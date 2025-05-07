@@ -1,0 +1,85 @@
+{
+    "metadata": {
+        "name": "Duygu Geçişi Animasyonu",
+        "description": "Duygular arasında yumuşak geçiş sağlayan animasyon sekansı",
+        "version": "1.0.0",
+        "author": "GitHub Copilot",
+        "duration": 4.0,
+        "created": "2025-05-01",
+        "tags": ["emotion", "transition", "facial-expression"]
+    },
+    "sequence": [
+        {
+            "time": 0.0,
+            "emotion": {
+                "action": "set_emotion",
+                "params": {
+                    "emotion": "calm",
+                    "intensity": 0.7,
+                    "transition": 0.5
+                }
+            },
+            "leds": {
+                "action": "pulse",
+                "params": {
+                    "color": [0, 0, 200],
+                    "speed": 80
+                }
+            }
+        },
+        {
+            "time": 1.0,
+            "eyes": {
+                "action": "blink",
+                "params": {
+                    "duration": 0.2
+                }
+            }
+        },
+        {
+            "time": 1.5,
+            "emotion": {
+                "action": "set_emotion",
+                "params": {
+                    "emotion": "happy",
+                    "intensity": 0.8,
+                    "transition": 0.7
+                }
+            },
+            "leds": {
+                "action": "pulse",
+                "params": {
+                    "color": [0, 200, 0],
+                    "speed": 50
+                }
+            }
+        },
+        {
+            "time": 2.5,
+            "eyes": {
+                "action": "blink",
+                "params": {
+                    "duration": 0.2
+                }
+            }
+        },
+        {
+            "time": 3.0,
+            "emotion": {
+                "action": "set_emotion",
+                "params": {
+                    "emotion": "surprised",
+                    "intensity": 0.9,
+                    "transition": 0.3
+                }
+            },
+            "leds": {
+                "action": "pulse",
+                "params": {
+                    "color": [200, 200, 0],
+                    "speed": 30
+                }
+            }
+        }
+    ]
+}

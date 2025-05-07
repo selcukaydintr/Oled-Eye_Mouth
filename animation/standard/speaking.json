@@ -1,0 +1,107 @@
+{
+    "metadata": {
+        "name": "Konuşma Animasyonu",
+        "description": "Robot konuşurken kullanılabilecek ağız hareketleri ve LED animasyonları",
+        "version": "1.0.0",
+        "author": "GitHub Copilot",
+        "duration": 6.0,
+        "created": "2025-05-01",
+        "tags": ["speaking", "talk", "conversation", "interactive"]
+    },
+    "sequence": [
+        {
+            "time": 0.0,
+            "emotion": {
+                "action": "set_emotion",
+                "params": {
+                    "emotion": "neutral",
+                    "intensity": 0.7
+                }
+            },
+            "leds": {
+                "action": "pulse",
+                "params": {
+                    "color": [0, 150, 255],
+                    "speed": 60
+                }
+            }
+        },
+        {
+            "time": 0.5,
+            "eyes": {
+                "action": "look_around",
+                "params": {
+                    "duration": 1.0,
+                    "points": [
+                        [-0.3, 0.0],
+                        [0.3, 0.0],
+                        [0.0, 0.0]
+                    ]
+                }
+            }
+        },
+        {
+            "time": 1.0,
+            "mouth": {
+                "action": "speak",
+                "params": {
+                    "duration": 2.0,
+                    "pattern": "default"
+                }
+            }
+        },
+        {
+            "time": 3.0,
+            "eyes": {
+                "action": "blink",
+                "params": {
+                    "duration": 0.2
+                }
+            }
+        },
+        {
+            "time": 3.5,
+            "mouth": {
+                "action": "speak",
+                "params": {
+                    "duration": 1.5,
+                    "pattern": "fast"
+                }
+            },
+            "leds": {
+                "action": "pulse",
+                "params": {
+                    "color": [100, 100, 255],
+                    "speed": 40
+                }
+            }
+        },
+        {
+            "time": 5.0,
+            "eyes": {
+                "action": "blink",
+                "params": {
+                    "duration": 0.2
+                }
+            }
+        },
+        {
+            "time": 5.5,
+            "emotion": {
+                "action": "set_emotion",
+                "params": {
+                    "emotion": "happy",
+                    "intensity": 0.6,
+                    "transition": 0.5
+                }
+            },
+            "leds": {
+                "action": "pulse",
+                "params": {
+                    "color": [0, 200, 100],
+                    "speed": 50
+                }
+            }
+        }
+    ]
+}

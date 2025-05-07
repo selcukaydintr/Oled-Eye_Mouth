@@ -1,0 +1,141 @@
+{
+  "transitions": [
+    {
+      "id": "4b37f023-3d8a-445f-a7ae-6d30f63f0a3e",
+      "name": "Mutluluk Patlaması",
+      "description": "Nötr durumdan mutluluğa hızlı bir geçiş",
+      "emotions": [
+        {
+          "id": "neutral",
+          "name": "Nötr",
+          "intensity": 1.0,
+          "duration": 0.5
+        },
+        {
+          "id": "happy",
+          "name": "Mutlu",
+          "intensity": 0.5,
+          "duration": 0.8
+        },
+        {
+          "id": "happy",
+          "name": "Mutlu",
+          "intensity": 1.0,
+          "duration": 1.5
+        }
+      ],
+      "created_at": "2025-05-05T23:23:29.733401",
+      "updated_at": "2025-05-05T23:23:29.733411"
+    },
+    {
+      "id": "d80bff5a-4429-47ba-aa23-e88d42ba94a9",
+      "name": "Şaşkınlık ve Merak",
+      "description": "Şaşkınlıktan meraklı bir ifadeye geçiş",
+      "emotions": [
+        {
+          "id": "neutral",
+          "name": "Nötr",
+          "intensity": 1.0,
+          "duration": 0.5
+        },
+        {
+          "id": "surprised",
+          "name": "Şaşkın",
+          "intensity": 0.8,
+          "duration": 1.0
+        },
+        {
+          "id": "neutral",
+          "name": "Nötr",
+          "intensity": 0.6,
+          "duration": 0.8
+        }
+      ],
+      "created_at": "2025-05-05T23:23:29.733422",
+      "updated_at": "2025-05-05T23:23:29.733424"
+    },
+    {
+      "id": "48670e52-f974-4293-851e-75f8d9960405",
+      "name": "Üzgün ve Kızgın",
+      "description": "Üzgünlükten kızgınlığa geçiş",
+      "emotions": [
+        {
+          "id": "sad",
+          "name": "Üzgün",
+          "intensity": 0.7,
+          "duration": 1.0
+        },
+        {
+          "id": "angry",
+          "name": "Kızgın",
+          "intensity": 0.5,
+          "duration": 0.5
+        },
+        {
+          "id": "angry",
+          "name": "Kızgın",
+          "intensity": 0.8,
+          "duration": 1.0
+        }
+      ],
+      "created_at": "2025-05-05T23:23:29.733433",
+      "updated_at": "2025-05-05T23:23:29.733434"
+    },
+    {
+      "id": "a92a33de-5e32-40ff-ab96-3217dd08acf1",
+      "name": "Sakinleşme",
+      "description": "Kızgınlıktan sakinliğe geçiş",
+      "emotions": [
+        {
+          "id": "angry",
+          "name": "Kızgın",
+          "intensity": 0.8,
+          "duration": 0.8
+        },
+        {
+          "id": "neutral",
+          "name": "Nötr",
+          "intensity": 0.6,
+          "duration": 1.0
+        },
+        {
+          "id": "calm",
+          "name": "Sakin",
+          "intensity": 0.7,
+          "duration": 1.5
+        }
+      ],
+      "created_at": "2025-05-05T23:23:29.733449",
+      "updated_at": "2025-05-05T23:23:29.733451"
+    }
+  ],
+  "recent_transitions": [
+    {
+      "id": "4b37f023-3d8a-445f-a7ae-6d30f63f0a3e",
+      "name": "Mutluluk Patlaması",
+      "description": "Nötr durumdan mutluluğa hızlı bir geçiş",
+      "emotions": [
+        {
+          "id": "neutral",
+          "name": "Nötr",
+          "intensity": 1.0,
+          "duration": 0.5
+        },
+        {
+          "id": "happy",
+          "name": "Mutlu",
+          "intensity": 0.5,
+          "duration": 0.8
+        },
+        {
+          "id": "happy",
+          "name": "Mutlu",
+          "intensity": 1.0,
+          "duration": 1.5
+        }
+      ],
+      "created_at": "2025-05-05T23:23:29.733401",
+      "updated_at": "2025-05-05T23:23:29.733411"
+    }
+  ]
+}

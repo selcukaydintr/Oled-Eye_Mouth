@@ -1,0 +1,105 @@
+{
+    "metadata": {
+        "name": "Başlangıç Animasyonu",
+        "description": "FACE1 robotunun açılış animasyon sekansı",
+        "version": "1.0.0",
+        "author": "GitHub Copilot",
+        "duration": 5.0,
+        "created": "2025-05-01",
+        "tags": ["startup", "greeting", "boot"]
+    },
+    "sequence": [
+        {
+            "time": 0.0,
+            "eyes": {
+                "action": "clear",
+                "params": {}
+            },
+            "mouth": {
+                "action": "clear",
+                "params": {}
+            },
+            "leds": {
+                "action": "off",
+                "params": {}
+            }
+        },
+        {
+            "time": 0.3,
+            "eyes": {
+                "action": "growing_circle",
+                "params": {
+                    "duration": 1.0
+                }
+            }
+        },
+        {
+            "time": 1.5,
+            "eyes": {
+                "action": "blink",
+                "params": {
+                    "duration": 0.2
+                }
+            }
+        },
+        {
+            "time": 2.0,
+            "mouth": {
+                "action": "smile",
+                "params": {
+                    "emotion": "happy",
+                    "intensity": 0.8
+                }
+            },
+            "leds": {
+                "action": "rainbow",
+                "params": {
+                    "speed": 30
+                }
+            }
+        },
+        {
+            "time": 3.0,
+            "eyes": {
+                "action": "look_around",
+                "params": {
+                    "duration": 1.0,
+                    "points": [
+                        [-0.5, 0.0],
+                        [0.5, 0.0],
+                        [0.0, -0.5],
+                        [0.0, 0.5],
+                        [0.0, 0.0]
+                    ]
+                }
+            }
+        },
+        {
+            "time": 4.0,
+            "mouth": {
+                "action": "speak",
+                "params": {
+                    "duration": 0.8,
+                    "pattern": "fast"
+                }
+            }
+        },
+        {
+            "time": 4.8,
+            "emotion": {
+                "action": "set_emotion",
+                "params": {
+                    "emotion": "happy",
+                    "intensity": 0.7
+                }
+            },
+            "leds": {
+                "action": "pulse",
+                "params": {
+                    "color": [0, 255, 0],
+                    "speed": 40
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,170 @@
+{
+    "system": {
+        "log_level": "INFO",
+        "watchdog_enabled": true,
+        "watchdog_timeout": 10.0,
+        "startup_delay": 1.0,
+        "auto_restart": true,
+        "shutdown_grace_period": 2.0
+    },
+    "oled": {
+        "brightness": 128,
+        "power_save": true,
+        "power_save_timeout": 300.0,
+        "random_eye_movement": true,
+        "blink_frequency": 4.5
+    },
+    "leds": {
+        "brightness": 128,
+        "enabled": true,
+        "animate_emotions": true
+    },
+    "emotions": {
+        "default_emotion": "neutral",
+        "emotion_decay_time": 300.0,
+        "micro_expressions_enabled": true,
+        "personality_profile": "balanced",
+        "transition_speed": 0.5,
+        "available_emotions": [
+            "neutral",
+            "happy",
+            "sad",
+            "angry",
+            "surprised",
+            "confused",
+            "sleepy",
+            "excited",
+            "bored",
+            "love"
+        ]
+    },
+    "animation": {
+        "startup_animation_enabled": true,
+        "fps": 30.0,
+        "transition_speed": 1.0,
+        "blink_interval_min": 2.0,
+        "blink_interval_max": 8.0,
+        "idle_animations": true
+    },
+    "theme": {
+        "default_theme": "default",
+        "cache_enabled": true,
+        "cache_size": 10
+    },
+    "api": {
+        "port": 8000,
+        "enabled": true,
+        "access_control_enabled": false,
+        "api_key": "",
+        "host": "0.0.0.0",
+        "debug": false
+    },
+    "performance": {
+        "enabled": true,
+        "check_interval": 10.0,
+        "cpu_threshold": 80.0,
+        "memory_threshold": 80.0,
+        "auto_adjust_fps": true,
+        "auto_adjust_brightness": true,
+        "battery_saver_enabled": true,
+        "battery_threshold": 20.0
+    },
+    "plugin_isolation": {
+        "enabled": true,
+        "resource_limits": {
+            "cpu_limit": 80.0,
+            "memory_limit": 500.0,
+            "file_descriptors_limit": 1000
+        },
+        "error_recovery": true,
+        "max_recovery_attempts": 3
+    },
+    "hardware": {
+        "platform": "desktop",
+        "simulation_mode": true,
+        "oled_displays": {
+            "left_eye": {
+                "i2c_address": "0x3C",
+                "width": 128,
+                "height": 64,
+                "channel": 0
+            },
+            "right_eye": {
+                "i2c_address": "0x3D",
+                "width": 128,
+                "height": 64,
+                "channel": 1
+            },
+            "mouth": {
+                "i2c_address": "0x3E",
+                "width": 128,
+                "height": 64,
+                "channel": 2
+            }
+        },
+        "use_multiplexer": true,
+        "multiplexer_address": "0x70",
+        "led_strip": {
+            "pin": 18,
+            "count": 30,
+            "brightness": 0.5
+        },
+        "i2c_bus": 1,
+        "debug_mode": true
+    },
+    "logging": {
+        "level": "INFO",
+        "file": "logs/face_plugin.log",
+        "console_output": true,
+        "max_size": 5242880,
+        "backup_count": 3
+    },
+    "themes": {
+        "active_theme": "default",
+        "theme_path": "themes/"
+    },
+    "config": {
+        "system": {
+            "log_level": "DEBUG",
+            "watchdog_timeout": null
+        },
+        "oled": {
+            "brightness": 128,
+            "power_save_timeout": false,
+            "random_eye_movement": true,
+            "blink_frequency": 1.6
+        },
+        "leds": {
+            "brightness": 128,
+            "enabled": true,
+            "animate_emotions": "on"
+        },
+        "emotions": {
+            "default_emotion": "neutral",
+            "emotion_decay_time": 10,
+            "micro_expressions_enabled": true,
+            "personality_profile": "balanced"
+        },
+        "animation": {
+            "startup_animation_enabled": true,
+            "fps": 10,
+            "transition_speed": 2.6
+        },
+        "theme": {
+            "default_theme": "realistic",
+            "cache_enabled": true,
+            "cache_size": 1
+        },
+        "api": {
+            "port": null,
+            "api_key": ""
+        },
+        "performance": {
+            "check_interval": "",
+            "cpu_threshold": "",
+            "memory_threshold": "",
+            "battery_threshold": ""
+        }
+    },
+    "save": true
+}
