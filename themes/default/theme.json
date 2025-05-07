@@ -1,0 +1,214 @@
+{
+    "name": "Default",
+    "description": "Standart çizgi film tarzı ifadeler",
+    "author": "FACE1 Team",
+    "version": "1.0.0",
+    "eyes": {
+        "happy": {
+            "style": "round",
+            "width": 20,
+            "height": 12,
+            "pupil_size": 6,
+            "blink_speed": 0.2
+        },
+        "sad": {
+            "style": "droopy",
+            "width": 20,
+            "height": 8,
+            "pupil_size": 5,
+            "blink_speed": 0.3
+        },
+        "angry": {
+            "style": "narrow",
+            "width": 18,
+            "height": 5,
+            "pupil_size": 4,
+            "blink_speed": 0.1
+        },
+        "surprised": {
+            "style": "wide",
+            "width": 25,
+            "height": 15,
+            "pupil_size": 8,
+            "blink_speed": 0.1
+        },
+        "confused": {
+            "style": "uneven",
+            "width": 22,
+            "height": 10,
+            "pupil_size": 6,
+            "blink_speed": 0.3
+        },
+        "sleepy": {
+            "style": "half-closed",
+            "width": 20,
+            "height": 5,
+            "pupil_size": 4,
+            "blink_speed": 0.5
+        },
+        "excited": {
+            "style": "sparkle",
+            "width": 22,
+            "height": 13,
+            "pupil_size": 7,
+            "blink_speed": 0.1
+        },
+        "bored": {
+            "style": "flat",
+            "width": 20,
+            "height": 8,
+            "pupil_size": 5,
+            "blink_speed": 0.4
+        },
+        "love": {
+            "style": "heart",
+            "width": 20,
+            "height": 15,
+            "pupil_size": 0,
+            "blink_speed": 0.2
+        },
+        "calm": {
+            "style": "default",
+            "width": 20,
+            "height": 10,
+            "pupil_size": 6,
+            "blink_speed": 0.3
+        },
+        "neutral": {
+            "style": "default",
+            "width": 20,
+            "height": 10,
+            "pupil_size": 6,
+            "blink_speed": 0.2
+        }
+    },
+    "mouth": {
+        "happy": {
+            "style": "smile",
+            "width": 40,
+            "height": 15,
+            "curve": 0.8
+        },
+        "sad": {
+            "style": "frown",
+            "width": 30,
+            "height": 10,
+            "curve": -0.6
+        },
+        "angry": {
+            "style": "straight",
+            "width": 35,
+            "height": 5,
+            "curve": -0.2
+        },
+        "surprised": {
+            "style": "o",
+            "width": 20,
+            "height": 20,
+            "curve": 1.0
+        },
+        "confused": {
+            "style": "squiggle",
+            "width": 30,
+            "height": 5,
+            "curve": 0.2
+        },
+        "sleepy": {
+            "style": "yawn",
+            "width": 20,
+            "height": 15,
+            "curve": 0.3
+        },
+        "excited": {
+            "style": "grin",
+            "width": 45,
+            "height": 15,
+            "curve": 1.0
+        },
+        "bored": {
+            "style": "flat",
+            "width": 25,
+            "height": 3,
+            "curve": 0
+        },
+        "love": {
+            "style": "smile",
+            "width": 35,
+            "height": 12,
+            "curve": 0.6
+        },
+        "calm": {
+            "style": "slight-smile",
+            "width": 30,
+            "height": 5,
+            "curve": 0.3
+        },
+        "neutral": {
+            "style": "default",
+            "width": 30,
+            "height": 5,
+            "curve": 0
+        }
+    },
+    "led": {
+        "happy": {
+            "color": [255, 255, 50],
+            "animation": "pulse",
+            "speed": 0.7
+        },
+        "sad": {
+            "color": [50, 100, 255],
+            "animation": "breathe",
+            "speed": 0.3
+        },
+        "angry": {
+            "color": [255, 50, 50],
+            "animation": "flash",
+            "speed": 0.9
+        },
+        "surprised": {
+            "color": [255, 255, 150],
+            "animation": "sparkle",
+            "speed": 0.8
+        },
+        "confused": {
+            "color": [200, 100, 255],
+            "animation": "chase",
+            "speed": 0.5
+        },
+        "sleepy": {
+            "color": [100, 100, 150],
+            "animation": "fade",
+            "speed": 0.2
+        },
+        "excited": {
+            "color": [255, 150, 0],
+            "animation": "rainbow",
+            "speed": 1.0
+        },
+        "bored": {
+            "color": [100, 100, 100],
+            "animation": "static",
+            "speed": 0.2
+        },
+        "love": {
+            "color": [255, 50, 150],
+            "animation": "pulse",
+            "speed": 0.6
+        },
+        "calm": {
+            "color": [50, 200, 255],
+            "animation": "breathe",
+            "speed": 0.3
+        },
+        "neutral": {
+            "color": [100, 100, 255],
+            "animation": "static",
+            "speed": 0.5
+        }
+    },
+    "metadata": {
+        "created_date": "2025-04-28",
+        "modified_date": "2025-04-28"
+    }
+}

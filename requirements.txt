@@ -1,0 +1,42 @@
+# FACE1 - Raspberry Pi Robot Yüz Eklentisi Bağımlılıkları
+
+# Donanım erişimi için kütüphaneler
+
+# Görüntü işleme ve gösterimi için kütüphaneler
+
+# Web arayüzü ve API için
+
+# MQTT desteği için (opsiyonel)
+
+# Sistem izleme
+
+# Genel yardımcı kütüphaneler
+Adafruit-Blinka==8.56.0
+Adafruit-PlatformDetect==3.77.0
+Adafruit-PureIO==1.1.11
+Pillow==11.2.1
+RPi.GPIO==0.7.1
+adafruit-circuitpython-busdevice==5.2.11
+adafruit-circuitpython-ssd1306==2.12.19
+adafruit-circuitpython-tca9548a==0.8.0
+aiofiles==23.2.1
+fastapi==0.110.0
+jinja2==3.1.4
+lgpio==0.2.2.0
+numpy==1.26.4
+paho-mqtt==2.0.0
+psutil==5.9.8
+pyftdi==0.56.0
+pyserial==3.5
+pyusb==1.3.1
+rpi_ws281x==5.0.0
+typing_extensions==4.13.2
+uvicorn==0.29.0
+websockets==12.0
+
+# Genel yardımcı kütüphaneler
+platform==1.0.8
+
+# Donanım erişimi için kütüphaneler
+adafruit_tca9548a==0.8.0
+

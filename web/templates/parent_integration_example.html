@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<!--
+===========================================================
+# Proje: FACE1 - Raspberry Pi 5 Robot AI için Yüz Eklentisi
+# Dosya: parent_integration_example.html
+# Açıklama: Üst projede FACE1'in kullanım örneği
+# Bağımlılıklar: iframe_bridge.js, web socket
+# Bağlı Dosyalar: iframe_integration.html, state_reflection_demo.html
+
+# Versiyon: 0.5.0
+# Değişiklikler:
+# - [0.5.0] Üst proje entegrasyon örneği oluşturuldu
+# - [0.5.0] Açık/koyu tema desteği eklendi
+# - [0.5.0] Duygu ve animasyon kontrol paneli eklendi
+# - [0.5.0] Metrik göstergeleri eklendi
+#
+# Yazar: GitHub Copilot
+# Tarih: 2025-05-04
+===========================================================
+-->
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FACE1 - Üst Proje Entegrasyon Örneği</title>
+    <style>
+        :root {
+            --background-color: #f5f5f5;
+            --text-color: #333;
+            --accent-color: #4a90e2;
+            --border-color: #ddd;
+            --card-background: white;
+        }
+
+        .dark-theme {
+            --background-color: #232323;
+            --text-color: #eaeaea;
+            --accent-color: #5c9deb;
+            --border-color: #444;
+            --card-background: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        header {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .flex-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .main-content {
+            flex: 3;
+            min-width: 400px;
+        }
+
+        .card {
+            background-color: var(--card-background);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .face-container {
+            width: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        iframe {
+            width: 100%;
+            border: none;
+            height: 600px;
+            background-color: white;
+        }
+
+        .button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .button:hover {
+            background-color: #3a7bc8;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            margin-right: 0.5rem;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .tab.active {
+            background-color: var(--card-background);
+            border-color: var(--border-color);
+            border-bottom: 1px solid var(--card-background);
+            margin-bottom: -1px;
+        }
+
+        .tab:hover:not(.active) {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .status {
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .status-connected {
+            background-color: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4caf50;
+        }
+
+        .status-disconnected {
+            background-color: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            margin-right: 10px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Üst Proje Dashboard</h1>
+    </header>
+    
+    <div class="container">
+        <div class="flex-container">
+            <div class="sidebar">
+                <div class="card">
+                    <h2>Kontrol Paneli</h2>
+                    <div class="form-group">
+                        <div class="theme-toggle">
+                            <label class="switch">
+                                <input type="checkbox" id="theme-toggle">
+                                <span class="slider"></span>
+                            </label>
+                            <span id="theme-label">Koyu Tema</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="face-url">FACE1 URL:</label>
+                        <input type="text" id="face-url" value="http://localhost:8000/embed">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="allowed-origins">İzin Verilen Kaynaklar:</label>
+                        <input type="text" id="allowed-origins" value="http://localhost:8000">
+                        <small>Virgülle ayrılmış URL'ler. Örn: http://localhost:8000, https://face1.example.com</small>
+                    </div>
+
+                    <div id="connection-status" class="status status-disconnected">
+                        IFrame Bağlantı Durumu: <span id="connection-text">Bağlantı bekleniyor...</span>
+                        <div><small>Origin: <span id="connection-origin">-</span></small></div>
+                    </div>
+
+                    <div class="form-group">
+                        <button id="connect-btn" class="button">Bağlantı Kur</button>
+                        <button id="refresh-btn" class="button">Yenile</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Yüz Kontrolü</h2>
+
+                    <div class="form-group">
+                        <label for="theme-select">Tema:</label>
+                        <select id="theme-select" disabled>
+                            <option value="default">Varsayılan</option>
+                            <option value="minimal">Minimal</option>
+                            <option value="pixel">Pixel</option>
+                            <option value="realistic">Gerçekçi</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Duygular:</label>
+                        <div>
+                            <button class="button emotion-btn" data-emotion="happy" disabled>Mutlu</button>
+                            <button class="button emotion-btn" data-emotion="sad" disabled>Üzgün</button>
+                            <button class="button emotion-btn" data-emotion="angry" disabled>Kızgın</button>
+                            <button class="button emotion-btn" data-emotion="surprised" disabled>Şaşkın</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Animasyonlar:</label>
+                        <div>
+                            <button class="button animation-btn" data-animation="blink" disabled>Göz Kırpma</button>
+                            <button class="button animation-btn" data-animation="speaking" disabled>Konuşma</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Sistem:</label>
+                        <div>
+                            <button id="lifecycle-btn" class="button" data-command="maintenance" disabled>Bakım Modu</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="tabs">
+                    <div class="tab active" data-tab="face">Robot Yüzü</div>
+                    <div class="tab" data-tab="metrics">Metrikler</div>
+                    <div class="tab" data-tab="logs">Loglar</div>
+                </div>
+
+                <div id="face-tab" class="card tab-content">
+                    <h2>FACE1 Yüz Görüntüsü</h2>
+                    <div class="face-container">
+                        <iframe id="face-iframe" src="about:blank" title="FACE1 Yüz Görüntüsü"></iframe>
+                    </div>
+                </div>
+
+                <div id="metrics-tab" class="card tab-content" style="display: none;">
+                    <h2>Sistem Metrikleri</h2>
+                    <div id="metrics-container">
+                        <p>CPU: <span id="cpu-usage">--</span>%</p>
+                        <p>RAM: <span id="ram-usage">--</span> MB</p>
+                        <p>Disk: <span id="disk-usage">--</span>%</p>
+                        <p>FPS: <span id="fps">--</span></p>
+                        <p>Çalışma Süresi: <span id="uptime">--</span></p>
+                    </div>
+                </div>
+
+                <div id="logs-tab" class="card tab-content" style="display: none;">
+                    <h2>Mesaj Kaydı</h2>
+                    <div id="messages" style="height: 400px; overflow-y: auto; background: #f5f5f5; padding: 10px; font-family: monospace; border: 1px solid #ddd;">
+                        <div>Mesaj kayıtları burada görünecek...</div>
+                    </div>
+                    <button id="clear-logs" class="button">Temizle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Değişkenler
+        let iframeElement = document.getElementById('face-iframe');
+        let isConnected = false;
+        let currentTheme = 'light';
+        let connectionAttempting = false;
+        let trustedOrigin = ''; // Güvenli bağlantı kurulan kaynak
+        
+        // DOM elementleri
+        const faceUrl = document.getElementById('face-url');
+        const allowedOriginsInput = document.getElementById('allowed-origins');
+        const connectBtn = document.getElementById('connect-btn');
+        const refreshBtn = document.getElementById('refresh-btn');
+        const themeSelect = document.getElementById('theme-select');
+        const lifecycleBtn = document.getElementById('lifecycle-btn');
+        const connectionStatus = document.getElementById('connection-status');
+        const connectionText = document.getElementById('connection-text');
+        const connectionOrigin = document.getElementById('connection-origin');
+        const messagesContainer = document.getElementById('messages');
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeLabel = document.getElementById('theme-label');
+        
+        // İzin verilen kaynakları kontrol et
+        function isAllowedOrigin(origin) {
+            if (!origin) return false;
+            
+            const allowedOrigins = allowedOriginsInput.value.split(',').map(o => o.trim());
+            return allowedOrigins.includes(origin) || allowedOrigins.includes('*');
+        }
+        
+        // Güvenlik token'ı oluştur (oturum boyunca tutarlı)
+        const securityToken = generateSecurityToken();
+        
+        // Sekme değiştirme fonksiyonu
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+                
+                // Sekmeleri güncelle
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // İçerikleri güncelle
+                document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+                document.getElementById(`${tabName}-tab`).style.display = 'block';
+            });
+        });
+        
+        // Tema değişimi
+        themeToggle.addEventListener('change', function() {
+            currentTheme = this.checked ? 'dark' : 'light';
+            applyTheme(currentTheme);
+            
+            themeLabel.textContent = currentTheme === 'dark' ? 'Açık Tema' : 'Koyu Tema';
+            
+            // IFrame'e tema değişikliğini bildir
+            if (isConnected) {
+                sendMessageToIFrame('FACE1_SET_THEME', { theme: currentTheme });
+            }
+        });
+        
+        // Tema uygulama fonksiyonu
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('dark-theme');
+            } else {
+                document.body.classList.remove('dark-theme');
+            }
+        }
+        
+        // Mesaj kaydı ekle
+        function addMessage(message, type = 'info') {
+            const messageElement = document.createElement('div');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            messageElement.innerHTML = `<span style="color: #888;">[${timestamp}]</span> <span style="color: ${type === 'error' ? 'red' : type === 'success' ? 'green' : 'blue'};">[${type.toUpperCase()}]</span> ${message}`;
+            messagesContainer.appendChild(messageElement);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        // Log temizleme
+        document.getElementById('clear-logs').addEventListener('click', function() {
+            messagesContainer.innerHTML = '';
+        });
+        
+        // IFrame'e mesaj gönderme (güvenlik kontrolü ile)
+        function sendMessageToIFrame(type, data = {}) {
+            if (!isConnected) {
+                addMessage('IFrame bağlantısı kurulmadan mesaj gönderilemez', 'error');
+                return;
+            }
+            
+            if (!trustedOrigin) {
+                addMessage('Güvenilir kaynak belirlenmeden mesaj gönderilemez', 'error');
+                return;
+            }
+            
+            try {
+                const message = {
+                    type: type,
+                    data: data,
+                    securityToken: securityToken, // Güvenlik token'ı ekle
+                    timestamp: Date.now()
+                };
+                
+                // Güvenlik: Sadece doğrulanmış origin'e mesaj gönder
+                iframeElement.contentWindow.postMessage(message, trustedOrigin);
+                addMessage(`Mesaj gönderildi: ${type} - ${JSON.stringify(data)}`, 'success');
+            } catch (e) {
+                addMessage(`Mesaj gönderme hatası: ${e.message}`, 'error');
+            }
+        }
+        
+        // Bağlantı durumunu güncelleme
+        function updateConnectionStatus(connected, origin = '-') {
+            isConnected = connected;
+            connectionAttempting = false;
+            
+            if (connected) {
+                trustedOrigin = origin;
+            } else {
+                trustedOrigin = '';
+            }
+            
+            // UI güncelleme
+            connectionStatus.className = `status ${connected ? 'status-connected' : 'status-disconnected'}`;
+            connectionText.textContent = connected ? 'Bağlı' : 'Bağlantı kesildi';
+            connectionOrigin.textContent = origin;
+            
+            // Butonları etkinleştir/devre dışı bırak
+            document.querySelectorAll('.emotion-btn, .animation-btn').forEach(btn => {
+                btn.disabled = !connected;
+            });
+            
+            lifecycleBtn.disabled = !connected;
+            themeSelect.disabled = !connected;
+            
+            // Bağlantı butonunu güncelle
+            connectBtn.textContent = connected ? 'Bağlantıyı Kes' : 'Bağlantı Kur';
+        }
+        
+        // IFrame URL'sini güncelleme ve bağlanma
+        connectBtn.addEventListener('click', function() {
+            if (isConnected) {
+                // Bağlantıyı kes
+                iframeElement.src = 'about:blank';
+                updateConnectionStatus(false);
+                addMessage('IFrame bağlantısı kesildi', 'info');
+            } else {
+                // Bağlantı kur
+                if (connectionAttempting) return;
+                
+                connectionAttempting = true;
+                const url = faceUrl.value;
+                
+                if (!url) {
+                    addMessage('Geçerli bir URL girin', 'error');
+                    connectionAttempting = false;
+                    return;
+                }
+                
+                // URL güvenlik kontrolü
+                try {
+                    const urlObj = new URL(url);
+                    if (!isAllowedOrigin(urlObj.origin)) {
+                        addMessage(`Güvenlik: ${urlObj.origin} kaynağına izin verilmiyor`, 'error');
+                        connectionAttempting = false;
+                        return;
+                    }
+                } catch (e) {
+                    addMessage('Geçersiz URL formatı', 'error');
+                    connectionAttempting = false;
+                    return;
+                }
+                
+                addMessage(`Bağlantı kuruluyor: ${url}`, 'info');
+                iframeElement.src = url;
+            }
+        });
+        
+        // IFrame sayfasını yenileme
+        refreshBtn.addEventListener('click', function() {
+            if (!isConnected) {
+                addMessage('Bağlantı kurulmadan yenilenemez', 'error');
+                return;
+            }
+            
+            iframeElement.src = iframeElement.src;
+            addMessage('IFrame yenileniyor...', 'info');
+        });
+        
+        // Tema seçimi
+        themeSelect.addEventListener('change', function() {
+            if (!isConnected) return;
+            
+            const theme = themeSelect.value;
+            sendMessageToIFrame('FACE1_SET_THEME_NAME', { themeName: theme });
+        });
+        
+        // Duygu butonları
+        document.querySelectorAll('.emotion-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                if (!isConnected) return;
+                
+                const emotion = this.getAttribute('data-emotion');
+                sendMessageToIFrame('FACE1_SET_EMOTION', { 
+                    emotion: emotion,
+                    intensity: 1.0
+                });
+            });
+        });
+        
+        // Animasyon butonları
+        document.querySelectorAll('.animation-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                if (!isConnected) return;
+                
+                const animation = this.getAttribute('data-animation');
+                sendMessageToIFrame('FACE1_PLAY_ANIMATION', { animation });
+            });
+        });
+        
+        // Yaşam döngüsü butonları
+        lifecycleBtn.addEventListener('click', function() {
+            if (!isConnected) return;
+            
+            const command = this.getAttribute('data-command');
+            
+            if (command === 'maintenance') {
+                this.setAttribute('data-command', 'exit_maintenance');
+                this.textContent = 'Bakımdan Çık';
+            } else {
+                this.setAttribute('data-command', 'maintenance');
+                this.textContent = 'Bakım Modu';
+            }
+            
+            sendMessageToIFrame('FACE1_PLUGIN_CONTROL', { command });
+        });
+        
+        // IFrame'den gelen mesajları dinleme (güvenlik kontrolü ile)
+        window.addEventListener('message', function(event) {
+            // Mesajın geçerli olup olmadığını kontrol et
+            if (!event.data || typeof event.data !== 'object' || !event.data.type) {
+                return;
+            }
+            
+            // Origin güvenlik kontrolü
+            if (!isAllowedOrigin(event.origin)) {
+                console.warn(`Güvenlik: İzin verilmeyen kaynaktan mesaj: ${event.origin}`);
+                addMessage(`Güvenlik uyarısı: İzin verilmeyen kaynaktan mesaj alındı (${event.origin})`, 'error');
+                return;
+            }
+            
+            const message = event.data;
+            
+            // FACE1_READY mesajında trusted origin ayarlama
+            if (message.type === 'FACE1_READY' && !trustedOrigin) {
+                // Güvenlik için FACE1_READY ile güvenilen kaynağı belirle
+                trustedOrigin = event.origin;
+            }
+            
+            // Bağlantı kurulmuşsa, sadece bilinen kaynaktan gelen mesajları işle
+            if (isConnected && event.origin !== trustedOrigin) {
+                console.warn(`Güvenlik: Beklenen kaynak (${trustedOrigin}) yerine başka kaynaktan mesaj geldi: ${event.origin}`);
+                addMessage(`Güvenlik uyarısı: Güvenilmeyen kaynaktan mesaj (${event.origin})`, 'error');
+                return;
+            }
+            
+            // Mesajı işle
+            switch (message.type) {
+                case 'FACE1_READY':
+                    // FACE1 hazır sinyali
+                    addMessage('FACE1 hazır sinyali alındı', 'info');
+                    
+                    // Bağlantı gönder
+                    event.source.postMessage({
+                        type: 'FACE1_CONNECT',
+                        data: {
+                            appName: 'Üst Proje',
+                            appVersion: '1.0.0',
+                            clientId: generateClientId(),
+                            securityToken: securityToken // Güvenlik token'ı ekle
+                        },
+                        timestamp: Date.now()
+                    }, event.origin);  // Güvenlik: * yerine doğrulanmış origin kullan
+                    
+                    break;
+                    
+                case 'FACE1_CONNECTED':
+                    // Bağlantı onayı
+                    updateConnectionStatus(true, event.origin);
+                    addMessage(`FACE1 bağlantısı kuruldu (${event.origin})`, 'success');
+                    
+                    // Mevcut temayı gönder
+                    sendMessageToIFrame('FACE1_SET_THEME', { theme: currentTheme });
+                    break;
+                    
+                case 'FACE1_EMOTION_CHANGE':
+                    // Duygu değişikliği bildirimi
+                    addMessage(`Duygu değişti: ${message.data.emotion} (${message.data.intensity})`, 'info');
+                    break;
+                    
+                case 'FACE1_ANIMATION_UPDATE':
+                    // Animasyon güncelleme bildirimi
+                    addMessage(`Animasyon güncellendi: ${message.data.animation} (${Math.round(message.data.progress * 100)}%)`, 'info');
+                    break;
+                    
+                case 'FACE1_METRICS_UPDATE':
+                    // Metrik güncellemesi
+                    updateMetrics(message.data.metrics);
+                    break;
+                    
+                case 'FACE1_STATE_CHANGE':
+                    // Durum değişikliği
+                    addMessage(`Durum değişti: ${message.data.state}`, 'info');
+                    break;
+                    
+                case 'FACE1_RESIZE':
+                    // Boyut değişikliği
+                    addMessage(`Boyut değişikliği: ${message.data.width}x${message.data.height}`, 'info');
+                    
+                    // Boyut değişikliğini onaylayın
+                    event.source.postMessage({
+                        type: 'FACE1_RESIZE_ACK',
+                        data: {
+                            width: message.data.width,
+                            height: message.data.height,
+                            status: 'ok'
+                        },
+                        securityToken: securityToken, // Güvenlik token'ı ekle
+                        timestamp: Date.now()
+                    }, event.origin); // Güvenlik: * yerine doğrulanmış origin kullan
+                    break;
+                    
+                case 'FACE1_ERROR':
+                    // Hata bildirimi
+                    addMessage(`FACE1 hatası: ${message.data.message}`, 'error');
+                    break;
+                    
+                default:
+                    // Bilinmeyen mesaj tipi
+                    addMessage(`Bilinmeyen mesaj tipi: ${message.type}`, 'info');
+                    break;
+            }
+        });
+        
+        // Metrikleri güncelle
+        function updateMetrics(metrics) {
+            if (!metrics) return;
+            
+            document.getElementById('cpu-usage').textContent = metrics.cpu || '--';
+            document.getElementById('ram-usage').textContent = metrics.memory || '--';
+            document.getElementById('disk-usage').textContent = metrics.disk || '--';
+            document.getElementById('fps').textContent = metrics.fps || '--';
+            document.getElementById('uptime').textContent = formatUptime(metrics.uptime) || '--';
+        }
+        
+        // Çalışma süresini formatla
+        function formatUptime(seconds) {
+            if (!seconds) return '';
+            
+            const days = Math.floor(seconds / (24 * 60 * 60));
+            seconds %= (24 * 60 * 60);
+            
+            const hours = Math.floor(seconds / (60 * 60));
+            seconds %= (60 * 60);
+            
+            const minutes = Math.floor(seconds / 60);
+            seconds %= 60;
+            
+            let result = '';
+            if (days) result += `${days}g `;
+            if (hours) result += `${hours}s `;
+            if (minutes) result += `${minutes}d `;
+            result += `${Math.floor(seconds)}sn`;
+            
+            return result;
+        }
+        
+        // Rastgele müşteri ID'si oluştur
+        function generateClientId() {
+            return 'parent_' + Math.random().toString(36).substring(2, 15);
+        }
+        
+        // Güvenlik token'ı oluştur
+        function generateSecurityToken() {
+            const randomBytes = new Uint8Array(16);
+            window.crypto.getRandomValues(randomBytes);
+            return Array.from(randomBytes).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+        
+        // Sayfa yüklendiğinde
+        window.addEventListener('DOMContentLoaded', () => {
+            addMessage('Sayfa yüklendi, bağlantı bekliyor...', 'info');
+            updateConnectionStatus(false);
+        });
+    </script>
+</body>
+</html>

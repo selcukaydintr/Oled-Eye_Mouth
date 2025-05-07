@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="light">
+<head>
+    <title>Hata - FACE1 Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tema ve erişilebilirlik CSS dosyaları -->
+    <link rel="stylesheet" href="/static/css/theme/theme-variables.css">
+    <link rel="stylesheet" href="/static/css/theme/responsive.css">
+    <link rel="stylesheet" href="/static/css/theme/accessibility.css">
+    <!-- Ana stil dosyası -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Ekran okuyucular için atlama linki -->
+    <a href="#main-content" class="f1-skip-link">Ana içeriğe atla</a>
+    
+    <header>
+        <h1>FACE1 Robot Kontrol Paneli</h1>
+        <!-- Tema değiştirme butonları -->
+        <div class="f1-theme-toggle">
+            <button data-theme-toggle="light" title="Açık tema" class="f1-button">☀️</button>
+            <button data-theme-toggle="dark" title="Koyu tema" class="f1-button">🌙</button>
+            <button data-theme-toggle="high-contrast" title="Yüksek kontrast tema" class="f1-button">🔍</button>
+        </div>
+    </header>
+    
+    <main id="main-content">
+        <div class="f1-error-container">
+            <h2>Hata</h2>
+            <p class="f1-error-message">{{ message }}</p>
+            <a href="/" class="f1-button">Ana Sayfaya Dön</a>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 FACE1 Robot - Version 0.5.1</p>
+    </footer>
+    
+    <!-- Tema yönetici scripti -->
+    <script src="/static/js/theme-manager.js"></script>
+</body>
+</html>

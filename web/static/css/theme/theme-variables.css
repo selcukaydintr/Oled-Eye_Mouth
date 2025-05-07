@@ -1,0 +1,238 @@
+/**
+ * FACE1 Tema Değişkenleri
+ * 
+ * Versiyon: 0.5.1
+ * Tarih: 06.05.2025
+ * 
+ * Bu dosya, FACE1 projesi için ana tema değişkenlerini ve renk şemalarını içerir.
+ * Faz 5-3 kapsamında CSS değişkenleri üst proje CSS değişkenleri ile uyumlu hale 
+ * getirilmiştir.
+ */
+
+:root {
+  /* Temel ölçüler ve birimler */
+  --f1-spacing-unit: 0.5rem;
+  --f1-border-radius: 8px;
+  --f1-border-radius-sm: 4px;
+  --f1-border-radius-lg: 12px;
+  --f1-border-width: 1px;
+  --f1-content-width: 1200px;
+  
+  /* Geçiş ve Animasyon */
+  --f1-transition-speed: 0.3s;
+  --f1-animation-timing: ease-in-out;
+  
+  /* z-indeks katmanları */
+  --f1-z-index-base: 1;
+  --f1-z-index-header: 10;
+  --f1-z-index-popup: 50;
+  --f1-z-index-modal: 100;
+  --f1-z-index-dropdown: 25;
+  
+  /* Gölgeler */
+  --f1-shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --f1-shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+  --f1-shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+  --f1-panel-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  --f1-modal-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  
+  /* Odak çizgisi */
+  --f1-focus-outline-width: 2px;
+  --f1-focus-outline-color: rgba(52, 152, 219, 0.5);
+}
+
+/* Açık tema (varsayılan) */
+:root[data-theme="light"] {
+  /* Ana renkler */
+  --f1-primary-color: #3498db;
+  --f1-secondary-color: #2c3e50;
+  --f1-accent-color: #e74c3c;
+  --f1-success-color: #2ecc71;
+  --f1-warning-color: #f39c12;
+  --f1-danger-color: #e74c3c;
+  --f1-info-color: #3498db;
+  
+  /* Arka plan ve metin renkleri */
+  --f1-background-color: #f4f6f9;
+  --f1-text-color: #333;
+  --f1-text-color-light: #777;
+  --f1-text-color-inverted: #fff;
+  
+  /* Bileşen renkleri */
+  --f1-card-background: #ffffff;
+  --f1-header-background: #2c3e50;
+  --f1-footer-background: #f9f9f9;
+  --f1-border-color: #e0e0e0;
+  --f1-input-border-color: #ddd;
+  --f1-input-background: #fff;
+  --f1-modal-backdrop: rgba(0, 0, 0, 0.5);
+}
+
+/* Koyu tema */
+:root[data-theme="dark"] {
+  /* Ana renkler - koyu temada biraz daha yumuşak */
+  --f1-primary-color: #4dabf7;
+  --f1-secondary-color: #495057;
+  --f1-accent-color: #ff6b6b;
+  --f1-success-color: #51cf66;
+  --f1-warning-color: #fcc419;
+  --f1-danger-color: #fa5252;
+  --f1-info-color: #4dabf7;
+  
+  /* Arka plan ve metin renkleri */
+  --f1-background-color: #212529;
+  --f1-text-color: #f8f9fa;
+  --f1-text-color-light: #adb5bd;
+  --f1-text-color-inverted: #212529;
+  
+  /* Bileşen renkleri */
+  --f1-card-background: #343a40;
+  --f1-header-background: #343a40;
+  --f1-footer-background: #2a2e33;
+  --f1-border-color: #495057;
+  --f1-input-border-color: #495057;
+  --f1-input-background: #2a2e33;
+  --f1-modal-backdrop: rgba(0, 0, 0, 0.75);
+  
+  /* Gölgeler - koyu temaya uygun tonlarda */
+  --f1-shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+  --f1-shadow-md: 0 4px 6px rgba(0,0,0,0.3);
+  --f1-shadow-lg: 0 10px 15px rgba(0,0,0,0.3);
+  --f1-panel-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  --f1-modal-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  
+  /* Odak çizgisi */
+  --f1-focus-outline-color: rgba(77, 171, 247, 0.5);
+}
+
+/* Yüksek kontrast tema */
+:root[data-theme="high-contrast"] {
+  /* Ana renkler - yüksek kontrast için optimize edilmiş */
+  --f1-primary-color: #0066cc;
+  --f1-secondary-color: #000000;
+  --f1-accent-color: #cc0000;
+  --f1-success-color: #008800;
+  --f1-warning-color: #cc6600;
+  --f1-danger-color: #cc0000;
+  --f1-info-color: #0066cc;
+  
+  /* Arka plan ve metin renkleri - maksimum kontrast */
+  --f1-background-color: #ffffff;
+  --f1-text-color: #000000;
+  --f1-text-color-light: #333333;
+  --f1-text-color-inverted: #ffffff;
+  
+  /* Bileşen renkleri */
+  --f1-card-background: #ffffff;
+  --f1-header-background: #000000;
+  --f1-footer-background: #f0f0f0;
+  --f1-border-color: #000000;
+  --f1-input-border-color: #000000;
+  --f1-input-background: #ffffff;
+  --f1-modal-backdrop: rgba(0, 0, 0, 0.8);
+  
+  /* Gölgeler - yüksek kontrast için daha belirgin */
+  --f1-shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --f1-shadow-md: 0 4px 6px rgba(0,0,0,0.4);
+  --f1-shadow-lg: 0 10px 15px rgba(0,0,0,0.5);
+  --f1-panel-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  --f1-modal-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  
+  /* Odak çizgisi - daha belirgin */
+  --f1-focus-outline-width: 3px;
+  --f1-focus-outline-color: #0066cc;
+  
+  /* Tipografi - daha büyük ve okunabilir */
+  font-size: 110%;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+}
+
+/* Üst sistemden tema değişkenlerini kullandığımızda */
+:root[data-parent-theme="true"] {
+  /* Burada hiçbir şeyi yeniden tanımlamıyoruz, çünkü 
+     üst sistemden gelen CSS değişkenlerini kullanıyoruz */
+}
+
+/* Baskı medya sorgusu */
+@media print {
+  :root {
+    --f1-primary-color: #000;
+    --f1-secondary-color: #333;
+    --f1-accent-color: #666;
+    --f1-background-color: #fff;
+    --f1-text-color: #000;
+    --f1-card-background: #fff;
+    --f1-border-color: #ccc;
+    
+    /* Gölgeleri kaldır */
+    --f1-shadow-sm: none;
+    --f1-shadow-md: none;
+    --f1-shadow-lg: none;
+    --f1-panel-shadow: none;
+    --f1-modal-shadow: none;
+  }
+}
+
+/* Karanlık Mod Medya Sorgusu - Sistem tercihini kontrol et */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    /* Bu kısmı koyu tema ile aynı yap */
+    --f1-primary-color: #4dabf7;
+    --f1-secondary-color: #495057;
+    --f1-accent-color: #ff6b6b;
+    --f1-success-color: #51cf66;
+    --f1-warning-color: #fcc419;
+    --f1-danger-color: #fa5252;
+    --f1-info-color: #4dabf7;
+    
+    --f1-background-color: #212529;
+    --f1-text-color: #f8f9fa;
+    --f1-text-color-light: #adb5bd;
+    --f1-text-color-inverted: #212529;
+    
+    --f1-card-background: #343a40;
+    --f1-header-background: #343a40;
+    --f1-footer-background: #2a2e33;
+    --f1-border-color: #495057;
+    --f1-input-border-color: #495057;
+    --f1-input-background: #2a2e33;
+    --f1-modal-backdrop: rgba(0, 0, 0, 0.75);
+    
+    --f1-shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+    --f1-shadow-md: 0 4px 6px rgba(0,0,0,0.3);
+    --f1-shadow-lg: 0 10px 15px rgba(0,0,0,0.3);
+    --f1-panel-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    --f1-modal-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    
+    --f1-focus-outline-color: rgba(77, 171, 247, 0.5);
+  }
+}
+
+/* Hareket azaltma tercihi - animasyonları azalt */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --f1-transition-speed: 0.01ms;
+  }
+}
+
+/* Ana üst proje tema değişkenleri ile uyumlu geri dönüşüm */
+:root {
+  /* Ana değişkenler */
+  --primary-color: var(--f1-primary-color);
+  --secondary-color: var(--f1-secondary-color);
+  --accent-color: var(--f1-accent-color);
+  --text-color: var(--f1-text-color);
+  --bg-color: var(--f1-background-color);
+  --card-bg: var(--f1-card-background);
+  --border-color: var(--f1-border-color);
+}
+
+/* Tema geçişleri için animasyonlar */
+body, button, input, select, textarea, 
+.f1-card, .f1-header, .f1-panel, .f1-modal-content {
+  transition: background-color var(--f1-transition-speed) var(--f1-animation-timing),
+              color var(--f1-transition-speed) var(--f1-animation-timing),
+              border-color var(--f1-transition-speed) var(--f1-animation-timing),
+              box-shadow var(--f1-transition-speed) var(--f1-animation-timing);
+}

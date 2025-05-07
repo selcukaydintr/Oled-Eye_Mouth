@@ -1,0 +1,104 @@
+{% extends "widgets/widget_base.html" %}
+
+{% block widget_content %}
+<div class="state-history-widget">
+    <div class="state-current">
+        <h4>Güncel Durum</h4>
+        <div class="state-indicators">
+            <div class="state-item">
+                <div class="state-label">Sistem Durumu</div>
+                <div id="system-state-{{ widget_id }}" class="state-value system-state">{{ system_state }}</div>
+            </div>
+            <div class="state-item">
+                <div class="state-label">Duygu Durumu</div>
+                <div id="emotion-state-{{ widget_id }}" class="state-value emotion-state">{{ emotion_state }}</div>
+            </div>
+            <div class="state-item">
+                <div class="state-label">Konuşma Durumu</div>
+                <div id="speaking-state-{{ widget_id }}" class="state-value speaking-state">{{ speaking_state }}</div>
+            </div>
+            <div class="state-item">
+                <div class="state-label">Animasyon</div>
+                <div id="animation-state-{{ widget_id }}" class="state-value animation-state">{{ animation_state }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="state-metrics">
+        <h4>Sistem Metrikleri</h4>
+        <div class="metrics-grid">
+            <div class="metric">
+                <div class="metric-icon cpu-icon">
+                    <span class="icon">💻</span>
+                </div>
+                <div class="metric-details">
+                    <div class="metric-name">CPU</div>
+                    <div id="cpu-usage-{{ widget_id }}" class="metric-value">{{ cpu_usage }}</div>
+                </div>
+            </div>
+            <div class="metric">
+                <div class="metric-icon memory-icon">
+                    <span class="icon">🧠</span>
+                </div>
+                <div class="metric-details">
+                    <div class="metric-name">Bellek</div>
+                    <div id="memory-usage-{{ widget_id }}" class="metric-value">{{ memory_usage }}</div>
+                </div>
+            </div>
+            <div class="metric">
+                <div class="metric-icon temperature-icon">
+                    <span class="icon">🌡️</span>
+                </div>
+                <div class="metric-details">
+                    <div class="metric-name">Sıcaklık</div>
+                    <div id="temperature-{{ widget_id }}" class="metric-value">{{ temperature }}</div>
+                </div>
+            </div>
+            <div class="metric">
+                <div class="metric-icon uptime-icon">
+                    <span class="icon">⏱️</span>
+                </div>
+                <div class="metric-details">
+                    <div class="metric-name">Çalışma Süresi</div>
+                    <div id="uptime-{{ widget_id }}" class="metric-value">{{ uptime }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="state-history">
+        <div class="history-header">
+            <h4>Durum Tarihçesi</h4>
+            <div class="history-filters">
+                <select id="history-filter-{{ widget_id }}" class="history-filter">
+                    <option value="all">Tümü</option>
+                    <option value="system">Sistem</option>
+                    <option value="emotion">Duygu</option>
+                    <option value="speaking">Konuşma</option>
+                    <option value="animation">Animasyon</option>
+                    <option value="error">Hatalar</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="history-timeline-{{ widget_id }}" class="history-timeline">
+            {% for entry in history_entries %}
+            <div class="history-entry {{ entry.type }}">
+                <div class="entry-icon">
+                    <span class="icon">{{ entry.icon }}</span>
+                </div>
+                <div class="entry-content">
+                    <div class="entry-time">{{ entry.time }}</div>
+                    <div class="entry-message">{{ entry.message }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h4>Etkinlik Grafiği (son 24 saat)</h4>
+        <div id="activity-chart-{{ widget_id }}" class="activity-chart"></div>
+    </div>
+</div>
+{% endblock %}

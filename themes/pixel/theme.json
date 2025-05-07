@@ -1,0 +1,171 @@
+{
+    "theme_name": "pixel",
+    "theme_type": "pixel",
+    "display_name": "Pixel",
+    "description": "D\u00fc\u015f\u00fck \u00e7\u00f6z\u00fcn\u00fcrl\u00fckl\u00fc piksel sanat\u0131 stili",
+    "version": "1.0.0",
+    "author": "FACE1 Project",
+    "default_emotion": "neutral",
+    "eyes": {
+        "style": "pixel",
+        "resolution": "low",
+        "blink_speed": 0.2
+    },
+    "mouth": {
+        "style": "pixel",
+        "resolution": "low",
+        "animation_speed": 0.3
+    },
+    "led": {
+        "brightness": 0.8,
+        "color_harmony": "analogous",
+        "animation_speed": 0.5,
+        "color_multiplier": 1.0
+    },
+    "emotions": {
+        "happy": {
+            "eyes": {
+                "shape": "pixel_happy",
+                "style": "8bit"
+            },
+            "mouth": {
+                "shape": "pixel_smile",
+                "style": "8bit"
+            },
+            "led": {
+                "color": [
+                    255,
+                    255,
+                    0
+                ],
+                "pattern": "pulse"
+            }
+        },
+        "sad": {
+            "eyes": {
+                "shape": "pixel_sad",
+                "style": "8bit"
+            },
+            "mouth": {
+                "shape": "pixel_frown",
+                "style": "8bit"
+            },
+            "led": {
+                "color": [
+                    0,
+                    0,
+                    255
+                ],
+                "pattern": "fade"
+            }
+        },
+        "angry": {
+            "eyes": {
+                "shape": "pixel_angry",
+                "style": "8bit"
+            },
+            "mouth": {
+                "shape": "pixel_grimace",
+                "style": "8bit"
+            },
+            "led": {
+                "color": [
+                    255,
+                    0,
+                    0
+                ],
+                "pattern": "scan"
+            }
+        },
+        "surprised": {
+            "eyes": {
+                "shape": "pixel_wide",
+                "style": "8bit"
+            },
+            "mouth": {
+                "shape": "pixel_o_shape",
+                "style": "8bit"
+            },
+            "led": {
+                "color": [
+                    255,
+                    0,
+                    255
+                ],
+                "pattern": "sparkle"
+            }
+        },
+        "disgusted": {
+            "eyes": {
+                "shape": "pixel_disgusted",
+                "style": "8bit"
+            },
+            "mouth": {
+                "shape": "pixel_grimace",
+                "style": "8bit"
+            },
+            "led": {
+                "color": [
+                    0,
+                    128,
+                    0
+                ],
+                "pattern": "wave"
+            }
+        },
+        "fearful": {
+            "eyes": {
+                "shape": "pixel_wide",
+                "style": "8bit"
+            },
+            "mouth": {
+                "shape": "pixel_small_o",
+                "style": "8bit"
+            },
+            "led": {
+                "color": [
+                    128,
+                    0,
+                    128
+                ],
+                "pattern": "chase"
+            }
+        },
+        "neutral": {
+            "eyes": {
+                "shape": "pixel_neutral",
+                "style": "8bit"
+            },
+            "mouth": {
+                "shape": "pixel_straight",
+                "style": "8bit"
+            },
+            "led": {
+                "color": [
+                    255,
+                    255,
+                    255
+                ],
+                "pattern": "static"
+            }
+        },
+        "calm": {
+            "eyes": {
+                "shape": "pixel_calm",
+                "style": "8bit"
+            },
+            "mouth": {
+                "shape": "pixel_small_smile",
+                "style": "8bit"
+            },
+            "led": {
+                "color": [
+                    0,
+                    255,
+                    255
+                ],
+                "pattern": "breathe"
+            }
+        }
+    }
+}

@@ -1,0 +1,794 @@
+<!-- 
+    Dosya: theme_editor.html
+    Son Güncelleme: 06 Mayıs 2025
+    Versiyon: 0.5.1
+    
+    Bu şablon dosyası FACE1 robot yüz projesindeki tema editör arayüzünü sağlar.
+    Kullanıcı burada robotun göz, ağız ve LED ifadelerini duygu durumlarına göre
+    özelleştirebilir ve temayı kaydedebilir.
+-->
+<!DOCTYPE html>
+<html lang="tr" data-theme="light">
+<head>
+    <title>FACE1 Tema Editörü</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tema ve erişilebilirlik CSS dosyaları -->
+    <link rel="stylesheet" href="/static/css/theme/theme-variables.css">
+    <link rel="stylesheet" href="/static/css/theme/responsive.css">
+    <link rel="stylesheet" href="/static/css/theme/accessibility.css">
+    <!-- Ana stil dosyası -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Tema editörü özel stilleri */
+        .theme-editor {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: calc(var(--f1-spacing-unit, 8px) * 2);
+        }
+
+        .sidebar {
+            background-color: var(--f1-card-background, #f0f4f8);
+            padding: var(--f1-spacing-unit, 8px) * 2;
+            border-radius: var(--f1-border-radius, 8px);
+            box-shadow: var(--f1-panel-shadow, 0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            padding: calc(var(--f1-spacing-unit, 8px)) 0;
+            border-bottom: 1px solid var(--f1-border-color, #e0e0e0);
+            cursor: pointer;
+        }
+
+        .sidebar li.active {
+            font-weight: bold;
+            color: var(--f1-primary-color, var(--primary-color));
+        }
+
+        .editor-main {
+            background-color: var(--f1-card-background, white);
+            padding: calc(var(--f1-spacing-unit, 8px) * 2);
+            border-radius: var(--f1-border-radius, 8px);
+            box-shadow: var(--f1-panel-shadow, 0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .editor-section {
+            display: none;
+            margin-bottom: calc(var(--f1-spacing-unit, 8px) * 4);
+        }
+
+        .editor-section.active {
+            display: block;
+        }
+
+        .theme-preview {
+            margin: calc(var(--f1-spacing-unit, 8px) * 2) 0;
+            padding: calc(var(--f1-spacing-unit, 8px) * 2);
+            background-color: #f9f9f9;
+            border: 1px solid var(--f1-border-color, #e0e0e0);
+            border-radius: var(--f1-border-radius, 8px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .preview-face {
+            width: 220px;
+            height: 270px;
+            background-color: #f0f0f0;
+            border-radius: 50% 50% 40% 40%;
+            position: relative;
+            margin: 1rem auto;
+            border: 2px solid #ddd;
+        }
+
+        .form-row {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-row label {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .color-picker {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .color-picker input[type="color"] {
+            width: 50px;
+            height: 30px;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .color-picker input[type="text"] {
+            width: 80px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .emotion-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .emotion-tab {
+            padding: 0.5rem 1rem;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .emotion-tab.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .theme-metadata {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Ekran okuyucular için atlama linki -->
+    <a href="#main-content" class="f1-skip-link">Ana içeriğe atla</a>
+    
+    <header>
+        <h1>FACE1 Robot Tema Editörü</h1>
+        <div class="header-actions">
+            <a href="/" class="f1-button">Ana Sayfaya Dön</a>
+            
+            <!-- Tema değiştirme butonları -->
+            <div class="f1-theme-toggle">
+                <button data-theme-toggle="light" title="Açık tema" class="f1-button">☀️</button>
+                <button data-theme-toggle="dark" title="Koyu tema" class="f1-button">🌙</button>
+                <button data-theme-toggle="high-contrast" title="Yüksek kontrast tema" class="f1-button">🔍</button>
+            </div>
+        </div>
+    </header>
+    
+    <main id="main-content">
+        <div class="container">
+            <div class="theme-header">
+                <h2>{{ theme_name|title }} Teması Düzenleme</h2>
+                <p class="description">Tema detaylarını ve görsel öğeleri buradan düzenleyebilirsiniz.</p>
+            </div>
+
+            <div class="theme-editor">
+                <div class="sidebar">
+                    <h3>Bölümler</h3>
+                    <ul>
+                        <li class="section-link active" data-section="general">Genel Bilgiler</li>
+                        <li class="section-link" data-section="eyes">Göz Ayarları</li>
+                        <li class="section-link" data-section="mouth">Ağız Ayarları</li>
+                        <li class="section-link" data-section="led">LED Ayarları</li>
+                        <li class="section-link" data-section="preview">Önizleme</li>
+                    </ul>
+                    
+                    <div class="sidebar-actions">
+                        <button id="save-theme" class="primary-button">Temayı Kaydet</button>
+                        <button id="copy-theme" class="secondary-button">Tema Kopyala</button>
+                    </div>
+                </div>
+
+                <div class="editor-main">
+                    <!-- Genel Bilgiler Bölümü -->
+                    <div class="editor-section active" id="section-general">
+                        <h3>Genel Tema Bilgileri</h3>
+                        <div class="theme-metadata">
+                            <div class="form-row">
+                                <label for="theme-name">Tema Adı:</label>
+                                <input type="text" id="theme-name" value="{{ theme_details.name }}" required>
+                            </div>
+                            <div class="form-row">
+                                <label for="theme-description">Açıklama:</label>
+                                <textarea id="theme-description" rows="3">{{ theme_details.description }}</textarea>
+                            </div>
+                            <div class="form-row">
+                                <label for="theme-author">Yazar:</label>
+                                <input type="text" id="theme-author" value="{{ theme_details.author }}">
+                            </div>
+                            <div class="form-row">
+                                <label for="theme-version">Versiyon:</label>
+                                <input type="text" id="theme-version" value="{{ theme_details.version }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Göz Ayarları Bölümü -->
+                    <div class="editor-section" id="section-eyes">
+                        <h3>Göz Ayarları</h3>
+                        <div class="emotion-tabs">
+                            {% for emotion in emotions %}
+                            <div class="emotion-tab {% if loop.first %}active{% endif %}" data-emotion="{{ emotion }}">{{ emotion|title }}</div>
+                            {% endfor %}
+                        </div>
+
+                        {% for emotion in emotions %}
+                        <div class="emotion-settings {% if loop.first %}active{% endif %}" id="eyes-{{ emotion }}">
+                            <h4>{{ emotion|title }} Duygusu Göz Ayarları</h4>
+                            
+                            <div class="form-grid">
+                                <div class="form-row">
+                                    <label for="eye-style-{{ emotion }}">Göz Stili:</label>
+                                    <select id="eye-style-{{ emotion }}">
+                                        <option value="cartoon" {% if theme_details.eyes[emotion].style == "cartoon" %}selected{% endif %}>Çizgi Film</option>
+                                        <option value="minimal" {% if theme_details.eyes[emotion].style == "minimal" %}selected{% endif %}>Minimal</option>
+                                        <option value="pixel" {% if theme_details.eyes[emotion].style == "pixel" %}selected{% endif %}>Piksel</option>
+                                        <option value="realistic" {% if theme_details.eyes[emotion].style == "realistic" %}selected{% endif %}>Gerçekçi</option>
+                                    </select>
+                                </div>
+                                <div class="form-row">
+                                    <label for="pupil-size-{{ emotion }}">Göz Bebeği Boyutu:</label>
+                                    <input type="range" id="pupil-size-{{ emotion }}" min="0.1" max="0.8" step="0.05" 
+                                        value="{{ theme_details.eyes[emotion].pupil_size }}">
+                                    <span id="pupil-size-value-{{ emotion }}">{{ theme_details.eyes[emotion].pupil_size }}</span>
+                                </div>
+                                <div class="form-row">
+                                    <label>Göz Bebeği Rengi:</label>
+                                    <div class="color-picker">
+                                        <input type="color" id="iris-color-picker-{{ emotion }}" 
+                                            value="#{{ '%02x%02x%02x' % tuple(theme_details.eyes[emotion].iris_color) }}">
+                                        <input type="text" id="iris-color-text-{{ emotion }}" 
+                                            value="{{ theme_details.eyes[emotion].iris_color }}">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <label for="animation-{{ emotion }}">Animasyon:</label>
+                                    <select id="animation-{{ emotion }}">
+                                        <option value="blink" {% if theme_details.eyes[emotion].animation == "blink" %}selected{% endif %}>Göz Kırpma</option>
+                                        <option value="blink_slow" {% if theme_details.eyes[emotion].animation == "blink_slow" %}selected{% endif %}>Yavaş Göz Kırpma</option>
+                                        <option value="squint" {% if theme_details.eyes[emotion].animation == "squint" %}selected{% endif %}>Kısık Göz</option>
+                                        <option value="wide" {% if theme_details.eyes[emotion].animation == "wide" %}selected{% endif %}>Geniş Göz</option>
+                                        <option value="look_around" {% if theme_details.eyes[emotion].animation == "look_around" %}selected{% endif %}>Etrafı İzle</option>
+                                    </select>
+                                </div>
+                                <div class="form-row">
+                                    <label for="blink-rate-{{ emotion }}">Göz Kırpma Hızı:</label>
+                                    <input type="range" id="blink-rate-{{ emotion }}" min="1" max="10" step="0.5" 
+                                        value="{{ theme_details.eyes[emotion].blink_rate }}">
+                                    <span id="blink-rate-value-{{ emotion }}">{{ theme_details.eyes[emotion].blink_rate }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Ağız Ayarları Bölümü -->
+                    <div class="editor-section" id="section-mouth">
+                        <h3>Ağız Ayarları</h3>
+                        <div class="emotion-tabs">
+                            {% for emotion in emotions %}
+                            <div class="emotion-tab {% if loop.first %}active{% endif %}" data-emotion="{{ emotion }}">{{ emotion|title }}</div>
+                            {% endfor %}
+                        </div>
+
+                        {% for emotion in emotions %}
+                        <div class="emotion-settings {% if loop.first %}active{% endif %}" id="mouth-{{ emotion }}">
+                            <h4>{{ emotion|title }} Duygusu Ağız Ayarları</h4>
+                            
+                            <div class="form-grid">
+                                <div class="form-row">
+                                    <label for="mouth-style-{{ emotion }}">Ağız Stili:</label>
+                                    <select id="mouth-style-{{ emotion }}">
+                                        <option value="smile" {% if theme_details.mouth[emotion].style == "smile" %}selected{% endif %}>Gülümseme</option>
+                                        <option value="frown" {% if theme_details.mouth[emotion].style == "frown" %}selected{% endif %}>Üzgün</option>
+                                        <option value="flat" {% if theme_details.mouth[emotion].style == "flat" %}selected{% endif %}>Düz</option>
+                                        <option value="o" {% if theme_details.mouth[emotion].style == "o" %}selected{% endif %}>O Şekli</option>
+                                        <option value="slight_smile" {% if theme_details.mouth[emotion].style == "slight_smile" %}selected{% endif %}>Hafif Gülümseme</option>
+                                        <option value="grimace" {% if theme_details.mouth[emotion].style == "grimace" %}selected{% endif %}>Yüz Buruşturma</option>
+                                        <option value="o_small" {% if theme_details.mouth[emotion].style == "o_small" %}selected{% endif %}>Küçük O</option>
+                                    </select>
+                                </div>
+                                <div class="form-row">
+                                    <label for="mouth-width-{{ emotion }}">Ağız Genişliği:</label>
+                                    <input type="range" id="mouth-width-{{ emotion }}" min="0.2" max="1.0" step="0.05" 
+                                        value="{{ theme_details.mouth[emotion].width }}">
+                                    <span id="mouth-width-value-{{ emotion }}">{{ theme_details.mouth[emotion].width }}</span>
+                                </div>
+                                <div class="form-row">
+                                    <label for="mouth-height-{{ emotion }}">Ağız Yüksekliği:</label>
+                                    <input type="range" id="mouth-height-{{ emotion }}" min="0" max="1.0" step="0.05" 
+                                        value="{{ theme_details.mouth[emotion].height }}">
+                                    <span id="mouth-height-value-{{ emotion }}">{{ theme_details.mouth[emotion].height }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- LED Ayarları Bölümü -->
+                    <div class="editor-section" id="section-led">
+                        <h3>LED Ayarları</h3>
+                        <div class="emotion-tabs">
+                            {% for emotion in emotions %}
+                            <div class="emotion-tab {% if loop.first %}active{% endif %}" data-emotion="{{ emotion }}">{{ emotion|title }}</div>
+                            {% endfor %}
+                        </div>
+
+                        {% for emotion in emotions %}
+                        <div class="emotion-settings {% if loop.first %}active{% endif %}" id="led-{{ emotion }}">
+                            <h4>{{ emotion|title }} Duygusu LED Ayarları</h4>
+                            
+                            <div class="form-grid">
+                                <div class="form-row">
+                                    <label>LED Rengi:</label>
+                                    <div class="color-picker">
+                                        <input type="color" id="led-color-picker-{{ emotion }}" 
+                                            value="#{{ '%02x%02x%02x' % tuple(theme_details.led[emotion].color) }}">
+                                        <input type="text" id="led-color-text-{{ emotion }}" 
+                                            value="{{ theme_details.led[emotion].color }}">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <label for="led-pattern-{{ emotion }}">LED Deseni:</label>
+                                    <select id="led-pattern-{{ emotion }}">
+                                        <option value="static" {% if theme_details.led[emotion].pattern == "static" %}selected{% endif %}>Sabit</option>
+                                        <option value="pulse" {% if theme_details.led[emotion].pattern == "pulse" %}selected{% endif %}>Nabız</option>
+                                        <option value="breathe" {% if theme_details.led[emotion].pattern == "breathe" %}selected{% endif %}>Nefes</option>
+                                        <option value="wipe" {% if theme_details.led[emotion].pattern == "wipe" %}selected{% endif %}>Silme</option>
+                                        <option value="sparkle" {% if theme_details.led[emotion].pattern == "sparkle" %}selected{% endif %}>Parıldama</option>
+                                        <option value="rainbow" {% if theme_details.led[emotion].pattern == "rainbow" %}selected{% endif %}>Gökkuşağı</option>
+                                    </select>
+                                </div>
+                                <div class="form-row">
+                                    <label for="led-speed-{{ emotion }}">Animasyon Hızı:</label>
+                                    <input type="range" id="led-speed-{{ emotion }}" min="0" max="100" step="5" 
+                                        value="{{ theme_details.led[emotion].speed }}">
+                                    <span id="led-speed-value-{{ emotion }}">{{ theme_details.led[emotion].speed }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Önizleme Bölümü -->
+                    <div class="editor-section" id="section-preview">
+                        <h3>Tema Önizleme</h3>
+                        <div class="preview-controls">
+                            <div class="form-row">
+                                <label for="preview-emotion">Duygu Seçin:</label>
+                                <select id="preview-emotion">
+                                    {% for emotion in emotions %}
+                                    <option value="{{ emotion }}">{{ emotion|title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="theme-preview">
+                            <div class="preview-face">
+                                <div class="eyes">
+                                    <div class="eye left"></div>
+                                    <div class="eye right"></div>
+                                </div>
+                                <div class="mouth"></div>
+                            </div>
+                            <div class="preview-led">
+                                <div class="led-strip"></div>
+                            </div>
+                        </div>
+
+                        <div class="simulation-link">
+                            <p>Daha detaylı önizleme için <a href="/" target="_blank">Ana Dashboard</a> sayfasına gidip tema seçimini değiştirebilirsiniz.</p>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="reset-theme" class="secondary-button">Değişiklikleri Sıfırla</button>
+                        <button id="save-theme-bottom" class="primary-button">Temayı Kaydet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 FACE1 Robot - Version 0.5.1</p>
+    </footer>
+
+    <div class="f1-modal" id="copy-theme-modal">
+        <div class="f1-modal-content">
+            <span class="f1-modal-close">&times;</span>
+            <h3>Tema Kopyala</h3>
+            <p>Yeni tema adını giriniz:</p>
+            <div class="form-row">
+                <input type="text" id="new-theme-name" placeholder="yeni_tema_adı">
+            </div>
+            <div class="f1-modal-actions">
+                <button id="confirm-copy" class="f1-button">Kopyala</button>
+                <button class="f1-button modal-close-btn">İptal</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tema yönetici scripti -->
+    <script src="/static/js/theme-manager.js"></script>
+    <!-- Mevcut scriptler -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elementleri
+            const sectionLinks = document.querySelectorAll('.section-link');
+            const editorSections = document.querySelectorAll('.editor-section');
+            const emotionTabs = document.querySelectorAll('.emotion-tab');
+            const emotionSettings = document.querySelectorAll('.emotion-settings');
+            const saveButtons = document.querySelectorAll('#save-theme, #save-theme-bottom');
+            const copyThemeBtn = document.getElementById('copy-theme');
+            const resetThemeBtn = document.getElementById('reset-theme');
+            const copyThemeModal = document.getElementById('copy-theme-modal');
+            const confirmCopyBtn = document.getElementById('confirm-copy');
+            const modalCloseBtns = document.querySelectorAll('.modal-close, .modal-close-btn');
+            const originalThemeData = {{ theme_details|tojson|safe }};
+            
+            let currentThemeData = JSON.parse(JSON.stringify(originalThemeData));
+            let hasChanges = false;
+
+            // Bölümler arası geçiş
+            sectionLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const section = this.getAttribute('data-section');
+                    
+                    // Aktif bağlantıyı işaretle
+                    sectionLinks.forEach(link => link.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // İlgili bölümü göster
+                    editorSections.forEach(section => section.classList.remove('active'));
+                    document.getElementById(`section-${section}`).classList.add('active');
+                });
+            });
+            
+            // Duygu sekmeleri arası geçiş
+            emotionTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const emotion = this.getAttribute('data-emotion');
+                    const parentSection = this.closest('.editor-section');
+                    const sectionId = parentSection.id;
+                    const type = sectionId.replace('section-', '');
+                    
+                    // Aynı bölümdeki sekmeleri güncelle
+                    parentSection.querySelectorAll('.emotion-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // İlgili duygu ayarlarını göster
+                    parentSection.querySelectorAll('.emotion-settings').forEach(s => s.classList.remove('active'));
+                    document.getElementById(`${type}-${emotion}`).classList.add('active');
+                });
+            });
+            
+            // Range inputları için değer gösterimi
+            document.querySelectorAll('input[type="range"]').forEach(input => {
+                const valueSpan = document.getElementById(input.id + '-value');
+                if (valueSpan) {
+                    input.addEventListener('input', function() {
+                        valueSpan.textContent = this.value;
+                        updateThemeData();
+                    });
+                }
+            });
+            
+            // Renk seçici senkronizasyonu
+            document.querySelectorAll('input[type="color"]').forEach(colorInput => {
+                const textInput = document.getElementById(colorInput.id.replace('-picker', '-text'));
+                
+                colorInput.addEventListener('input', function() {
+                    const hexColor = this.value;
+                    const rgbColor = hexToRgb(hexColor);
+                    textInput.value = rgbColor;
+                    updateThemeData();
+                });
+                
+                textInput.addEventListener('change', function() {
+                    try {
+                        const rgbArray = JSON.parse(this.value);
+                        const hexColor = rgbToHex(rgbArray);
+                        colorInput.value = hexColor;
+                        updateThemeData();
+                    } catch (e) {
+                        console.error('Renk formatı hatalı:', e);
+                    }
+                });
+            });
+            
+            // Diğer inputlar ve selectler için değişim takibi
+            document.querySelectorAll('input[type="text"], textarea, select').forEach(input => {
+                input.addEventListener('change', updateThemeData);
+            });
+            
+            // Modal işlevleri
+            copyThemeBtn.addEventListener('click', function() {
+                copyThemeModal.style.display = 'block';
+            });
+            
+            modalCloseBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    copyThemeModal.style.display = 'none';
+                });
+            });
+            
+            // Tema kopyalama işlemi
+            confirmCopyBtn.addEventListener('click', async function() {
+                const newThemeName = document.getElementById('new-theme-name').value.trim();
+                
+                if (!newThemeName) {
+                    alert('Lütfen yeni tema için bir isim giriniz.');
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(`/api/themes/{{ theme_name }}/copy/${newThemeName}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok) {
+                        alert(`Tema başarıyla kopyalandı: ${newThemeName}`);
+                        window.location.href = `/theme-editor/${newThemeName}`;
+                    } else {
+                        alert(`Hata: ${result.detail || 'Tema kopyalanamadı'}`);
+                    }
+                } catch (e) {
+                    alert('Bağlantı hatası: ' + e.message);
+                } finally {
+                    copyThemeModal.style.display = 'none';
+                }
+            });
+            
+            // Tema kaydetme işlemi
+            saveButtons.forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    if (!hasChanges) {
+                        alert('Henüz bir değişiklik yapılmadı.');
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch(`/api/themes/{{ theme_name }}/edit`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(currentThemeData)
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (response.ok) {
+                            alert('Tema başarıyla kaydedildi.');
+                            hasChanges = false;
+                            // Orijinal veriyi güncelle
+                            originalThemeData = JSON.parse(JSON.stringify(currentThemeData));
+                        } else {
+                            alert(`Hata: ${result.detail || 'Tema kaydedilemedi'}`);
+                        }
+                    } catch (e) {
+                        alert('Bağlantı hatası: ' + e.message);
+                    }
+                });
+            });
+            
+            // Değişiklikleri sıfırlama
+            resetThemeBtn.addEventListener('click', function() {
+                if (confirm('Tüm değişiklikler kaybolacak. Devam etmek istiyor musunuz?')) {
+                    resetForm();
+                }
+            });
+            
+            // Tema verilerini güncelleme
+            function updateThemeData() {
+                // Temel bilgiler
+                currentThemeData.name = document.getElementById('theme-name').value;
+                currentThemeData.description = document.getElementById('theme-description').value;
+                currentThemeData.author = document.getElementById('theme-author').value;
+                currentThemeData.version = document.getElementById('theme-version').value;
+                
+                // Duygular için ayarları topla
+                const emotions = {{ emotions|tojson|safe }};
+                
+                emotions.forEach(emotion => {
+                    // Göz ayarları
+                    if (currentThemeData.eyes && currentThemeData.eyes[emotion]) {
+                        currentThemeData.eyes[emotion].style = document.getElementById(`eye-style-${emotion}`).value;
+                        currentThemeData.eyes[emotion].pupil_size = parseFloat(document.getElementById(`pupil-size-${emotion}`).value);
+                        currentThemeData.eyes[emotion].iris_color = JSON.parse(document.getElementById(`iris-color-text-${emotion}`).value);
+                        currentThemeData.eyes[emotion].animation = document.getElementById(`animation-${emotion}`).value;
+                        currentThemeData.eyes[emotion].blink_rate = parseFloat(document.getElementById(`blink-rate-${emotion}`).value);
+                    }
+                    
+                    // Ağız ayarları
+                    if (currentThemeData.mouth && currentThemeData.mouth[emotion]) {
+                        currentThemeData.mouth[emotion].style = document.getElementById(`mouth-style-${emotion}`).value;
+                        currentThemeData.mouth[emotion].width = parseFloat(document.getElementById(`mouth-width-${emotion}`).value);
+                        currentThemeData.mouth[emotion].height = parseFloat(document.getElementById(`mouth-height-${emotion}`).value);
+                    }
+                    
+                    // LED ayarları
+                    if (currentThemeData.led && currentThemeData.led[emotion]) {
+                        currentThemeData.led[emotion].color = JSON.parse(document.getElementById(`led-color-text-${emotion}`).value);
+                        currentThemeData.led[emotion].pattern = document.getElementById(`led-pattern-${emotion}`).value;
+                        currentThemeData.led[emotion].speed = parseInt(document.getElementById(`led-speed-${emotion}`).value);
+                    }
+                });
+                
+                hasChanges = !compareObjects(originalThemeData, currentThemeData);
+                updateSaveButtonState();
+            }
+            
+            // Form alanlarını sıfırlama
+            function resetForm() {
+                // Mevcut temayı orijinal veriden geri yükle
+                currentThemeData = JSON.parse(JSON.stringify(originalThemeData));
+                
+                // Temel bilgiler
+                document.getElementById('theme-name').value = currentThemeData.name;
+                document.getElementById('theme-description').value = currentThemeData.description;
+                document.getElementById('theme-author').value = currentThemeData.author;
+                document.getElementById('theme-version').value = currentThemeData.version;
+                
+                // Duygular için ayarları yükle
+                const emotions = {{ emotions|tojson|safe }};
+                
+                emotions.forEach(emotion => {
+                    // Göz ayarları
+                    if (currentThemeData.eyes && currentThemeData.eyes[emotion]) {
+                        document.getElementById(`eye-style-${emotion}`).value = currentThemeData.eyes[emotion].style;
+                        document.getElementById(`pupil-size-${emotion}`).value = currentThemeData.eyes[emotion].pupil_size;
+                        document.getElementById(`pupil-size-value-${emotion}`).textContent = currentThemeData.eyes[emotion].pupil_size;
+                        document.getElementById(`iris-color-text-${emotion}`).value = JSON.stringify(currentThemeData.eyes[emotion].iris_color);
+                        document.getElementById(`iris-color-picker-${emotion}`).value = rgbToHex(currentThemeData.eyes[emotion].iris_color);
+                        document.getElementById(`animation-${emotion}`).value = currentThemeData.eyes[emotion].animation;
+                        document.getElementById(`blink-rate-${emotion}`).value = currentThemeData.eyes[emotion].blink_rate;
+                        document.getElementById(`blink-rate-value-${emotion}`).textContent = currentThemeData.eyes[emotion].blink_rate;
+                    }
+                    
+                    // Ağız ayarları
+                    if (currentThemeData.mouth && currentThemeData.mouth[emotion]) {
+                        document.getElementById(`mouth-style-${emotion}`).value = currentThemeData.mouth[emotion].style;
+                        document.getElementById(`mouth-width-${emotion}`).value = currentThemeData.mouth[emotion].width;
+                        document.getElementById(`mouth-width-value-${emotion}`).textContent = currentThemeData.mouth[emotion].width;
+                        document.getElementById(`mouth-height-${emotion}`).value = currentThemeData.mouth[emotion].height;
+                        document.getElementById(`mouth-height-value-${emotion}`).textContent = currentThemeData.mouth[emotion].height;
+                    }
+                    
+                    // LED ayarları
+                    if (currentThemeData.led && currentThemeData.led[emotion]) {
+                        document.getElementById(`led-color-text-${emotion}`).value = JSON.stringify(currentThemeData.led[emotion].color);
+                        document.getElementById(`led-color-picker-${emotion}`).value = rgbToHex(currentThemeData.led[emotion].color);
+                        document.getElementById(`led-pattern-${emotion}`).value = currentThemeData.led[emotion].pattern;
+                        document.getElementById(`led-speed-${emotion}`).value = currentThemeData.led[emotion].speed;
+                        document.getElementById(`led-speed-value-${emotion}`).textContent = currentThemeData.led[emotion].speed;
+                    }
+                });
+                
+                hasChanges = false;
+                updateSaveButtonState();
+            }
+            
+            // Yardımcı fonksiyonlar
+            function hexToRgb(hex) {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? 
+                    [
+                        parseInt(result[1], 16),
+                        parseInt(result[2], 16),
+                        parseInt(result[3], 16)
+                    ] :
+                    [0, 0, 0];
+            }
+            
+            function rgbToHex(rgb) {
+                return `#${((1 << 24) + (rgb[0] << 16) + (rgb[1] << 8) + rgb[2]).toString(16).slice(1)}`;
+            }
+            
+            function compareObjects(obj1, obj2) {
+                return JSON.stringify(obj1) === JSON.stringify(obj2);
+            }
+            
+            function updateSaveButtonState() {
+                saveButtons.forEach(btn => {
+                    btn.disabled = !hasChanges;
+                    btn.classList.toggle('disabled', !hasChanges);
+                });
+            }
+            
+            // Önizleme güncellemesi (basit)
+            const previewEmotion = document.getElementById('preview-emotion');
+            previewEmotion.addEventListener('change', updatePreview);
+            
+            function updatePreview() {
+                const emotion = previewEmotion.value;
+                const previewFace = document.querySelector('.preview-face');
+                const eyeLeft = previewFace.querySelector('.eye.left');
+                const eyeRight = previewFace.querySelector('.eye.right');
+                const mouth = previewFace.querySelector('.mouth');
+                const ledStrip = document.querySelector('.led-strip');
+                
+                // Göz ayarları
+                const eyeData = currentThemeData.eyes[emotion];
+                const eyeStyle = eyeData.style || 'cartoon';
+                const pupilSize = eyeData.pupil_size || 0.3;
+                const irisColor = eyeData.iris_color || [0, 0, 0];
+                
+                // Ağız ayarları
+                const mouthData = currentThemeData.mouth[emotion];
+                const mouthStyle = mouthData.style || 'smile';
+                const mouthWidth = mouthData.width || 0.6;
+                const mouthHeight = mouthData.height || 0.3;
+                
+                // LED ayarları
+                const ledData = currentThemeData.led[emotion];
+                const ledColor = ledData.color || [255, 255, 255];
+                
+                // CSS ile basit önizleme uygula
+                // (Gerçek uygulamada daha karmaşık görseller olabilir)
+                eyeLeft.style.backgroundColor = 'white';
+                eyeRight.style.backgroundColor = 'white';
+                
+                // Göz bebeği boyutu
+                eyeLeft.style.setProperty('--pupil-size', pupilSize);
+                eyeRight.style.setProperty('--pupil-size', pupilSize);
+                
+                // Göz bebeği rengi
+                eyeLeft.style.setProperty('--iris-color', `rgb(${irisColor[0]}, ${irisColor[1]}, ${irisColor[2]})`);
+                eyeRight.style.setProperty('--iris-color', `rgb(${irisColor[0]}, ${irisColor[1]}, ${irisColor[2]})`);
+                
+                // Ağız stili (basitleştirilmiş)
+                mouth.style.width = `${mouthWidth * 100}px`;
+                mouth.style.height = `${mouthHeight * 50}px`;
+                
+                if (mouthStyle.includes('smile')) {
+                    mouth.style.borderRadius = '0 0 100px 100px';
+                } else if (mouthStyle.includes('frown')) {
+                    mouth.style.borderRadius = '100px 100px 0 0';
+                } else if (mouthStyle.includes('o')) {
+                    mouth.style.borderRadius = '50%';
+                } else {
+                    mouth.style.borderRadius = '0';
+                    mouth.style.height = '5px';
+                }
+                
+                // LED rengi
+                ledStrip.style.backgroundColor = `rgb(${ledColor[0]}, ${ledColor[1]}, ${ledColor[2]})`;
+            }
+            
+            // Sayfa yüklendiğinde önizlemeyi güncelle
+            updatePreview();
+        });
+    </script>
+</body>
+</html>

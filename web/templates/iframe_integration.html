@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<!--
+===========================================================
+# Proje: FACE1 - Raspberry Pi 5 Robot AI için Yüz Eklentisi
+# Dosya: iframe_integration.html
+# Açıklama: FACE1 IFrameBridge kullanım test sayfası
+# Bağımlılıklar: iframe_bridge.js
+# Bağlı Dosyalar: parent_integration_example.html
+
+# Versiyon: 0.5.0
+# Değişiklikler:
+# - [0.5.0] IFrameBridge test sayfası oluşturuldu
+# - [0.5.0] Temel iletişim protokolü demonstrasyonu eklendi
+# - [0.5.0] Duygu ve animasyon kontrolleri eklendi
+#
+# Yazar: GitHub Copilot
+# Tarih: 2025-05-04
+===========================================================
+-->
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FACE1 - IFrame Entegrasyon Testi</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f5f5f5;
+            --text-color: #333;
+            --border-color: #ddd;
+            --accent-color: #e74c3c;
+        }
+
+        .dark-theme {
+            --primary-color: #2980b9;
+            --secondary-color: #27ae60;
+            --background-color: #222;
+            --text-color: #eee;
+            --border-color: #444;
+            --accent-color: #c0392b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .sidebar {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .main-content {
+            flex: 2;
+            min-width: 400px;
+        }
+
+        h1, h2, h3 {
+            color: var(--primary-color);
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .dark-theme .card {
+            background-color: #333;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .component-manager {
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 10px;
+            margin-bottom: 15px;
+        }
+
+        .event-log {
+            height: 200px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            font-family: monospace;
+            font-size: 14px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        .dark-theme .event-log {
+            background-color: #2a2a2a;
+            border-color: var(--border-color);
+        }
+
+        .event-item {
+            margin-bottom: 5px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        .event-timestamp {
+            color: #888;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .event-type {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+
+        .event-error {
+            color: var(--accent-color);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        input, select {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: white;
+            color: var(--text-color);
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .dark-theme input, .dark-theme select {
+            background-color: #444;
+            border-color: #555;
+            color: #eee;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .theme-toggle input {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .status-connected {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .status-disconnected {
+            background-color: var(--accent-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <h1>FACE1 IFrame Entegrasyonu <span id="connection-status" class="status status-disconnected">Bağlantı bekleniyor</span></h1>
+            
+            <div class="card">
+                <h2>Event Delegasyonu Demo</h2>
+                <p>Bu sayfa, FACE1 event delegasyonu sisteminin ve iframe entegrasyonunun nasıl kullanılacağını göstermektedir.</p>
+                
+                <div class="theme-toggle">
+                    <input type="checkbox" id="theme-toggle">
+                    <label for="theme-toggle">Koyu tema</label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="allowed-origins">İzin Verilen Kaynaklar:</label>
+                    <input type="text" id="allowed-origins" value="*">
+                    <small>Güvenlik: * yerine gerçek domain'leri girin (virgülle ayırarak)</small>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Olay Günlüğü</h2>
+                <div id="event-log" class="event-log">
+                    <div class="event-item">
+                        <span class="event-timestamp">[00:00:00]</span>
+                        <span class="event-type">INFO</span>
+                        <span>Sayfa yüklendi, bağlantı bekleniyor</span>
+                    </div>
+                </div>
+                <button id="clear-log">Günlüğü Temizle</button>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="card">
+                <h2>Test Bileşenleri</h2>
+                
+                <div class="component-manager">
+                    <h3>Duygu Motoru</h3>
+                    <div class="form-group">
+                        <label for="emotion-select">Duygu:</label>
+                        <select id="emotion-select">
+                            <option value="happy">Mutlu</option>
+                            <option value="sad">Üzgün</option>
+                            <option value="angry">Kızgın</option>
+                            <option value="surprised">Şaşkın</option>
+                            <option value="neutral">Nötr</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="intensity-range">Yoğunluk: <span id="intensity-value">0.8</span></label>
+                        <input type="range" id="intensity-range" min="0" max="1" step="0.1" value="0.8">
+                    </div>
+                    <button id="set-emotion-btn">Duygu Ayarla</button>
+                </div>
+                
+                <div class="component-manager">
+                    <h3>Animasyon Kontrolü</h3>
+                    <div class="form-group">
+                        <label for="animation-select">Animasyon:</label>
+                        <select id="animation-select">
+                            <option value="blink">Göz Kırpma</option>
+                            <option value="speaking">Konuşma</option>
+                            <option value="nod">Baş Sallama</option>
+                            <option value="look_around">Etrafı İzleme</option>
+                        </select>
+                    </div>
+                    <button id="play-animation-btn">Animasyonu Oynat</button>
+                </div>
+                
+                <div class="component-manager">
+                    <h3>Tema Kontrolü</h3>
+                    <div class="form-group">
+                        <label for="theme-select">Tema:</label>
+                        <select id="theme-select">
+                            <option value="default">Varsayılan</option>
+                            <option value="minimal">Minimal</option>
+                            <option value="pixel">Pixel</option>
+                            <option value="realistic">Gerçekçi</option>
+                        </select>
+                    </div>
+                    <button id="set-theme-btn">Tema Ayarla</button>
+                </div>
+                
+                <div class="component-manager">
+                    <h3>LED Kontrolü</h3>
+                    <div class="form-group">
+                        <label for="led-action">Eylem:</label>
+                        <select id="led-action">
+                            <option value="pulse">Nabız</option>
+                            <option value="rainbow">Gökkuşağı</option>
+                            <option value="breathe">Nefes</option>
+                            <option value="off">Kapalı</option>
+                        </select>
+                    </div>
+                    <button id="led-control-btn">LED'leri Ayarla</button>
+                </div>
+                
+                <div class="component-manager">
+                    <h3>Yaşam Döngüsü</h3>
+                    <button id="lifecycle-btn" data-command="maintenance">Bakım Modu</button>
+                    <button id="lifecycle-resume-btn" data-command="exit_maintenance" disabled>Bakımdan Çık</button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Örnek Bileşenler</h2>
+                <p>Bu bileşenler, event delegasyonu sisteminin nasıl kullanılacağını göstermek için oluşturulmuştur.</p>
+                <div class="form-group">
+                    <label>Bileşen Tipleri:</label>
+                    <div>
+                        <button class="register-component-btn" data-type="EMOTION">Duygu Bileşeni Ekle</button>
+                        <button class="register-component-btn" data-type="ANIMATION">Animasyon Bileşeni Ekle</button>
+                        <button class="register-component-btn" data-type="LED">LED Bileşeni Ekle</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- IFrameBridge ve EventDelegator kütüphaneleri -->
+    <script src="/static/js/iframe_bridge.js"></script>
+    <script src="/static/js/event_delegator.js"></script>
+    
+    <script>
+        // Değişkenler
+        let bridge = null;
+        let delegator = null;
+        let sampleComponents = {};
+        
+        // DOM Elementleri
+        const eventLog = document.getElementById('event-log');
+        const connectionStatus = document.getElementById('connection-status');
+        const themeToggle = document.getElementById('theme-toggle');
+        const intensityRange = document.getElementById('intensity-range');
+        const intensityValue = document.getElementById('intensity-value');
+        const allowedOriginsInput = document.getElementById('allowed-origins');
+        
+        // Event Log'a mesaj ekle
+        function addLogMessage(message, type = 'INFO') {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            
+            const logItem = document.createElement('div');
+            logItem.className = 'event-item' + (type === 'ERROR' ? ' event-error' : '');
+            
+            logItem.innerHTML = `
+                <span class="event-timestamp">[${timeString}]</span>
+                <span class="event-type">${type}</span>
+                <span>${message}</span>
+            `;
+            
+            eventLog.appendChild(logItem);
+            eventLog.scrollTop = eventLog.scrollHeight;
+            
+            // Günlük boyutu kontrolü
+            if (eventLog.children.length > 100) {
+                eventLog.removeChild(eventLog.children[0]);
+            }
+        }
+        
+        // Hata olaylarını yakalama
+        window.addEventListener('error', function(event) {
+            addLogMessage(`Hata: ${event.message}`, 'ERROR');
+        });
+        
+        // Tema değişimi işleyici
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('dark-theme');
+            } else {
+                document.body.classList.remove('dark-theme');
+            }
+        });
+        
+        // Clear Log butonu
+        document.getElementById('clear-log').addEventListener('click', function() {
+            eventLog.innerHTML = '';
+            addLogMessage('Günlük temizlendi');
+        });
+        
+        // Yoğunluk değerini güncelle
+        intensityRange.addEventListener('input', function() {
+            intensityValue.textContent = this.value;
+        });
+        
+        // IFrameBridge ve EventDelegator'u başlat
+        function initializeIntegration() {
+            // Köprü oluştur
+            const allowedOrigins = allowedOriginsInput.value.split(',').map(origin => origin.trim());
+            
+            bridge = new IFrameBridge({
+                allowedOrigins: allowedOrigins,
+                debug: true,
+                onConnection: function(origin) {
+                    connectionStatus.textContent = 'Bağlandı';
+                    connectionStatus.className = 'status status-connected';
+                    addLogMessage(`IFrame bağlantısı kuruldu: ${origin}`);
+                },
+                onError: function(message, error) {
+                    addLogMessage(`IFrameBridge Hatası: ${message}`, 'ERROR');
+                }
+            });
+            
+            // Event delegasyonu sistemini oluştur
+            delegator = new EventDelegator(bridge, { debug: true });
+            
+            // Örnek bileşenleri oluştur
+            createSampleComponents();
+            
+            // Mesaj işleyicileri ekle
+            setupEventHandlers();
+            
+            addLogMessage('IFrameBridge ve EventDelegator başlatıldı');
+        }
+        
+        // Örnek bileşenleri oluştur
+        function createSampleComponents() {
+            // Duygu bileşeni
+            sampleComponents.emotion = {
+                name: 'EmotionComponent',
+                currentEmotion: 'neutral',
+                currentIntensity: 0.5,
+                handleMessage: function(messageType, data) {
+                    if (messageType === 'FACE1_SET_EMOTION') {
+                        this.currentEmotion = data.emotion || this.currentEmotion;
+                        this.currentIntensity = data.intensity || this.currentIntensity;
+                        addLogMessage(`Duygu değişti: ${this.currentEmotion} (${this.currentIntensity})`);
+                    }
+                }
+            };
+            
+            // Animasyon bileşeni
+            sampleComponents.animation = {
+                name: 'AnimationComponent',
+                currentAnimation: null,
+                isPlaying: false,
+                handleMessage: function(messageType, data) {
+                    if (messageType === 'FACE1_PLAY_ANIMATION') {
+                        this.currentAnimation = data.animation;
+                        this.isPlaying = true;
+                        addLogMessage(`Animasyon başlatıldı: ${this.currentAnimation}`);
+                        
+                        // 2 saniye sonra animasyonu bitir (test için)
+                        setTimeout(() => {
+                            this.isPlaying = false;
+                            if (delegator) {
+                                delegator.sendToParent('FACE1_ANIMATION_UPDATE', {
+                                    animation: this.currentAnimation,
+                                    progress: 1.0,
+                                    playing: false
+                                });
+                            }
+                            addLogMessage(`Animasyon tamamlandı: ${this.currentAnimation}`);
+                        }, 2000);
+                    }
+                }
+            };
+            
+            // LED bileşeni
+            sampleComponents.led = {
+                name: 'LEDComponent',
+                currentAction: 'off',
+                handleMessage: function(messageType, data) {
+                    if (messageType === 'FACE1_LED_CONTROL') {
+                        this.currentAction = data.action || 'off';
+                        addLogMessage(`LED eylemi: ${this.currentAction}`);
+                    }
+                }
+            };
+            
+            // Yaşam döngüsü bileşeni
+            sampleComponents.lifecycle = {
+                name: 'LifecycleComponent',
+                currentState: 'RUNNING',
+                handleMessage: function(messageType, data) {
+                    if (messageType === 'FACE1_PLUGIN_CONTROL') {
+                        const prevState = this.currentState;
+                        
+                        switch (data.command) {
+                            case 'maintenance':
+                                this.currentState = 'MAINTENANCE';
+                                document.getElementById('lifecycle-btn').disabled = true;
+                                document.getElementById('lifecycle-resume-btn').disabled = false;
+                                break;
+                            case 'exit_maintenance':
+                                this.currentState = 'RUNNING';
+                                document.getElementById('lifecycle-btn').disabled = false;
+                                document.getElementById('lifecycle-resume-btn').disabled = true;
+                                break;
+                        }
+                        
+                        addLogMessage(`Yaşam döngüsü durum değişikliği: ${prevState} -> ${this.currentState}`);
+                        
+                        // Üst projeye bildir
+                        if (delegator) {
+                            delegator.sendToParent('FACE1_STATE_CHANGE', {
+                                state: this.currentState,
+                                previousState: prevState
+                            });
+                        }
+                    }
+                }
+            };
+            
+            // Tema bileşeni
+            sampleComponents.theme = {
+                name: 'ThemeComponent',
+                currentTheme: 'default',
+                handleMessage: function(messageType, data) {
+                    if (messageType === 'FACE1_SET_THEME_NAME') {
+                        this.currentTheme = data.themeName || 'default';
+                        addLogMessage(`Tema değişti: ${this.currentTheme}`);
+                    }
+                }
+            };
+        }
+        
+        // Event işleyicileri
+        function setupEventHandlers() {
+            // Duygu ayarlama
+            document.getElementById('set-emotion-btn').addEventListener('click', function() {
+                if (!delegator) return;
+                
+                const emotion = document.getElementById('emotion-select').value;
+                const intensity = parseFloat(document.getElementById('intensity-range').value);
+                
+                delegator.sendToParent('FACE1_EMOTION_CHANGE', {
+                    emotion: emotion,
+                    intensity: intensity
+                });
+                
+                addLogMessage(`Duygu değişikliği gönderildi: ${emotion} (${intensity})`);
+            });
+            
+            // Animasyon oynatma
+            document.getElementById('play-animation-btn').addEventListener('click', function() {
+                if (!delegator) return;
+                
+                const animation = document.getElementById('animation-select').value;
+                
+                delegator.sendToParent('FACE1_ANIMATION_UPDATE', {
+                    animation: animation,
+                    progress: 0,
+                    playing: true
+                });
+                
+                addLogMessage(`Animasyon oynatma başlatıldı: ${animation}`);
+                
+                // Simüle edilmiş ilerleme güncellemeleri gönder
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 0.2;
+                    if (progress >= 1) {
+                        progress = 1;
+                        clearInterval(interval);
+                    }
+                    
+                    delegator.sendToParent('FACE1_ANIMATION_UPDATE', {
+                        animation: animation,
+                        progress: progress,
+                        playing: progress < 1
+                    });
+                    
+                }, 400);
+            });
+            
+            // Tema ayarlama
+            document.getElementById('set-theme-btn').addEventListener('click', function() {
+                if (!delegator) return;
+                
+                const theme = document.getElementById('theme-select').value;
+                
+                delegator.sendToParent('FACE1_SET_THEME_NAME', {
+                    themeName: theme
+                });
+                
+                addLogMessage(`Tema değişikliği gönderildi: ${theme}`);
+            });
+            
+            // LED kontrolü
+            document.getElementById('led-control-btn').addEventListener('click', function() {
+                if (!delegator) return;
+                
+                const action = document.getElementById('led-action').value;
+                
+                delegator.sendToParent('FACE1_LED_CONTROL', {
+                    action: action
+                });
+                
+                addLogMessage(`LED kontrolü gönderildi: ${action}`);
+            });
+            
+            // Yaşam döngüsü kontrolü
+            document.getElementById('lifecycle-btn').addEventListener('click', function() {
+                if (!delegator) return;
+                
+                const command = this.getAttribute('data-command');
+                
+                delegator.sendToParent('FACE1_PLUGIN_CONTROL', {
+                    command: command
+                });
+                
+                addLogMessage(`Yaşam döngüsü komutu gönderildi: ${command}`);
+            });
+            
+            document.getElementById('lifecycle-resume-btn').addEventListener('click', function() {
+                if (!delegator) return;
+                
+                const command = this.getAttribute('data-command');
+                
+                delegator.sendToParent('FACE1_PLUGIN_CONTROL', {
+                    command: command
+                });
+                
+                addLogMessage(`Yaşam döngüsü komutu gönderildi: ${command}`);
+            });
+            
+            // Bileşen kayıt butonları
+            document.querySelectorAll('.register-component-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (!delegator) return;
+                    
+                    const componentType = this.getAttribute('data-type');
+                    let component;
+                    
+                    switch (componentType) {
+                        case 'EMOTION':
+                            component = sampleComponents.emotion;
+                            break;
+                        case 'ANIMATION':
+                            component = sampleComponents.animation;
+                            break;
+                        case 'LED':
+                            component = sampleComponents.led;
+                            break;
+                    }
+                    
+                    if (component) {
+                        delegator.registerComponent(componentType, component);
+                        addLogMessage(`${component.name} bileşeni ${componentType} türüne kaydedildi`);
+                    }
+                });
+            });
+            
+            // Olay aboneliği örneği
+            if (delegator) {
+                delegator.subscribeToEvent('emotion:message', function(e) {
+                    addLogMessage(`Event Bus Olayı: Duygu mesajı alındı (${e.detail.messageType})`);
+                });
+            }
+        }
+        
+        // Sayfa yüklendiğinde çalıştırılacak kod
+        document.addEventListener('DOMContentLoaded', function() {
+            addLogMessage('Sayfa yüklendi');
+            initializeIntegration();
+            
+            // Otomatik olarak bileşenleri kaydet
+            setTimeout(() => {
+                if (delegator) {
+                    delegator.registerComponent('EMOTION', sampleComponents.emotion);
+                    delegator.registerComponent('ANIMATION', sampleComponents.animation);
+                    delegator.registerComponent('THEME', sampleComponents.theme);
+                    delegator.registerComponent('LIFECYCLE', sampleComponents.lifecycle);
+                    delegator.registerComponent('LED', sampleComponents.led);
+                    
+                    addLogMessage('Tüm bileşenler otomatik olarak kaydedildi');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

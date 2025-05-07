@@ -1,0 +1,187 @@
+{
+    "theme_name": "realistic",
+    "display_name": "Ger\u00e7ek\u00e7i Stil",
+    "description": "\u0130nsan g\u00f6z\u00fcne benzeyen ger\u00e7ek\u00e7i robot y\u00fcz\u00fc",
+    "version": "0.1.0",
+    "author": "FACE1 Team",
+    "default_emotion": "neutral",
+    "style": "realistic",
+    "eyes": {
+        "happy": {
+            "style": "realistic_human",
+            "pupil_size": 8,
+            "iris_color": [
+                100,
+                150,
+                220
+            ],
+            "sclera_color": [
+                240,
+                240,
+                240
+            ],
+            "reflection": true,
+            "animation_speed": 1.0,
+            "blink_frequency": 0.9
+        },
+        "sad": {
+            "style": "realistic_human",
+            "pupil_size": 10,
+            "iris_color": [
+                80,
+                100,
+                180
+            ],
+            "sclera_color": [
+                230,
+                230,
+                240
+            ],
+            "reflection": true,
+            "animation_speed": 0.6,
+            "blink_frequency": 0.6
+        },
+        "angry": {
+            "style": "realistic_human",
+            "pupil_size": 12,
+            "iris_color": [
+                150,
+                60,
+                50
+            ],
+            "sclera_color": [
+                240,
+                220,
+                220
+            ],
+            "reflection": true,
+            "animation_speed": 1.4,
+            "blink_frequency": 0.4
+        },
+        "surprised": {
+            "style": "realistic_human",
+            "pupil_size": 14,
+            "iris_color": [
+                100,
+                180,
+                200
+            ],
+            "sclera_color": [
+                250,
+                250,
+                250
+            ],
+            "reflection": true,
+            "animation_speed": 1.5,
+            "blink_frequency": 0.3
+        },
+        "calm": {
+            "style": "realistic_human",
+            "pupil_size": 9,
+            "iris_color": [
+                90,
+                130,
+                180
+            ],
+            "sclera_color": [
+                245,
+                245,
+                245
+            ],
+            "reflection": true,
+            "animation_speed": 0.7,
+            "blink_frequency": 1.2
+        },
+        "default": {
+            "style": "realistic_human",
+            "pupil_size": 10,
+            "iris_color": [
+                100,
+                140,
+                200
+            ],
+            "sclera_color": [
+                245,
+                245,
+                245
+            ],
+            "reflection": true,
+            "animation_speed": 1.0,
+            "blink_frequency": 0.8
+        }
+    },
+    "mouth": {
+        "happy": {
+            "style": "realistic_smile",
+            "size": 1.0,
+            "teeth_visible": true,
+            "lip_color": [
+                220,
+                150,
+                150
+            ],
+            "animation_speed": 1.0
+        },
+        "sad": {
+            "style": "realistic_frown",
+            "size": 0.9,
+            "teeth_visible": false,
+            "lip_color": [
+                200,
+                140,
+                140
+            ],
+            "animation_speed": 0.6
+        },
+        "angry": {
+            "style": "realistic_grimace",
+            "size": 0.9,
+            "teeth_visible": true,
+            "lip_color": [
+                210,
+                120,
+                120
+            ],
+            "animation_speed": 1.3
+        },
+        "surprised": {
+            "style": "realistic_o",
+            "size": 1.1,
+            "teeth_visible": true,
+            "lip_color": [
+                220,
+                160,
+                160
+            ],
+            "animation_speed": 1.2
+        },
+        "calm": {
+            "style": "realistic_soft_smile",
+            "size": 0.9,
+            "teeth_visible": false,
+            "lip_color": [
+                210,
+                150,
+                150
+            ],
+            "animation_speed": 0.7
+        },
+        "default": {
+            "style": "realistic_neutral",
+            "size": 0.9,
+            "teeth_visible": false,
+            "lip_color": [
+                210,
+                150,
+                150
+            ],
+            "animation_speed": 0.9
+        }
+    },
+    "led": {
+        "color_harmony": "analogous",
+        "brightness": 0.7,
+        "pattern": "pulse",
+        "animation_speed": 50
+    }
+}

@@ -1,0 +1,255 @@
+/* FACE1 Yüz İfadesi Kontrolü Widget'ı - CSS */
+
+.expression-control-widget {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* İfade Izgara Düzeni */
+.expression-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+@media (max-width: 768px) {
+    .expression-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .expression-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* İfade Ögeleri */
+.expression-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.expression-item:hover {
+    background-color: var(--f1-secondary-color-light, #f0f0f0);
+    transform: translateY(-2px);
+}
+
+.expression-item.active {
+    background-color: var(--f1-accent-color-light, #e3f2fd);
+    box-shadow: 0 0 0 2px var(--f1-accent-color, #2196f3);
+}
+
+/* Mini Yüz İkonları */
+.expression-icon {
+    width: 50px;
+    height: 50px;
+    background-color: var(--f1-face-bg, #ffe0b2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+.mini-face {
+    position: relative;
+    width: 40px;
+    height: 40px;
+}
+
+.mini-face .eye {
+    position: absolute;
+    width: 8px;
+    height: 10px;
+    background-color: #333;
+    border-radius: 50%;
+    top: 12px;
+}
+
+.mini-face .eye.left {
+    left: 10px;
+}
+
+.mini-face .eye.right {
+    right: 10px;
+}
+
+.mini-face .mouth {
+    position: absolute;
+    width: 20px;
+    height: 8px;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: transparent;
+    border-bottom: 2px solid #333;
+}
+
+/* Emoji İfade Stilleri */
+.expression-icon.happy .mini-face .mouth {
+    border-bottom: none;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border: none;
+    height: 10px;
+    background-color: #333;
+    border-radius: 0 0 10px 10px;
+}
+
+.expression-icon.sad .mini-face .mouth {
+    border-top: 2px solid #333;
+    border-bottom: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.expression-icon.angry .mini-face .eye {
+    transform: rotate(15deg);
+    height: 6px;
+}
+
+.expression-icon.angry .mini-face .mouth {
+    border-bottom: 2px solid #333;
+    width: 16px;
+    height: 3px;
+}
+
+.expression-icon.surprised .mini-face .eye {
+    height: 12px;
+    border-radius: 50%;
+}
+
+.expression-icon.surprised .mini-face .mouth {
+    height: 10px;
+    width: 12px;
+    border: 2px solid #333;
+    border-radius: 50%;
+}
+
+.expression-name {
+    font-size: 12px;
+    text-align: center;
+    color: var(--f1-text-color, #333);
+}
+
+/* İfade Ayarları */
+.expression-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px;
+    background-color: var(--f1-card-background-secondary, #f9f9f9);
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.setting-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.slider-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.expression-intensity,
+.expression-duration {
+    flex: 1;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--f1-slider-bg, #ddd);
+    border-radius: 3px;
+}
+
+.expression-intensity::-webkit-slider-thumb,
+.expression-duration::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--f1-accent-color, #2196f3);
+    cursor: pointer;
+}
+
+.help-tooltip {
+    width: 16px;
+    height: 16px;
+    background-color: var(--f1-text-color-light, #777);
+    color: white;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    cursor: help;
+    margin-left: 5px;
+}
+
+/* Mevcut İfade Önizleme */
+.current-expression {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.current-expression h4 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+}
+
+.expression-preview {
+    display: flex;
+    justify-content: center;
+}
+
+.preview-face {
+    width: 100px;
+    height: 100px;
+    background-color: var(--f1-face-bg, #ffe0b2);
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview-face .eye {
+    position: absolute;
+    width: 20px;
+    height: 24px;
+    background-color: #333;
+    border-radius: 50%;
+    top: 30px;
+}
+
+.preview-face .eye.left {
+    left: 25px;
+}
+
+.preview-face .eye.right {
+    right: 25px;
+}
+
+.preview-face .mouth {
+    position: absolute;
+    width: 50px;
+    height: 20px;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: transparent;
+    border-bottom: 3px solid #333;
+}

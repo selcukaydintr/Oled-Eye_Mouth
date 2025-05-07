@@ -1,0 +1,214 @@
+{
+    "name": "Minimal",
+    "description": "Basitleştirilmiş çizgi sanatı tarzı ifadeler",
+    "author": "FACE1 Team",
+    "version": "1.0.0",
+    "eyes": {
+        "happy": {
+            "style": "minimal-round",
+            "width": 15,
+            "height": 8,
+            "pupil_size": 4,
+            "blink_speed": 0.2
+        },
+        "sad": {
+            "style": "minimal-droopy",
+            "width": 15,
+            "height": 6,
+            "pupil_size": 3,
+            "blink_speed": 0.3
+        },
+        "angry": {
+            "style": "minimal-narrow",
+            "width": 15,
+            "height": 4,
+            "pupil_size": 3,
+            "blink_speed": 0.1
+        },
+        "surprised": {
+            "style": "minimal-wide",
+            "width": 18,
+            "height": 10,
+            "pupil_size": 5,
+            "blink_speed": 0.1
+        },
+        "confused": {
+            "style": "minimal-uneven",
+            "width": 16,
+            "height": 8,
+            "pupil_size": 4,
+            "blink_speed": 0.3
+        },
+        "sleepy": {
+            "style": "minimal-half-closed",
+            "width": 15,
+            "height": 3,
+            "pupil_size": 3,
+            "blink_speed": 0.5
+        },
+        "excited": {
+            "style": "minimal-sparkle",
+            "width": 16,
+            "height": 9,
+            "pupil_size": 5,
+            "blink_speed": 0.1
+        },
+        "bored": {
+            "style": "minimal-flat",
+            "width": 15,
+            "height": 6,
+            "pupil_size": 3,
+            "blink_speed": 0.4
+        },
+        "love": {
+            "style": "minimal-heart",
+            "width": 15,
+            "height": 10,
+            "pupil_size": 0,
+            "blink_speed": 0.2
+        },
+        "calm": {
+            "style": "minimal",
+            "width": 15,
+            "height": 6,
+            "pupil_size": 4,
+            "blink_speed": 0.3
+        },
+        "neutral": {
+            "style": "minimal",
+            "width": 15,
+            "height": 6,
+            "pupil_size": 4,
+            "blink_speed": 0.2
+        }
+    },
+    "mouth": {
+        "happy": {
+            "style": "minimal-smile",
+            "width": 30,
+            "height": 10,
+            "curve": 0.6
+        },
+        "sad": {
+            "style": "minimal-frown",
+            "width": 20,
+            "height": 8,
+            "curve": -0.4
+        },
+        "angry": {
+            "style": "minimal-straight",
+            "width": 25,
+            "height": 3,
+            "curve": -0.1
+        },
+        "surprised": {
+            "style": "minimal-o",
+            "width": 15,
+            "height": 15,
+            "curve": 1.0
+        },
+        "confused": {
+            "style": "minimal-squiggle",
+            "width": 20,
+            "height": 3,
+            "curve": 0.2
+        },
+        "sleepy": {
+            "style": "minimal-yawn",
+            "width": 15,
+            "height": 10,
+            "curve": 0.3
+        },
+        "excited": {
+            "style": "minimal-grin",
+            "width": 35,
+            "height": 10,
+            "curve": 0.8
+        },
+        "bored": {
+            "style": "minimal-flat",
+            "width": 20,
+            "height": 2,
+            "curve": 0
+        },
+        "love": {
+            "style": "minimal-smile",
+            "width": 25,
+            "height": 8,
+            "curve": 0.5
+        },
+        "calm": {
+            "style": "minimal-slight-smile",
+            "width": 20,
+            "height": 3,
+            "curve": 0.2
+        },
+        "neutral": {
+            "style": "minimal",
+            "width": 20,
+            "height": 3,
+            "curve": 0
+        }
+    },
+    "led": {
+        "happy": {
+            "color": [200, 200, 40],
+            "animation": "pulse",
+            "speed": 0.6
+        },
+        "sad": {
+            "color": [40, 80, 200],
+            "animation": "breathe",
+            "speed": 0.3
+        },
+        "angry": {
+            "color": [200, 40, 40],
+            "animation": "flash",
+            "speed": 0.8
+        },
+        "surprised": {
+            "color": [200, 200, 120],
+            "animation": "sparkle",
+            "speed": 0.7
+        },
+        "confused": {
+            "color": [160, 80, 200],
+            "animation": "chase",
+            "speed": 0.4
+        },
+        "sleepy": {
+            "color": [80, 80, 120],
+            "animation": "fade",
+            "speed": 0.2
+        },
+        "excited": {
+            "color": [200, 120, 0],
+            "animation": "rainbow",
+            "speed": 0.9
+        },
+        "bored": {
+            "color": [80, 80, 80],
+            "animation": "static",
+            "speed": 0.2
+        },
+        "love": {
+            "color": [200, 40, 120],
+            "animation": "pulse",
+            "speed": 0.5
+        },
+        "calm": {
+            "color": [40, 160, 200],
+            "animation": "breathe",
+            "speed": 0.25
+        },
+        "neutral": {
+            "color": [80, 80, 200],
+            "animation": "static",
+            "speed": 0.5
+        }
+    },
+    "metadata": {
+        "created_date": "2025-04-28",
+        "modified_date": "2025-04-28"
+    }
+}

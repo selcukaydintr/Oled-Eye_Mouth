@@ -1,0 +1,129 @@
+{% extends "widgets/widget_base.html" %}
+
+{% block widget_content %}
+<div class="emotion-transitions-widget">
+    <div class="transitions-container">
+        <div class="transitions-header">
+            <h4>Tanımlanmış Duygu Sekansları</h4>
+            <div class="transitions-controls">
+                <button id="add-transition-btn-{{ widget_id }}" class="add-transition-btn" title="Yeni Sekans Ekle">
+                    <span class="icon">+</span>
+                </button>
+                <button id="edit-transitions-btn-{{ widget_id }}" class="edit-transitions-btn" title="Sekansları Düzenle">
+                    <span class="icon">✎</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="transitions-list-container">
+            <ul id="transitions-list-{{ widget_id }}" class="transitions-list">
+                {% for transition in transitions %}
+                <li class="transition-item" data-transition-id="{{ transition.id }}">
+                    <div class="transition-sequence">
+                        {% for emotion in transition.emotions %}
+                        <div class="sequence-emotion {{ emotion.id }}" title="{{ emotion.name }} ({{ emotion.intensity }})">
+                            <div class="mini-face-icon">
+                                <div class="eye left"></div>
+                                <div class="eye right"></div>
+                                <div class="mouth"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="transition-info">
+                        <div class="transition-name">{{ transition.name }}</div>
+                        <div class="transition-description">{{ transition.description }}</div>
+                    </div>
+                    <div class="transition-actions">
+                        <button class="play-transition-btn" title="Oynat">
+                            <span class="icon">▶</span>
+                        </button>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    
+    <div class="quick-emotions">
+        <h4>Hızlı Duygular</h4>
+        <div class="quick-emotions-grid">
+            {% for emotion in quick_emotions %}
+            <div class="quick-emotion-item" data-emotion="{{ emotion.id }}" data-intensity="{{ emotion.intensity }}">
+                <div class="quick-emotion-icon {{ emotion.id }}">
+                    <div class="mini-face-icon">
+                        <div class="eye left"></div>
+                        <div class="eye right"></div>
+                        <div class="mouth"></div>
+                    </div>
+                </div>
+                <div class="quick-emotion-name">{{ emotion.name }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="recent-transitions">
+        <h4>Son Kullanılanlar</h4>
+        <div class="recent-transitions-container">
+            <ul id="recent-transitions-{{ widget_id }}" class="recent-transitions-list">
+                {% for transition in recent_transitions %}
+                <li class="recent-transition-item" data-transition-id="{{ transition.id }}">
+                    <div class="recent-transition-icon">
+                        {% for emotion in transition.emotions|slice:":2" %}
+                        <div class="mini-face-icon {{ emotion.id }}"></div>
+                        {% endfor %}
+                        {% if transition.emotions|length > 2 %}
+                        <div class="more-emotions">+{{ transition.emotions|length - 2 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="recent-transition-name">{{ transition.name }}</div>
+                    <button class="replay-transition-btn" title="Tekrar Oynat">
+                        <span class="icon">↻</span>
+                    </button>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    
+    <div id="transition-modal-{{ widget_id }}" class="transition-modal hidden">
+        <div class="transition-modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title-{{ widget_id }}">Duygu Sekansı Ekle/Düzenle</h3>
+                <button class="close-modal-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="transition-form-{{ widget_id }}" class="transition-form">
+                    <input type="hidden" id="transition-id-{{ widget_id }}" name="id" value="">
+                    
+                    <div class="form-group">
+                        <label for="transition-name-{{ widget_id }}">Sekans Adı:</label>
+                        <input type="text" id="transition-name-{{ widget_id }}" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="transition-description-{{ widget_id }}">Açıklama:</label>
+                        <textarea id="transition-description-{{ widget_id }}" name="description" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Duygu Sekansı:</label>
+                        <div id="emotion-sequence-builder-{{ widget_id }}" class="emotion-sequence-builder">
+                            <div class="emotion-steps-container" id="emotion-steps-{{ widget_id }}">
+                                <!-- Adımlar buraya eklenecek -->
+                            </div>
+                            <button type="button" class="add-emotion-step-btn">Duygu Ekle</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="cancel-btn">İptal</button>
+                        <button type="submit" class="save-btn">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

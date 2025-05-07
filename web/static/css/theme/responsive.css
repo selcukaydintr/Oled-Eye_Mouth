@@ -1,0 +1,195 @@
+/**
+ * FACE1 Duyarlı Tasarım
+ * 
+ * Versiyon: 0.5.1
+ * Tarih: 06.05.2025
+ * 
+ * Bu dosya, FACE1 projesi için duyarlı tasarım (responsive design)
+ * kurallarını içerir. Farklı ekran boyutları için özel düzenlemeler
+ * tanımlanmıştır.
+ */
+
+/* Büyük ekranlar ve varsayılan stiller (1200px ve üstü) */
+.f1-container {
+  max-width: var(--f1-content-width);
+  margin: 0 auto;
+  padding: calc(var(--f1-spacing-unit) * 2);
+}
+
+.f1-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: calc(var(--f1-spacing-unit) * 2);
+}
+
+.f1-panel-container {
+  display: flex;
+  flex-direction: row;
+  gap: calc(var(--f1-spacing-unit) * 2);
+}
+
+.f1-sidebar {
+  width: 250px;
+  flex-shrink: 0;
+}
+
+.f1-main-content {
+  flex: 1;
+}
+
+.f1-button-group {
+  display: flex;
+  flex-direction: row;
+  gap: var(--f1-spacing-unit);
+}
+
+.f1-tabs-container {
+  display: flex;
+  flex-direction: row;
+}
+
+/* Büyük tabletler ve küçük dizüstü ekranları (992px - 1199px) */
+@media (max-width: 1199px) {
+  .f1-container {
+    max-width: 960px;
+  }
+  
+  .f1-dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .f1-sidebar {
+    width: 220px;
+  }
+}
+
+/* Orta boy tablet ekranları (768px - 991px) */
+@media (max-width: 991px) {
+  .f1-container {
+    max-width: 720px;
+    padding: calc(var(--f1-spacing-unit) * 1.5);
+  }
+  
+  .f1-dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: calc(var(--f1-spacing-unit) * 1.5);
+  }
+  
+  .f1-panel-container {
+    flex-direction: column;
+  }
+  
+  .f1-sidebar {
+    width: 100%;
+    margin-bottom: calc(var(--f1-spacing-unit) * 2);
+  }
+  
+  .f1-modal-content {
+    max-width: 90%;
+    margin: 50px auto;
+    padding: calc(var(--f1-spacing-unit) * 2);
+  }
+}
+
+/* Telefon ve küçük tablet ekranları (576px - 767px) */
+@media (max-width: 767px) {
+  .f1-container {
+    max-width: 540px;
+    padding: var(--f1-spacing-unit);
+  }
+  
+  .f1-dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: var(--f1-spacing-unit);
+  }
+  
+  .f1-tabs-container {
+    flex-direction: column;
+  }
+  
+  .f1-tab-button {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .f1-modal-content {
+    max-width: 95%;
+    margin: 30px auto;
+    padding: calc(var(--f1-spacing-unit) * 1.5);
+  }
+  
+  /* Form elementleri için düzenlemeler */
+  .f1-form-row {
+    flex-direction: column;
+  }
+  
+  .f1-form-group {
+    width: 100%;
+    margin-bottom: var(--f1-spacing-unit);
+  }
+}
+
+/* Çok küçük telefon ekranları (575px ve altı) */
+@media (max-width: 575px) {
+  .f1-container {
+    padding: calc(var(--f1-spacing-unit) * 0.75);
+  }
+  
+  .f1-button-group {
+    flex-direction: column;
+  }
+  
+  .f1-button {
+    width: 100%;
+    margin-bottom: var(--f1-spacing-unit);
+  }
+  
+  .f1-modal-content {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: var(--f1-spacing-unit);
+  }
+  
+  /* Küçük ekranlarda gereksiz içerikleri gizle */
+  .f1-hide-xs {
+    display: none !important;
+  }
+  
+  /* Küçük ekranlarda kayan menü için daha fazla alan */
+  .f1-menu-container {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  
+  /* Başlık ve metin boyutları */
+  .f1-section-title {
+    font-size: 1.2rem;
+  }
+  
+  .f1-card-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* Yazıcı ortamı */
+@media print {
+  .f1-no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: #fff;
+    color: #000;
+  }
+  
+  .f1-container {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .f1-card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+}

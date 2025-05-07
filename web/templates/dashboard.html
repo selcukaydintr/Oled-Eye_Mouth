@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="light">
+<head>
+    <title>FACE1 Robot Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <!-- Tema ve erişilebilirlik CSS dosyaları -->
+    <link rel="stylesheet" href="/static/css/theme/theme-variables.css">
+    <link rel="stylesheet" href="/static/css/theme/responsive.css">
+    <link rel="stylesheet" href="/static/css/theme/accessibility.css">
+    <!-- Ana stil dosyası -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- Widget CSS dosyaları -->
+    <link rel="stylesheet" href="/static/css/widgets/widget_base.css">
+    <link rel="stylesheet" href="/static/css/widgets/expression_control.css">
+    <link rel="stylesheet" href="/static/css/widgets/state_history.css">
+    <link rel="stylesheet" href="/static/css/widgets/emotion_transitions.css">
+    <style>
+        /* Tab Stilleri */
+        .tabs-container {
+            margin: 20px 0;
+        }
+        
+        .tabs-navigation {
+            display: flex;
+            border-bottom: 1px solid var(--f1-border-color);
+            margin-bottom: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .tab-button {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            margin-bottom: -1px;
+            background-color: var(--f1-background-color);
+            color: var(--f1-text-color);
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button:hover {
+            background-color: var(--f1-hover-color, #f0f0f0);
+        }
+        
+        .tab-button.active {
+            border-color: var(--f1-border-color);
+            border-bottom-color: var(--f1-background-color);
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid var(--f1-border-color);
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            background-color: var(--f1-background-color);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Debug İşaretçileri */
+        .debug-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        .debug-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .debug-warn {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        
+        .debug-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        /* Geliştirilmiş kullanıcı arayüzü */
+        .tab-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .tab-title h2 {
+            margin: 0;
+            margin-right: 10px;
+        }
+        
+        /* Duyarlı tasarım için medya sorgusu */
+        @media (max-width: 768px) {
+            .tabs-navigation {
+                flex-wrap: wrap;
+            }
+            
+            .tab-button {
+                flex: 1 1 auto;
+                text-align: center;
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ekran okuyucular için atlama linki -->
+    <a href="#main-content" class="f1-skip-link">Ana içeriğe atla</a>
+    
+    <header>
+        <h1>FACE1 Robot Kontrol Paneli</h1>
+        <div class="system-stats">
+            <span id="cpu-usage">CPU: --%</span>
+            <span id="memory-usage">RAM: --%</span>
+            <span id="temperature">Sıcaklık: --°C</span>
+        </div>
+        <div class="header-actions">
+            <nav class="main-nav">
+                <a href="/config-editor" class="button" title="Yapılandırma Editörü">Yapılandırma</a>
+            </nav>
+            
+            <!-- Tema değiştirme butonları -->
+            <div class="f1-theme-toggle">
+                <button data-theme-toggle="light" title="Açık tema" class="f1-button">☀️</button>
+                <button data-theme-toggle="dark" title="Koyu tema" class="f1-button">🌙</button>
+                <button data-theme-toggle="high-contrast" title="Yüksek kontrast tema" class="f1-button">🔍</button>
+            </div>
+        </div>
+    </header>
+    
+    <main id="main-content">
+        <!-- Tab Navigasyonu -->
+        <div class="tabs-container">
+            <ul class="tabs-navigation">
+                <li class="tab-button active" data-tab="dashboard">Gösterge Paneli</li>
+                <li class="tab-button" data-tab="simulation">Simülasyon</li>
+                <li class="tab-button" data-tab="controls">Kontroller</li>
+                <li class="tab-button" data-tab="widgets">Widget'lar</li>
+                <li class="tab-button" data-tab="logs">Sistem Günlüğü</li>
+            </ul>
+            
+            <!-- Dashboard Tab (Ana Özet) -->
+            <div id="dashboard-tab" class="tab-content active">
+                <div class="tab-title">
+                    <h2>Gösterge Paneli</h2>
+                    <span class="debug-badge debug-info">SAYFA:DASHBOARD</span>
+                </div>
+                
+                <div class="face-preview">
+                    <h3>Yüz Önizleme</h3>
+                    <div class="face">
+                        <div class="eyes">
+                            <div class="eye left"></div>
+                            <div class="eye right"></div>
+                        </div>
+                        <div class="mouth"></div>
+                    </div>
+                    
+                    <!-- Ses Seviyesi ve Konuşma Göstergeleri -->
+                    <div class="audio-indicators">
+                        <h3>Ses Tepkimeli İfade Sistemi <span class="debug-badge debug-info">SES-MODÜL</span></h3>
+                        <div class="audio-controls">
+                            <div class="volume-indicator">
+                                <label for="volume-meter">Ses Seviyesi:</label>
+                                <div class="volume-meter-container">
+                                    <div id="volume-meter" class="volume-meter"></div>
+                                </div>
+                                <span id="volume-value">0.0</span>
+                            </div>
+                            <div class="speaking-indicator">
+                                <span class="indicator-label">Konuşma Durumu:</span>
+                                <div id="speaking-status" class="speaking-status">Sessiz</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Simülasyon Tab -->
+            <div id="simulation-tab" class="tab-content">
+                <div class="tab-title">
+                    <h2>Simülasyon Görüntüleri</h2>
+                    <span class="debug-badge debug-info">SAYFA:SİMÜLASYON</span></div>
+                
+                <div class="simulation-preview">
+                    <div class="simulation-images">
+                        <div class="sim-container">
+                            <h4>Sol Göz <span class="debug-badge debug-info">SOL-GÖZ</span></h4>
+                            <div class="sim-image sim-left-eye">Görüntü Yok</div>
+                        </div>
+                        <div class="sim-container">
+                            <h4>Sağ Göz <span class="debug-badge debug-info">SAĞ-GÖZ</span></h4>
+                            <div class="sim-image sim-right-eye">Görüntü Yok</div>
+                        </div>
+                        <div class="sim-container">
+                            <h4>Ağız <span class="debug-badge debug-info">AĞIZ</span></h4>
+                            <div class="sim-image sim-mouth">Görüntü Yok</div>
+                        </div>
+                        <div class="sim-container">
+                            <h4>LED'ler <span class="debug-badge debug-info">LED</span></h4>
+                            <div class="sim-image sim-leds">Görüntü Yok</div>
+                        </div>
+                    </div>
+                    <div class="sim-controls">
+                        <button id="toggle-simulation">Simülasyon Akışını Başlat</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Kontroller Tab -->
+            <div id="controls-tab" class="tab-content">
+                <div class="tab-title">
+                    <h2>Kontroller</h2>
+                    <span class="debug-badge debug-info">SAYFA:KONTROLLER</span>
+                </div>
+                
+                <div class="control-panel">
+                    <section class="emotions">
+                        <h3>Duygular <span class="debug-badge debug-info">DUYGU-MOTORU</span></h3>
+                        <div class="emotion-buttons">
+                            <button class="emotion-btn" data-emotion="happy">Mutlu</button>
+                            <button class="emotion-btn" data-emotion="sad">Üzgün</button>
+                            <button class="emotion-btn" data-emotion="angry">Kızgın</button>
+                            <button class="emotion-btn" data-emotion="surprised">Şaşkın</button>
+                            <button class="emotion-btn" data-emotion="fearful">Korkmuş</button>
+                            <button class="emotion-btn" data-emotion="disgusted">İğrenmiş</button>
+                            <button class="emotion-btn" data-emotion="calm">Sakin</button>
+                            <button class="emotion-btn" data-emotion="neutral">Nötr</button>
+                        </div>
+                        <div class="intensity-control">
+                            <label for="emotion-intensity">Duygu Yoğunluğu:</label>
+                            <input type="range" id="emotion-intensity" min="0" max="1" step="0.1" value="1">
+                            <span id="intensity-value">1.0</span>
+                        </div>
+                    </section>
+                    
+                    <section class="themes">
+                        <h3>Temalar <span class="debug-badge debug-info">TEMA-YÖNETİCİSİ</span></h3>
+                        <div class="theme-selector">
+                            <label for="theme-select">Tema Seç:</label>
+                            <select id="theme-select">
+                                {% for theme in themes %}
+                                <option value="{{ theme }}" {% if theme == current_theme %}selected{% endif %}>{{ theme|title }}</option>
+                                {% endfor %}
+                            </select>
+                            <button id="apply-theme">Temayı Uygula</button>
+                            <a href="/theme-editor/{{ current_theme }}" class="button" id="edit-theme">Tema Düzenle</a>
+                        </div>
+                    </section>
+                    
+                    <section class="animations">
+                        <h3>Animasyonlar <span class="debug-badge debug-info">ANİMASYON-MOTORU</span></h3>
+                        
+                        <!-- Temel Animasyon Butonları -->
+                        <div class="animation-buttons basic-animations">
+                            <h4>Temel Animasyonlar</h4>
+                            <button class="animation-btn" data-animation="blink">Göz Kırp</button>
+                            <button class="animation-btn" data-animation="nod">Baş Salla</button>
+                            <button class="animation-btn" data-animation="shake">Baş Salla (Hayır)</button>
+                            <button class="animation-btn" data-animation="random">Rastgele</button>
+                        </div>
+                        
+                        <!-- JSON Animasyon Sekansları -->
+                        <div class="json-animations">
+                            <h4>JSON Animasyon Sekansları</h4>
+                            <div class="animation-list-container">
+                                <select id="animation-select" size="5">
+                                    <!-- Animasyonlar JavaScript ile doldurulacak -->
+                                </select>
+                                <div class="animation-info">
+                                    <div id="animation-description">Bir animasyon seçin</div>
+                                    <div id="animation-duration"></div>
+                                </div>
+                            </div>
+                            <div class="animation-controls">
+                                <button id="play-animation" disabled>Oynat</button>
+                                <button id="stop-animation" disabled>Durdur</button>
+                                <button id="refresh-animations">Yenile</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            
+            <!-- Widget'lar Tab -->
+            <div id="widgets-tab" class="tab-content">
+                <div class="tab-title">
+                    <h2>Dashboard Widget'ları</h2>
+                    <span class="debug-badge debug-info">SAYFA:WİDGETLAR</span>
+                </div>
+                
+                <div class="widgets-grid">
+                    <!-- İfade Kontrolü Widget'ı -->
+                    <div class="widget-wrapper" id="expression-control-widget-container">
+                        <div class="widget-loading">Widget yükleniyor... <span class="debug-badge debug-info">WİDGET:İFADE-KONTROLÜ</span></div>
+                    </div>
+                    
+                    <!-- Durum İzleme Widget'ı -->
+                    <div class="widget-wrapper" id="state-history-widget-container">
+                        <div class="widget-loading">Widget yükleniyor... <span class="debug-badge debug-info">WİDGET:DURUM-İZLEME</span></div>
+                    </div>
+                    
+                    <!-- Duygu Geçişleri Widget'ı -->
+                    <div class="widget-wrapper" id="emotion-transitions-widget-container">
+                        <div class="widget-loading">Widget yükleniyor... <span class="debug-badge debug-info">WİDGET:DUYGU-GEÇİŞLERİ</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sistem Günlüğü Tab -->
+            <div id="logs-tab" class="tab-content">
+                <div class="tab-title">
+                    <h2>Sistem Günlüğü</h2>
+                    <span class="debug-badge debug-info">SAYFA:GÜNLÜK</span>
+                </div>
+                
+                <div class="log-viewer-container">
+                    <div class="log-controls">
+                        <select id="log-level">
+                            <option value="all">Tüm Mesajlar</option>
+                            <option value="info">Bilgi</option>
+                            <option value="warn">Uyarı</option>
+                            <option value="error">Hata</option>
+                        </select>
+                        <button id="clear-logs">Temizle</button>
+                    </div>
+                    <div id="log-viewer"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 FACE1 Robot - Version 0.5.1 <span class="debug-badge debug-info">SÜRÜM:0.5.1</span></p>
+    </footer>
+    
+    <!-- Tema yönetici scripti -->
+    <script src="/static/js/theme-manager.js"></script>
+    <!-- Ana dashboard scripti -->
+    <script src="/static/js/dashboard.js"></script>
+    <!-- Widget yükleyici script -->
+    <script src="/static/js/widgets/widget_loader.js"></script>
+
+    <!-- Tab yönetimi için JavaScript kodu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Debug işaretçilerinin görünürlüğünü kontrol etmek için
+            const showDebugBadges = true; // Geliştirme sırasında true, canlıda false
+            
+            if (!showDebugBadges) {
+                document.querySelectorAll('.debug-badge').forEach(badge => {
+                    badge.style.display = 'none';
+                });
+            }
+            
+            // Tab işlemleri
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Aktif tab butonunu güncelle
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Aktif içeriği göster
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                    
+                    // Debug log
+                    console.log(`[DEBUG] Tab değiştirildi: ${tabId}`);
+                });
+            });
+            
+            // Log filtreleme
+            document.getElementById('log-level').addEventListener('change', function() {
+                const selectedLevel = this.value;
+                console.log(`[DEBUG] Log seviyesi değiştirildi: ${selectedLevel}`);
+                // Log filtreleme mantığı dashboard.js içinde uygulanacak
+            });
+            
+            // Log temizleme
+            document.getElementById('clear-logs').addEventListener('click', function() {
+                document.getElementById('log-viewer').innerHTML = '';
+                console.log('[DEBUG] Günlükler temizlendi');
+            });
+        });
+    </script>
+</body>
+</html>

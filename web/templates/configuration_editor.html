@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="light">
+<head>
+    <title>FACE1 - Yapılandırma Editörü</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tema ve erişilebilirlik CSS dosyaları -->
+    <link rel="stylesheet" href="/static/css/theme/theme-variables.css">
+    <link rel="stylesheet" href="/static/css/theme/responsive.css">
+    <link rel="stylesheet" href="/static/css/theme/accessibility.css">
+    <!-- Ana stil dosyası -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .config-section {
+            margin-bottom: 25px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+        
+        .config-section h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        
+        .config-item {
+            margin-bottom: 12px;
+        }
+        
+        .config-item label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .config-item .description {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .buttons-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .json-view {
+            max-height: 400px;
+            overflow-y: auto;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre;
+        }
+        
+        .success-message, .error-message {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .success-message {
+            background-color: #dff0d8;
+            border: 1px solid #d6e9c6;
+            color: #3c763d;
+        }
+        
+        .error-message {
+            background-color: #f2dede;
+            border: 1px solid #ebccd1;
+            color: #a94442;
+        }
+        
+        .tab-container {
+            margin-bottom: 20px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid #ccc;
+        }
+        
+        .tab-button {
+            padding: 10px 20px;
+            background-color: #f1f1f1;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .tab-button:hover {
+            background-color: #ddd;
+        }
+        
+        .tab-button.active {
+            background-color: #ccc;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Ekran okuyucular için atlama linki -->
+    <a href="#main-content" class="f1-skip-link">Ana içeriğe atla</a>
+    
+    <header>
+        <h1>FACE1 Yapılandırma Editörü</h1>
+        <div class="header-actions">
+            <nav class="main-nav">
+                <a href="/" class="f1-button">Ana Sayfa</a>
+            </nav>
+            
+            <!-- Tema değiştirme butonları -->
+            <div class="f1-theme-toggle">
+                <button data-theme-toggle="light" title="Açık tema" class="f1-button">☀️</button>
+                <button data-theme-toggle="dark" title="Koyu tema" class="f1-button">🌙</button>
+                <button data-theme-toggle="high-contrast" title="Yüksek kontrast tema" class="f1-button">🔍</button>
+            </div>
+        </div>
+    </header>
+    
+    <main id="main-content">
+        <div class="container">
+            <div id="success-message" class="success-message">Değişiklikler başarıyla kaydedildi!</div>
+            <div id="error-message" class="error-message">Hata oluştu, lütfen tekrar deneyin.</div>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="openTab(event, 'form-view')">Form Görünümü</button>
+                    <button class="tab-button" onclick="openTab(event, 'json-view')">JSON Görünümü</button>
+                </div>
+                
+                <div id="form-view" class="tab-content active">
+                    <form id="config-form">
+                        <div class="config-section" id="system-config">
+                            <h3>Sistem Yapılandırması</h3>
+                            <div class="config-item">
+                                <label for="log_level">Log Seviyesi:</label>
+                                <div class="description">Log mesajlarının detay seviyesi</div>
+                                <select id="log_level" name="system.log_level">
+                                    <option value="DEBUG">Debug</option>
+                                    <option value="INFO">Info</option>
+                                    <option value="WARNING">Warning</option>
+                                    <option value="ERROR">Error</option>
+                                </select>
+                            </div>
+                            <div class="config-item">
+                                <label>
+                                    <input type="checkbox" id="watchdog_enabled" name="system.watchdog_enabled"> 
+                                    Watchdog Etkin
+                                </label>
+                                <div class="description">Sistem çökmelerini otomatik kurtarma</div>
+                            </div>
+                            <div class="config-item">
+                                <label for="watchdog_timeout">Watchdog Zaman Aşımı (saniye):</label>
+                                <input type="number" id="watchdog_timeout" name="system.watchdog_timeout" min="1" max="60" step="1">
+                                <div class="description">Watchdog'un sistem yanıt vermediğinde bekleyeceği süre</div>
+                            </div>
+                        </div>
+                        
+                        <div class="config-section" id="oled-config">
+                            <h3>OLED Ekran Yapılandırması</h3>
+                            <div class="config-item">
+                                <label for="brightness">Ekran Parlaklığı:</label>
+                                <input type="range" id="brightness" name="oled.brightness" min="0" max="255" step="1">
+                                <span id="brightness-value">128</span>
+                                <div class="description">OLED ekranların parlaklık seviyesi (0-255)</div>
+                            </div>
+                            <div class="config-item">
+                                <label>
+                                    <input type="checkbox" id="power_save" name="oled.power_save"> 
+                                    Güç Tasarrufu Modu
+                                </label>
+                                <div class="description">Belirli bir süre etkileşim olmadığında ekranları kapat</div>
+                            </div>
+                            <div class="config-item">
+                                <label for="power_save_timeout">Güç Tasarrufu Zaman Aşımı (saniye):</label>
+                                <input type="number" id="power_save_timeout" name="oled.power_save_timeout" min="10" max="3600" step="10">
+                                <div class="description">Güç tasarrufuna geçmeden önce beklenecek süre</div>
+                            </div>
+                            <div class="config-item">
+                                <label>
+                                    <input type="checkbox" id="random_eye_movement" name="oled.random_eye_movement"> 
+                                    Rastgele Göz Hareketleri
+                                </label>
+                                <div class="description">Gerçekçi rastgele göz hareketleri</div>
+                            </div>
+                            <div class="config-item">
+                                <label for="blink_frequency">Göz Kırpma Sıklığı (saniye):</label>
+                                <input type="number" id="blink_frequency" name="oled.blink_frequency" min="1" max="20" step="0.1">
+                                <div class="description">Göz kırpma aralığı ortalaması</div>
+                            </div>
+                        </div>
+                        
+                        <div class="config-section" id="led-config">
+                            <h3>LED Yapılandırması</h3>
+                            <div class="config-item">
+                                <label for="led_brightness">LED Parlaklığı:</label>
+                                <input type="range" id="led_brightness" name="leds.brightness" min="0" max="255" step="1">
+                                <span id="led-brightness-value">128</span>
+                                <div class="description">LED ışık parlaklığı (0-255)</div>
+                            </div>
+                            <div class="config-item">
+                                <label>
+                                    <input type="checkbox" id="led_enabled" name="leds.enabled"> 
+                                    LED'leri Etkinleştir
+                                </label>
+                                <div class="description">LED ışıkları aç/kapat</div>
+                            </div>
+                            <div class="config-item">
+                                <label>
+                                    <input type="checkbox" id="led_animate_emotions" name="leds.animate_emotions"> 
+                                    Duygu Animasyon LED'leri
+                                </label>
+                                <div class="description">Duygulara göre LED animasyonlarını etkinleştir</div>
+                            </div>
+                        </div>
+                        
+                        <div class="config-section" id="emotion-config">
+                            <h3>Duygu Motoru Yapılandırması</h3>
+                            <div class="config-item">
+                                <label for="default_emotion">Varsayılan Duygu:</label>
+                                <select id="default_emotion" name="emotions.default_emotion">
+                                    <option value="neutral">Nötr</option>
+                                    <option value="happy">Mutlu</option>
+                                    <option value="sad">Üzgün</option>
+                                    <option value="angry">Kızgın</option>
+                                    <option value="surprised">Şaşkın</option>
+                                    <option value="fearful">Korkmuş</option>
+                                    <option value="disgusted">İğrenmiş</option>
+                                    <option value="calm">Sakin</option>
+                                </select>
+                                <div class="description">Başlangıçta gösterilecek duygu</div>
+                            </div>
+                            <div class="config-item">
+                                <label for="emotion_decay_time">Duygu Azalma Süresi (saniye):</label>
+                                <input type="number" id="emotion_decay_time" name="emotions.emotion_decay_time" min="10" max="3600" step="10">
+                                <div class="description">Duygular ne kadar süre sonra nötr duruma dönecek</div>
+                            </div>
+                            <div class="config-item">
+                                <label for="micro_expressions_enabled">
+                                    <input type="checkbox" id="micro_expressions_enabled" name="emotions.micro_expressions_enabled"> 
+                                    Mikro İfadeleri Etkinleştir
+                                </label>
+                                <div class="description">Rastgele mikro ifadeleri etkinleştir</div>
+                            </div>
+                            <div class="config-item">
+                                <label for="personality_profile">Kişilik Profili:</label>
+                                <select id="personality_profile" name="emotions.personality_profile">
+                                    <option value="balanced">Dengeli</option>
+                                    <option value="cheerful">Neşeli</option>
+                                    <option value="serious">Ciddi</option>
+                                    <option value="reactive">Tepkili</option>
+                                    <option value="calm">Sakin</option>
+                                </select>
+                                <div class="description">Robotun duygusal tepki verme biçimini belirler</div>
+                            </div>
+                        </div>
+                        
+                        <div class="config-section" id="animation-config">
+                            <h3>Animasyon Yapılandırması</h3>
+                            <div class="config-item">
+                                <label>
+                                    <input type="checkbox" id="startup_animation_enabled" name="animation.startup_animation_enabled"> 
+                                    Başlangıç Animasyonunu Etkinleştir
+                                </label>
+                                <div class="description">FACE1 başladığında bir başlangıç animasyonu göster</div>
+                            </div>
+                            <div class="config-item">
+                                <label for="animation_fps">Animasyon FPS:</label>
+                                <input type="number" id="animation_fps" name="animation.fps" min="10" max="60" step="1">
+                                <div class="description">Animasyon kare hızı (saniyede kare sayısı)</div>
+                            </div>
+                            <div class="config-item">
+                                <label for="transition_speed">Duygu Geçiş Hızı:</label>
+                                <input type="range" id="transition_speed" name="animation.transition_speed" min="0.1" max="5" step="0.1">
+                                <span id="transition-speed-value">1.0</span>
+                                <div class="description">Duygular arasındaki geçiş hızı (1.0 = normal)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="config-section" id="theme-config">
+                            <h3>Tema Yapılandırması</h3>
+                            <div class="config-item">
+                                <label for="default_theme">Varsayılan Tema:</label>
+                                <select id="default_theme" name="theme.default_theme">
+                                    <option value="default">Varsayılan</option>
+                                    <option value="minimal">Minimal</option>
+                                    <option value="pixel">Piksel</option>
+                                    <option value="realistic">Gerçekçi</option>
+                                </select>
+                                <div class="description">Başlangıçta yüklenecek tema</div>
+                            </div>
+                            <div class="config-item">
+                                <label>
+                                    <input type="checkbox" id="theme_cache_enabled" name="theme.cache_enabled"> 
+                                    Tema Önbelleği Etkinleştir
+                                </label>
+                                <div class="description">Tema dosyalarını RAM'de önbelleğe al (performans için)</div>
+                            </div>
+                            <div class="config-item">
+                                <label for="theme_cache_size">Tema Önbellek Boyutu:</label>
+                                <input type="number" id="theme_cache_size" name="theme.cache_size" min="1" max="100" step="1">
+                                <div class="description">Önbelleğe alınacak maksimum tema sayısı</div>
+                            </div>
+                        </div>
+                        
+                        <div class="config-section" id="api-config">
+                            <h3>API ve İletişim Yapılandırması</h3>
+                            <div class="config-item">
+                                <label for="api_port">API Port:</label>
+                                <input type="number" id="api_port" name="api.port" min="1000" max="65535" step="1">
+                                <div class="description">Dashboard sunucusunun çalışacağı port numarası</div>
+                            </div>
+                            <div class="config-item">
+                                <label>
+                                    <input type="checkbox" id="api_enabled" name="api.enabled"> 
+                                    API Etkinleştir
+                                </label>
+                                <div class="description">REST API ve WebSocket sunucusunu etkinleştir</div>
+                            </div>
+                            <div class="config-item">
+                                <label>
+                                    <input type="checkbox" id="access_control_enabled" name="api.access_control_enabled"> 
+                                    Erişim Kontrolü Etkinleştir
+                                </label>
+                                <div class="description">API için kimlik doğrulama kullan</div>
+                            </div>
+                            <div class="config-item">
+                                <label for="api_key">API Anahtarı:</label>
+                                <input type="text" id="api_key" name="api.api_key">
+                                <div class="description">API kimlik doğrulama anahtarı (boş bırakmak yeni bir tane oluşturur)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="config-section">
+                            <h3>Performans Optimizasyonu</h3>
+                            <div class="config-item">
+                                <label>
+                                    <input type="checkbox" id="performance_enabled" name="performance.enabled"> 
+                                    Performans Optimizasyonu Etkinleştir
+                                </label>
+                                <div class="description">Otomatik performans optimizasyonunu etkinleştir/devre dışı bırak</div>
+                            </div>
+                            <div class="config-item">
+                                <label for="check_interval">Kontrol Aralığı (saniye):</label>
+                                <input type="number" id="check_interval" name="performance.check_interval" min="1" max="60" step="1">
+                                <div class="description">Sistem kaynaklarının ne sıklıkta izleneceği</div>
+                            </div>
+                            <div class="config-item">
+                                <label for="cpu_threshold">CPU Eşik Değeri (%):</label>
+                                <input type="number" id="cpu_threshold" name="performance.cpu_threshold" min="20" max="95" step="5">
+                                <div class="description">Performans ayarlamasına sebep olacak CPU yük eşiği</div>
+                            </div>
+                            <div class="config-item">
+                                <label for="memory_threshold">Bellek Eşik Değeri (%):</label>
+                                <input type="number" id="memory_threshold" name="performance.memory_threshold" min="20" max="95" step="5">
+                                <div class="description">Performans ayarlamasına sebep olacak bellek kullanım eşiği</div>
+                            </div>
+                            <div class="config-item">
+                                <label>
+                                    <input type="checkbox" id="auto_adjust_fps" name="performance.auto_adjust_fps"> 
+                                    FPS Otomatik Ayarlama
+                                </label>
+                                <div class="description">Sistem yüküne göre FPS değerini otomatik olarak ayarla</div>
+                            </div>
+                            <div class="config-item">
+                                <label>
+                                    <input type="checkbox" id="auto_adjust_brightness" name="performance.auto_adjust_brightness"> 
+                                    Parlaklık Otomatik Ayarlama
+                                </label>
+                                <div class="description">Sistem yüküne göre LED parlaklığını otomatik olarak ayarla</div>
+                            </div>
+                            <div class="config-item">
+                                <label>
+                                    <input type="checkbox" id="battery_saver_enabled" name="performance.battery_saver_enabled"> 
+                                    Pil Tasarruf Modu
+                                </label>
+                                <div class="description">Düşük pil durumunda otomatik tasarruf modunu etkinleştir</div>
+                            </div>
+                            <div class="config-item">
+                                <label for="battery_threshold">Pil Eşik Değeri (%):</label>
+                                <input type="number" id="battery_threshold" name="performance.battery_threshold" min="5" max="50" step="5">
+                                <div class="description">Pil tasarruf modunun etkinleşeceği pil seviyesi eşiği</div>
+                            </div>
+                        </div>
+                        
+                        <div class="buttons-container">
+                            <button type="button" id="restore-defaults" class="button secondary">Varsayılanlara Sıfırla</button>
+                            <div>
+                                <button type="button" id="apply-config" class="button primary">Değişiklikleri Uygula</button>
+                                <button type="button" id="save-config" class="button success">Kaydet ve Uygula</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <div id="json-view" class="tab-content">
+                    <div class="json-view-controls">
+                        <button id="format-json" class="button">Formatla</button>
+                        <button id="apply-json" class="button primary">Değişiklikleri Uygula</button>
+                    </div>
+                    <div class="json-view" id="config-json" contenteditable="true"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 FACE1 Robot - Version 0.5.1</p>
+    </footer>
+    
+    <!-- Tema yönetici scripti -->
+    <script src="/static/js/theme-manager.js"></script>
+    
+    <!-- Mevcut script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Konfigürasyon verilerini yükle
+            loadConfig();
+            
+            // Kaydırıcı değerlerini güncelleme
+            document.getElementById('brightness').addEventListener('input', function() {
+                document.getElementById('brightness-value').textContent = this.value;
+            });
+            
+            document.getElementById('led_brightness').addEventListener('input', function() {
+                document.getElementById('led-brightness-value').textContent = this.value;
+            });
+            
+            document.getElementById('transition_speed').addEventListener('input', function() {
+                document.getElementById('transition-speed-value').textContent = this.value;
+            });
+            
+            // Form değişliklerini uygula
+            document.getElementById('apply-config').addEventListener('click', function() {
+                applyConfig(false);
+            });
+            
+            // Form değişliklerini kaydet ve uygula
+            document.getElementById('save-config').addEventListener('click', function() {
+                applyConfig(true);
+            });
+            
+            // Varsayılanlara sıfırla
+            document.getElementById('restore-defaults').addEventListener('click', function() {
+                if (confirm('Tüm ayarları varsayılanlara sıfırlamak istediğinizden emin misiniz?')) {
+                    fetch('/api/config/reset', {
+                        method: 'POST'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showSuccessMessage('Ayarlar varsayılanlara sıfırlandı');
+                            loadConfig(); // Yeniden yükle
+                        } else {
+                            showErrorMessage('Ayarları sıfırlarken hata oluştu: ' + data.error);
+                        }
+                    })
+                    .catch(error => {
+                        showErrorMessage('Ayarları sıfırlarken hata oluştu: ' + error);
+                    });
+                }
+            });
+            
+            // JSON formatını düzenle
+            document.getElementById('format-json').addEventListener('click', function() {
+                try {
+                    const jsonElement = document.getElementById('config-json');
+                    const config = JSON.parse(jsonElement.textContent);
+                    jsonElement.textContent = JSON.stringify(config, null, 2);
+                } catch (error) {
+                    showErrorMessage('JSON formatlanırken hata oluştu: ' + error);
+                }
+            });
+            
+            // JSON'dan değişiklikleri uygula
+            document.getElementById('apply-json').addEventListener('click', function() {
+                try {
+                    const jsonText = document.getElementById('config-json').textContent;
+                    const config = JSON.parse(jsonText);
+                    
+                    fetch('/api/config/update', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            config: config,
+                            save: true
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showSuccessMessage('Yapılandırma güncellendi');
+                            loadConfig(); // Form ve JSON görünümünü güncelle
+                        } else {
+                            showErrorMessage('Yapılandırma güncellenirken hata oluştu: ' + data.error);
+                        }
+                    })
+                    .catch(error => {
+                        showErrorMessage('Yapılandırma güncellenirken hata oluştu: ' + error);
+                    });
+                } catch (error) {
+                    showErrorMessage('Geçersiz JSON formatı: ' + error);
+                }
+            });
+        });
+        
+        // Sekme değiştirme fonksiyonu
+        function openTab(evt, tabName) {
+            let tabcontent = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            
+            let tabbuttons = document.getElementsByClassName("tab-button");
+            for (let i = 0; i < tabbuttons.length; i++) {
+                tabbuttons[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+        
+        // Yapılandırma bilgisini yükle
+        function loadConfig() {
+            fetch('/api/config')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateFormValues(data.config);
+                    updateJsonView(data.config);
+                } else {
+                    showErrorMessage('Yapılandırma bilgisi yüklenirken hata oluştu: ' + data.error);
+                }
+            })
+            .catch(error => {
+                showErrorMessage('Yapılandırma bilgisi yüklenirken hata oluştu: ' + error);
+            });
+        }
+        
+        // Form değerlerini güncelle
+        function updateFormValues(config) {
+            // Sistem yapılandırması
+            if (config.system) {
+                document.getElementById('log_level').value = config.system.log_level || 'INFO';
+                document.getElementById('watchdog_enabled').checked = config.system.watchdog_enabled !== false;
+                document.getElementById('watchdog_timeout').value = config.system.watchdog_timeout || 10;
+            }
+            
+            // OLED yapılandırması
+            if (config.oled) {
+                document.getElementById('brightness').value = config.oled.brightness || 128;
+                document.getElementById('brightness-value').textContent = config.oled.brightness || 128;
+                document.getElementById('power_save').checked = config.oled.power_save === true;
+                document.getElementById('power_save_timeout').value = config.oled.power_save_timeout || 300;
+                document.getElementById('random_eye_movement').checked = config.oled.random_eye_movement !== false;
+                document.getElementById('blink_frequency').value = config.oled.blink_frequency || 4.5;
+            }
+            
+            // LED yapılandırması
+            if (config.leds) {
+                document.getElementById('led_brightness').value = config.leds.brightness || 128;
+                document.getElementById('led-brightness-value').textContent = config.leds.brightness || 128;
+                document.getElementById('led_enabled').checked = config.leds.enabled !== false;
+                document.getElementById('led_animate_emotions').checked = config.leds.animate_emotions !== false;
+            }
+            
+            // Duygu motoru yapılandırması
+            if (config.emotions) {
+                document.getElementById('default_emotion').value = config.emotions.default_emotion || 'neutral';
+                document.getElementById('emotion_decay_time').value = config.emotions.emotion_decay_time || 300;
+                document.getElementById('micro_expressions_enabled').checked = config.emotions.micro_expressions_enabled !== false;
+                document.getElementById('personality_profile').value = config.emotions.personality_profile || 'balanced';
+            }
+            
+            // Animasyon yapılandırması
+            if (config.animation) {
+                document.getElementById('startup_animation_enabled').checked = config.animation.startup_animation_enabled !== false;
+                document.getElementById('animation_fps').value = config.animation.fps || 30;
+                document.getElementById('transition_speed').value = config.animation.transition_speed || 1.0;
+                document.getElementById('transition-speed-value').textContent = config.animation.transition_speed || 1.0;
+            }
+            
+            // Tema yapılandırması
+            if (config.theme) {
+                document.getElementById('default_theme').value = config.theme.default_theme || 'default';
+                document.getElementById('theme_cache_enabled').checked = config.theme.cache_enabled !== false;
+                document.getElementById('theme_cache_size').value = config.theme.cache_size || 10;
+            }
+            
+            // API yapılandırması
+            if (config.api) {
+                document.getElementById('api_port').value = config.api.port || 8000;
+                document.getElementById('api_enabled').checked = config.api.enabled !== false;
+                document.getElementById('access_control_enabled').checked = config.api.access_control_enabled === true;
+                document.getElementById('api_key').value = config.api.api_key || '';
+            }
+
+            // Performans yapılandırması
+            if (config.performance) {
+                document.getElementById('performance_enabled').checked = config.performance.enabled !== false;
+                document.getElementById('check_interval').value = config.performance.check_interval || 10;
+                document.getElementById('cpu_threshold').value = config.performance.cpu_threshold || 80;
+                document.getElementById('memory_threshold').value = config.performance.memory_threshold || 80;
+                document.getElementById('auto_adjust_fps').checked = config.performance.auto_adjust_fps !== false;
+                document.getElementById('auto_adjust_brightness').checked = config.performance.auto_adjust_brightness !== false;
+                document.getElementById('battery_saver_enabled').checked = config.performance.battery_saver_enabled !== false;
+                document.getElementById('battery_threshold').value = config.performance.battery_threshold || 20;
+            }
+        }
+        
+        // JSON görünümünü güncelle
+        function updateJsonView(config) {
+            const jsonElement = document.getElementById('config-json');
+            jsonElement.textContent = JSON.stringify(config, null, 2);
+        }
+        
+        // Form değişikliklerini uygula
+        function applyConfig(save) {
+            const form = document.getElementById('config-form');
+            const formData = new FormData(form);
+            const config = {};
+            
+            // Form verilerini işle ve iç içe yapıya dönüştür
+            for (let [key, value] of formData.entries()) {
+                const parts = key.split('.');
+                let obj = config;
+                
+                for (let i = 0; i < parts.length - 1; i++) {
+                    if (!obj[parts[i]]) {
+                        obj[parts[i]] = {};
+                    }
+                    obj = obj[parts[i]];
+                }
+                
+                // Değer tipini düzelt
+                const lastPart = parts[parts.length - 1];
+                
+                // Checkbox değerlerini boolean'a dönüştür
+                if (key.indexOf('_enabled') > -1 || key.indexOf('enabled') > -1 || 
+                    key.indexOf('power_save') > -1 || key.indexOf('random_eye_movement') > -1 || 
+                    key.indexOf('led_animate_emotions') > -1) {
+                    obj[lastPart] = value === "on";
+                }
+                // Sayısal değerleri sayıya dönüştür
+                else if (key.indexOf('brightness') > -1 || key.indexOf('timeout') > -1 || 
+                         key.indexOf('frequency') > -1 || key.indexOf('time') > -1 || 
+                         key.indexOf('fps') > -1 || key.indexOf('speed') > -1 || 
+                         key.indexOf('port') > -1 || key.indexOf('size') > -1) {
+                    obj[lastPart] = parseFloat(value);
+                }
+                // Diğer değerler
+                else {
+                    obj[lastPart] = value;
+                }
+            }
+            
+            // API'ye gönder
+            fetch('/api/config/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    config: config,
+                    save: save
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const action = save ? 'kaydedildi ve ' : '';
+                    showSuccessMessage(`Yapılandırma ${action}uygulandı`);
+                    // JSON görünümünü de güncelle
+                    updateJsonView(config);
+                } else {
+                    showErrorMessage('Yapılandırma güncellenirken hata oluştu: ' + data.error);
+                }
+            })
+            .catch(error => {
+                showErrorMessage('Yapılandırma güncellenirken hata oluştu: ' + error);
+            });
+        }
+        
+        // Başarı mesajını göster
+        function showSuccessMessage(message) {
+            const successElement = document.getElementById('success-message');
+            successElement.textContent = message;
+            successElement.style.display = 'block';
+            
+            // Hata mesajını gizle
+            document.getElementById('error-message').style.display = 'none';
+            
+            // 3 saniye sonra mesajı gizle
+            setTimeout(function() {
+                successElement.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Hata mesajını göster
+        function showErrorMessage(message) {
+            const errorElement = document.getElementById('error-message');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            
+            // Başarı mesajını gizle
+            document.getElementById('success-message').style.display = 'none';
+            
+            // 5 saniye sonra mesajı gizle
+            setTimeout(function() {
+                errorElement.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

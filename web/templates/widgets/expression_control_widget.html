@@ -1,0 +1,61 @@
+{% extends "widgets/widget_base.html" %}
+
+{% block widget_content %}
+<div class="expression-control-widget">
+    <div class="expression-controls">
+        <div class="expression-grid">
+            {% for emotion in emotions %}
+            <div class="expression-item" data-emotion="{{ emotion.id }}">
+                <div class="expression-icon {{ emotion.id }}">
+                    <div class="mini-face">
+                        <div class="eye left"></div>
+                        <div class="eye right"></div>
+                        <div class="mouth"></div>
+                    </div>
+                </div>
+                <span class="expression-name">{{ emotion.name }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="expression-settings">
+        <div class="setting-group">
+            <label for="expression-intensity-{{ widget_id }}">İfade Yoğunluğu:</label>
+            <div class="slider-container">
+                <input type="range" id="expression-intensity-{{ widget_id }}" 
+                       class="expression-intensity" min="0" max="1" step="0.1" value="1">
+                <span class="intensity-value">1.0</span>
+            </div>
+        </div>
+        
+        <div class="setting-group">
+            <label for="expression-duration-{{ widget_id }}">Geçiş Süresi (sn):</label>
+            <div class="slider-container">
+                <input type="range" id="expression-duration-{{ widget_id }}" 
+                       class="expression-duration" min="0.2" max="5" step="0.1" value="1">
+                <span class="duration-value">1.0</span>
+            </div>
+        </div>
+        
+        <div class="setting-group">
+            <label>
+                <input type="checkbox" id="expression-micro-{{ widget_id }}" class="expression-micro">
+                Mikro İfade Olarak Göster
+            </label>
+            <div class="help-tooltip" title="Mikro ifadeler kısa süreli geçici ifadelerdir">?</div>
+        </div>
+    </div>
+    
+    <div class="current-expression">
+        <h4>Mevcut İfade: <span class="current-emotion-name">Nötr</span></h4>
+        <div class="expression-preview">
+            <div class="preview-face">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+                <div class="mouth"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

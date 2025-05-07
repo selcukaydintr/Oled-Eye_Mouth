@@ -1,0 +1,195 @@
+/**
+ * FACE1 Erişilebilirlik Kuralları
+ * 
+ * Versiyon: 0.5.1
+ * Tarih: 06.05.2025
+ * 
+ * Bu dosya, WCAG 2.1 AA standartlarına uygunluğu destekleyen
+ * erişilebilirlik kurallarını içerir.
+ */
+
+/* Ekran okuyucu için gizli metin */
+.f1-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Skip to main content link - ekran okuyucular için önemli */
+.f1-skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--f1-accent-color);
+  color: #fff;
+  padding: 8px;
+  z-index: 1000;
+  transition: top 0.2s;
+}
+
+.f1-skip-link:focus {
+  top: 0;
+}
+
+/* Odaklanma stilleri - klavye kullanıcıları için görünür odak çizgisi */
+:focus-visible {
+  outline: var(--f1-focus-outline-width) solid var(--f1-focus-outline-color);
+  outline-offset: 2px;
+}
+
+/* Etkileşimli öğeler için odak stilleri */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: var(--f1-focus-outline-width) solid var(--f1-focus-outline-color);
+  outline-offset: 2px;
+}
+
+/* Yüksek kontrast tema destekleri */
+@media (forced-colors: active) {
+  .f1-button {
+    border: 1px solid ButtonText;
+  }
+  
+  .f1-card {
+    border: 1px solid ButtonText;
+  }
+  
+  /* Grafik elemanları için kontrast artışı */
+  .f1-chart-line {
+    color: Highlight;
+  }
+  
+  .f1-icon {
+    forced-color-adjust: auto;
+  }
+}
+
+/* Animasyon ve hareket azaltma tercihi */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .f1-animation,
+  .f1-transition {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Form kontrolleri için erişilebilirlik düzenlemeleri */
+.f1-form-control {
+  font-size: 1rem;
+  padding: 0.5rem;
+  line-height: 1.5;
+}
+
+.f1-form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+/* Form hata mesajları için erişilebilir stil */
+.f1-form-error {
+  color: var(--f1-danger-color);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+/* ARIA rol ve durum işaretleri için görsel göstergeler */
+[aria-invalid="true"] {
+  border-color: var(--f1-danger-color);
+}
+
+[aria-busy="true"]::after {
+  content: "...";
+}
+
+[aria-hidden="true"] {
+  display: none;
+}
+
+/* Metin okunabilirliği için iyileştirmeler */
+body {
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 1.5rem 0 1rem;
+  line-height: 1.2;
+}
+
+/* Erişilebilir tablo stilleri */
+.f1-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.f1-table caption {
+  margin: 0.5rem 0;
+  font-weight: bold;
+  text-align: left;
+}
+
+.f1-table th {
+  text-align: left;
+  font-weight: bold;
+}
+
+.f1-table th,
+.f1-table td {
+  padding: 0.5rem;
+  border: 1px solid var(--f1-border-color);
+}
+
+/* Geliştirmiş bağlantı erişilebilirliği */
+.f1-link {
+  text-decoration: underline;
+}
+
+.f1-link:hover {
+  text-decoration: none;
+}
+
+/* Erişilebilirlik ipuçları */
+.f1-tooltip {
+  position: relative;
+}
+
+.f1-tooltip-text {
+  visibility: hidden;
+  position: absolute;
+  z-index: 100;
+  background: var(--f1-card-background);
+  padding: 0.5rem;
+  border: 1px solid var(--f1-border-color);
+  border-radius: var(--f1-border-radius);
+  white-space: nowrap;
+}
+
+.f1-tooltip:hover .f1-tooltip-text,
+.f1-tooltip:focus .f1-tooltip-text,
+.f1-tooltip:focus-within .f1-tooltip-text {
+  visibility: visible;
+}
+
+/* Resim üzerine yazı alternatifi eksiği olan resimler için stil */
+img:not([alt]) {
+  border: 2px dashed var(--f1-danger-color);
+}

@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<!--
+===========================================================
+# Proje: FACE1 - Raspberry Pi 5 Robot AI için Yüz Eklentisi
+# Dosya: state_reflection_demo.html
+# Açıklama: Durum Yansıtma Protokolü (State Reflection Protocol) demo sayfası
+# Bağımlılıklar: iframe_bridge.js, state_reflector.js
+# Bağlı Dosyalar: iframe_integration.html, parent_integration_example.html
+
+# Versiyon: 0.5.0
+# Değişiklikler:
+# - [0.5.0] İlk oluşturma - Durum yansıtma protokolü demo sayfası oluşturuldu
+# - [0.5.0] Tüm durum tiplerine ait demolar eklendi
+# - [0.5.0] Durum değişikliklerini takip eden grafikler eklendi
+# - [0.5.0] Açık/koyu tema desteği eklendi
+#
+# Yazar: GitHub Copilot
+# Son Güncelleme: 2025-05-04
+===========================================================
+-->
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FACE1 - Durum Yansıtma Protokolü Demo</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --border-color: #ddd;
+            --box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            color: #777;
+            max-width: 800px;
+            margin: 0 auto 20px;
+        }
+        
+        .main-content {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .panel {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .iframe-container {
+            flex: 1;
+            min-width: 400px;
+        }
+        
+        .iframe-container iframe {
+            width: 100%;
+            height: 500px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        
+        .state-panel {
+            flex: 1;
+            min-width: 400px;
+        }
+        
+        .state-display {
+            margin-top: 20px;
+        }
+        
+        .state-group {
+            margin-bottom: 20px;
+        }
+        
+        .state-heading {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .state-heading .timestamp {
+            font-size: 0.8em;
+            color: #888;
+        }
+        
+        .state-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .state-item-label {
+            font-weight: 500;
+        }
+        
+        .state-item-value {
+            font-family: monospace;
+            padding: 2px 8px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+        
+        .controls {
+            margin-bottom: 20px;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 8px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        button.secondary {
+            background-color: #95a5a6;
+        }
+        
+        button.secondary:hover {
+            background-color: #7f8c8d;
+        }
+        
+        .metrics-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .metric-card {
+            flex: 1;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: var(--box-shadow);
+            padding: 15px;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .metric-title {
+            font-size: 0.9em;
+            color: #777;
+            margin-bottom: 5px;
+        }
+        
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .metric-value .unit {
+            font-size: 0.6em;
+            margin-left: 2px;
+            color: #aaa;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 5px;
+        }
+        
+        .status-connected {
+            background-color: #2ecc71;
+        }
+        
+        .status-disconnected {
+            background-color: #e74c3c;
+        }
+        
+        .debug-panel {
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            font-family: monospace;
+            font-size: 12px;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        
+        .log-entry {
+            margin-bottom: 3px;
+            border-bottom: 1px solid #34495e;
+            padding-bottom: 3px;
+        }
+        
+        .toggle-theme {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        /* Dark Theme */
+        body.dark-theme {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --bg-color: #2c3e50;
+            --text-color: #ecf0f1;
+            --border-color: #34495e;
+            --box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        body.dark-theme .panel,
+        body.dark-theme .metric-card {
+            background-color: #34495e;
+        }
+        
+        body.dark-theme .state-item-value {
+            background-color: #2c3e50;
+        }
+        
+        body.dark-theme .toggle-theme {
+            border-color: #ecf0f1;
+            color: #ecf0f1;
+        }
+    </style>
+</head>
+<body>
+    <button class="toggle-theme" onclick="toggleTheme()">Tema Değiştir</button>
+    <div class="container">
+        <header>
+            <h1>FACE1 Durum Yansıtma Protokolü Demo</h1>
+            <p class="description">
+                Bu demo, FACE1 durum yansıtma protokolünün nasıl çalıştığını gösterir.
+                FACE1, duygu durumu, konuşma durumu, sistem durumu ve çevresel faktör verilerini
+                bu protokol üzerinden üst projeye iletir.
+            </p>
+        </header>
+        
+        <div class="main-content">
+            <div class="iframe-container panel">
+                <h2>FACE1 İçeriği (iframe)</h2>
+                <iframe id="face1-frame" src="/static/html/iframe_content.html" title="FACE1 İçeriği"></iframe>
+            </div>
+            
+            <div class="state-panel panel">
+                <h2>Durum Bilgileri <span id="connection-status" class="status-indicator status-disconnected"></span></h2>
+                
+                <div class="controls">
+                    <button onclick="sendEmotion('happy')">Mutlu Yap</button>
+                    <button onclick="sendEmotion('sad')">Üzgün Yap</button>
+                    <button onclick="sendSpeakingState(true)">Konuştur</button>
+                    <button onclick="sendSpeakingState(false)" class="secondary">Sustur</button>
+                    <button onclick="refreshState()" class="secondary">Durum Güncelle</button>
+                </div>
+                
+                <div class="metrics-container">
+                    <div class="metric-card">
+                        <div class="metric-title">CPU</div>
+                        <div class="metric-value" id="metric-cpu">0<span class="unit">%</span></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-title">Bellek</div>
+                        <div class="metric-value" id="metric-memory">0<span class="unit">%</span></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-title">Sıcaklık</div>
+                        <div class="metric-value" id="metric-temp">0<span class="unit">°C</span></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-title">Çalışma Süresi</div>
+                        <div class="metric-value" id="metric-uptime">0<span class="unit">s</span></div>
+                    </div>
+                </div>
+                
+                <div class="state-display">
+                    <div class="state-group">
+                        <div class="state-heading">
+                            <span>Sistem Durumu</span>
+                            <span id="system-timestamp" class="timestamp"></span>
+                        </div>
+                        <div class="state-item">
+                            <span class="state-item-label">Durum</span>
+                            <span id="system-state" class="state-item-value">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="state-group">
+                        <div class="state-heading">
+                            <span>Duygu Durumu</span>
+                            <span id="emotion-timestamp" class="timestamp"></span>
+                        </div>
+                        <div class="state-item">
+                            <span class="state-item-label">Duygu</span>
+                            <span id="emotion-state" class="state-item-value">-</span>
+                        </div>
+                        <div class="state-item">
+                            <span class="state-item-label">Yoğunluk</span>
+                            <span id="emotion-intensity" class="state-item-value">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="state-group">
+                        <div class="state-heading">
+                            <span>Konuşma Durumu</span>
+                            <span id="speaking-timestamp" class="timestamp"></span>
+                        </div>
+                        <div class="state-item">
+                            <span class="state-item-label">Konuşuyor</span>
+                            <span id="speaking-state" class="state-item-value">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="state-group">
+                        <div class="state-heading">
+                            <span>Animasyon Durumu</span>
+                            <span id="animation-timestamp" class="timestamp"></span>
+                        </div>
+                        <div class="state-item">
+                            <span class="state-item-label">Animasyon</span>
+                            <span id="animation-name" class="state-item-value">-</span>
+                        </div>
+                        <div class="state-item">
+                            <span class="state-item-label">İlerleme</span>
+                            <span id="animation-progress" class="state-item-value">-</span>
+                        </div>
+                        <div class="state-item">
+                            <span class="state-item-label">Oynatılıyor</span>
+                            <span id="animation-playing" class="state-item-value">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="state-group">
+                        <div class="state-heading">
+                            <span>Çevresel Faktörler</span>
+                            <span id="environment-timestamp" class="timestamp"></span>
+                        </div>
+                        <div class="state-item">
+                            <span class="state-item-label">Işık</span>
+                            <span id="environment-light" class="state-item-value">-</span>
+                        </div>
+                        <div class="state-item">
+                            <span class="state-item-label">Sıcaklık</span>
+                            <span id="environment-temperature" class="state-item-value">-</span>
+                        </div>
+                        <div class="state-item">
+                            <span class="state-item-label">Nem</span>
+                            <span id="environment-humidity" class="state-item-value">-</span>
+                        </div>
+                        <div class="state-item">
+                            <span class="state-item-label">Hareket</span>
+                            <span id="environment-motion" class="state-item-value">-</span>
+                        </div>
+                        <div class="state-item">
+                            <span class="state-item-label">Dokunma</span>
+                            <span id="environment-touch" class="state-item-value">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="panel">
+            <h2>Debug Log</h2>
+            <div id="debug-log" class="debug-panel"></div>
+        </div>
+    </div>
+    
+    <script>
+        // DOM elementleri
+        const face1Frame = document.getElementById('face1-frame');
+        const connectionStatus = document.getElementById('connection-status');
+        const debugLog = document.getElementById('debug-log');
+        
+        // Durum elementleri
+        const systemState = document.getElementById('system-state');
+        const emotionState = document.getElementById('emotion-state');
+        const emotionIntensity = document.getElementById('emotion-intensity');
+        const speakingState = document.getElementById('speaking-state');
+        const animationName = document.getElementById('animation-name');
+        const animationProgress = document.getElementById('animation-progress');
+        const animationPlaying = document.getElementById('animation-playing');
+        
+        // Çevresel faktör elementleri
+        const environmentLight = document.getElementById('environment-light');
+        const environmentTemperature = document.getElementById('environment-temperature');
+        const environmentHumidity = document.getElementById('environment-humidity');
+        const environmentMotion = document.getElementById('environment-motion');
+        const environmentTouch = document.getElementById('environment-touch');
+        
+        // Zaman damgası elementleri
+        const systemTimestamp = document.getElementById('system-timestamp');
+        const emotionTimestamp = document.getElementById('emotion-timestamp');
+        const speakingTimestamp = document.getElementById('speaking-timestamp');
+        const animationTimestamp = document.getElementById('animation-timestamp');
+        const environmentTimestamp = document.getElementById('environment-timestamp');
+        
+        // Metrik elementleri
+        const metricCpu = document.getElementById('metric-cpu');
+        const metricMemory = document.getElementById('metric-memory');
+        const metricTemp = document.getElementById('metric-temp');
+        const metricUptime = document.getElementById('metric-uptime');
+        
+        // Durum değişkenleri
+        let isConnected = false;
+        let face1Origin = '*'; // Varsayılan olarak herhangi bir origin
+        let currentStates = {};
+        let currentTheme = 'light';
+        
+        // Log işlevi
+        function log(message) {
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            debugLog.appendChild(logEntry);
+            debugLog.scrollTop = debugLog.scrollHeight;
+        }
+        
+        // Tema değiştirme
+        function toggleTheme() {
+            if (document.body.classList.contains('dark-theme')) {
+                document.body.classList.remove('dark-theme');
+                currentTheme = 'light';
+            } else {
+                document.body.classList.add('dark-theme');
+                currentTheme = 'dark';
+            }
+            
+            // iframe'e tema değişikliğini gönder
+            if (isConnected) {
+                face1Frame.contentWindow.postMessage({
+                    type: 'FACE1_SET_THEME',
+                    data: { theme: currentTheme }
+                }, face1Origin);
+                
+                log(`Tema değiştirildi: ${currentTheme}`);
+            }
+        }
+        
+        // Zaman damgası güncelleme
+        function updateTimestamp(element) {
+            element.textContent = new Date().toLocaleTimeString();
+        }
+        
+        // Sistem durumunu güncelleme
+        function updateSystemStateDisplay(state) {
+            systemState.textContent = state;
+            updateTimestamp(systemTimestamp);
+        }
+        
+        // Duygu durumunu güncelleme
+        function updateEmotionDisplay(emotion, intensity) {
+            emotionState.textContent = emotion;
+            emotionIntensity.textContent = intensity.toFixed(1);
+            updateTimestamp(emotionTimestamp);
+        }
+        
+        // Konuşma durumunu güncelleme
+        function updateSpeakingDisplay(speaking) {
+            speakingState.textContent = speaking ? 'Evet' : 'Hayır';
+            updateTimestamp(speakingTimestamp);
+        }
+        
+        // Animasyon durumunu güncelleme
+        function updateAnimationDisplay(animation) {
+            animationName.textContent = animation.current || '-';
+            animationProgress.textContent = animation.progress ? animation.progress.toFixed(2) : '0.00';
+            animationPlaying.textContent = animation.playing ? 'Evet' : 'Hayır';
+            updateTimestamp(animationTimestamp);
+        }
+        
+        // Çevresel faktörleri güncelleme
+        function updateEnvironmentDisplay(environment) {
+            environmentLight.textContent = environment.light || '-';
+            environmentTemperature.textContent = environment.temperature || '-';
+            environmentHumidity.textContent = environment.humidity || '-';
+            environmentMotion.textContent = environment.motion || '-';
+            environmentTouch.textContent = environment.touch || '-';
+            updateTimestamp(environmentTimestamp);
+        }
+        
+        // Metrikleri güncelleme
+        function updateMetricsDisplay(metrics) {
+            metricCpu.innerHTML = `${Math.round(metrics.cpu)}<span class="unit">%</span>`;
+            metricMemory.innerHTML = `${Math.round(metrics.memory)}<span class="unit">%</span>`;
+            metricTemp.innerHTML = `${Math.round(metrics.temperature)}<span class="unit">°C</span>`;
+            
+            // Çalışma süresini saat:dakika:saniye formatına çevir
+            const uptime = metrics.uptime;
+            const hours = Math.floor(uptime / 3600);
+            const minutes = Math.floor((uptime % 3600) / 60);
+            const seconds = Math.floor(uptime % 60);
+            
+            const uptimeDisplay = hours > 0 
+                ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+                : `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+            metricUptime.innerHTML = `${uptimeDisplay}<span class="unit"></span>`;
+        }
+        
+        // Durum güncelleme işlevi
+        function updateStateDisplay(states) {
+            if (states.system) {
+                updateSystemStateDisplay(states.system);
+            }
+            
+            if (states.emotion) {
+                updateEmotionDisplay(states.emotion.current, states.emotion.intensity);
+            }
+            
+            if (states.speaking !== undefined) {
+                updateSpeakingDisplay(states.speaking);
+            }
+            
+            if (states.animation) {
+                updateAnimationDisplay(states.animation);
+            }
+            
+            if (states.environment) {
+                updateEnvironmentDisplay(states.environment);
+            }
+            
+            if (states.metrics) {
+                updateMetricsDisplay(states.metrics);
+            }
+            
+            currentStates = {...currentStates, ...states};
+        }
+        
+        // FACE1'e duygu durumu mesajı gönderme
+        function sendEmotion(emotion, intensity = 1.0) {
+            if (!isConnected) {
+                log('Bağlantı yok: Duygu durumu gönderilemedi');
+                return;
+            }
+            
+            face1Frame.contentWindow.postMessage({
+                type: 'FACE1_SET_EMOTION',
+                data: { emotion, intensity }
+            }, face1Origin);
+            
+            log(`Duygu durumu gönderildi: ${emotion} (${intensity})`);
+        }
+        
+        // FACE1'e konuşma durumu mesajı gönderme
+        function sendSpeakingState(speaking) {
+            if (!isConnected) {
+                log('Bağlantı yok: Konuşma durumu gönderilemedi');
+                return;
+            }
+            
+            face1Frame.contentWindow.postMessage({
+                type: 'FACE1_SPEAKING_STATE',
+                data: { speaking }
+            }, face1Origin);
+            
+            log(`Konuşma durumu gönderildi: ${speaking ? 'konuşuyor' : 'konuşmuyor'}`);
+        }
+        
+        // Durum güncellemesi alma
+        function refreshState() {
+            if (!isConnected) {
+                log('Bağlantı yok: Durum güncellemesi alınamadı');
+                return;
+            }
+            
+            face1Frame.contentWindow.postMessage({
+                type: 'FACE1_STATE_REFLECTION_CONTROL',
+                data: { command: 'snapshot' }
+            }, face1Origin);
+            
+            log('Durum güncellemesi talep edildi');
+        }
+        
+        // Sayfa yüklendiğinde
+        window.addEventListener('load', () => {
+            log('Demo sayfa yüklendi, iframe mesajları bekleniyor...');
+        });
+        
+        // iframe'den gelen mesajları dinle
+        window.addEventListener('message', (event) => {
+            // Sadece iframe'den gelen mesajları kabul et
+            if (event.source !== face1Frame.contentWindow) {
+                return;
+            }
+            
+            // Mesaj içeriğini kontrol et
+            const message = event.data;
+            
+            if (!message || typeof message !== 'object' || !message.type) {
+                return;
+            }
+            
+            // Hazır sinyali ile bağlantı kurulduğunda
+            if (message.type === 'FACE1_READY') {
+                face1Origin = event.origin;
+                
+                // FACE1'e bağlantı mesajı gönder
+                face1Frame.contentWindow.postMessage({
+                    type: 'FACE1_CONNECT',
+                    data: {
+                        clientId: 'parent-demo-' + Date.now(),
+                        securityToken: 'demo-token-' + Math.random().toString(36).substr(2, 9)
+                    }
+                }, face1Origin);
+                
+                log(`FACE1 hazır sinyali alındı, bağlantı kuruluyor...`);
+            }
+            // Bağlantı kurulduğunda
+            else if (message.type === 'FACE1_CONNECTED') {
+                isConnected = true;
+                connectionStatus.classList.remove('status-disconnected');
+                connectionStatus.classList.add('status-connected');
+                
+                log(`FACE1 ile bağlantı kuruldu.`);
+                
+                // Temayı gönder
+                face1Frame.contentWindow.postMessage({
+                    type: 'FACE1_SET_THEME',
+                    data: { theme: currentTheme }
+                }, face1Origin);
+            }
+            // Durum yansıtma hazır olduğunda
+            else if (message.type === 'FACE1_STATE_REFLECTION_READY') {
+                log(`Durum yansıtma protokolü hazır: ${message.data.status}, ${message.data.pollInterval}ms aralıkla`);
+                
+                // İlk durum güncellemesini iste
+                setTimeout(refreshState, 500);
+            }
+            // Durum yansıtma mesajı alındığında
+            else if (message.type === 'FACE1_STATE_REFLECTION') {
+                updateStateDisplay(message.data);
+                log('Durum yansıtma güncellemesi alındı');
+            }
+            // Durum özeti alındığında
+            else if (message.type === 'FACE1_STATE_SNAPSHOT') {
+                updateStateDisplay(message.data);
+                log('Durum özeti alındı');
+            }
+            // Duygu değişikliği alındığında
+            else if (message.type === 'FACE1_EMOTION_CHANGE') {
+                updateEmotionDisplay(message.data.emotion, message.data.intensity);
+                log(`Duygu değişikliği: ${message.data.emotion} (${message.data.intensity})`);
+            }
+            // Konuşma durumu değişikliği alındığında
+            else if (message.type === 'FACE1_SPEAKING_UPDATE') {
+                updateSpeakingDisplay(message.data.speaking);
+                log(`Konuşma durumu: ${message.data.speaking ? 'başladı' : 'durdu'}`);
+            }
+            // Animasyon güncellemesi alındığında
+            else if (message.type === 'FACE1_ANIMATION_UPDATE') {
+                updateAnimationDisplay({
+                    current: message.data.animation,
+                    progress: message.data.progress,
+                    playing: message.data.playing
+                });
+                log(`Animasyon güncellemesi: ${message.data.animation}`);
+            }
+            // Sistem durumu değişikliği alındığında
+            else if (message.type === 'FACE1_STATE_CHANGE') {
+                updateSystemStateDisplay(message.data.state);
+                log(`Sistem durumu değişti: ${message.data.state}`);
+            }
+            // Çevresel faktör değişikliği alındığında
+            else if (message.type === 'FACE1_ENVIRONMENT_UPDATE') {
+                const { factor, state } = message.data;
+                
+                // Mevcut çevresel faktörleri kopyala
+                const currentEnvironment = currentStates.environment || {
+                    light: null, temperature: null, humidity: null, motion: null, touch: null
+                };
+                
+                // İlgili faktörü güncelle
+                currentEnvironment[factor] = state;
+                
+                updateEnvironmentDisplay(currentEnvironment);
+                log(`Çevresel faktör değişikliği: ${factor} = ${state}`);
+            }
+            // Metrik güncellemesi alındığında
+            else if (message.type === 'FACE1_METRICS_UPDATE') {
+                updateMetricsDisplay(message.data.metrics);
+                log('Metrik güncellemesi alındı');
+            }
+            // Hata mesajı alındığında
+            else if (message.type === 'FACE1_ERROR') {
+                log(`HATA: ${message.data.message}`);
+                console.error('FACE1 hatası:', message.data);
+            }
+            else {
+                log(`Bilinmeyen mesaj tipi: ${message.type}`);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FACE1 - Animasyon Editörü</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+    <link rel="stylesheet" href="/static/css/animation_editor.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">FACE1</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link" href="/">Dashboard</a>
+                    <a class="nav-link active" href="/animation-editor">Animasyon Editörü</a>
+                    <a class="nav-link" href="/config-editor">Yapılandırma</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <h2>Animasyon Editörü</h2>
+        <p>FACE1 robot için animasyonları oluşturun, düzenleyin ve test edin.</p>
+
+        <div class="animation-editor-container">
+            <!-- Animasyon Listesi Paneli -->
+            <div class="editor-panel animation-list-panel">
+                <h4>Animasyon Listesi</h4>
+                <div class="animation-controls">
+                    <button id="new-animation" class="btn btn-sm btn-success">Yeni</button>
+                    <button id="load-animation" class="btn btn-sm btn-primary">Yükle</button>
+                    <button id="delete-animation" class="btn btn-sm btn-danger">Sil</button>
+                </div>
+                <div class="animation-list-container">
+                    <select id="animation-select" size="10">
+                        <option value="">Yükleniyor...</option>
+                    </select>
+                </div>
+                <div class="animation-info">
+                    <div id="animation-description">Bir animasyon seçin</div>
+                    <div id="animation-duration"></div>
+                </div>
+                <div class="playback-controls">
+                    <button id="play-animation" class="btn btn-primary" disabled>Oynat</button>
+                    <button id="stop-animation" class="btn btn-secondary" disabled>Durdur</button>
+                </div>
+            </div>
+            
+            <!-- Önizleme Paneli -->
+            <div class="editor-panel animation-preview-panel">
+                <h4>Animasyon Önizleme</h4>
+                <div class="animation-preview">
+                    <div class="preview-face">
+                        <div class="eyes">
+                            <div class="eye left-eye"></div>
+                            <div class="eye right-eye"></div>
+                        </div>
+                        <div class="mouth"></div>
+                    </div>
+                    <div class="simulation-images">
+                        <div class="sim-container">
+                            <h4>Sol Göz</h4>
+                            <div class="sim-image left-eye">Görüntü yok</div>
+                        </div>
+                        <div class="sim-container">
+                            <h4>Sağ Göz</h4>
+                            <div class="sim-image right-eye">Görüntü yok</div>
+                        </div>
+                        <div class="sim-container">
+                            <h4>Ağız</h4>
+                            <div class="sim-image mouth">Görüntü yok</div>
+                        </div>
+                        <div class="sim-container">
+                            <h4>LED'ler</h4>
+                            <div class="sim-image leds">Görüntü yok</div>
+                        </div>
+                    </div>
+                    <div class="timeline">
+                        <div class="timeline-ruler"></div>
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-items"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Düzenleme Araçları Paneli -->
+            <div class="editor-panel edit-tools-panel">
+                <h4>Düzenleme Araçları</h4>
+                
+                <div class="metadata-section">
+                    <h5>Animasyon Bilgileri</h5>
+                    <div class="form-group">
+                        <label for="animation-name">Animasyon Adı:</label>
+                        <input type="text" id="animation-name" class="form-control" placeholder="Animasyon Adı">
+                    </div>
+                    <div class="form-group">
+                        <label for="animation-file">Dosya Adı:</label>
+                        <input type="text" id="animation-file" class="form-control" placeholder="dosya_adi">
+                        <small>Boş bırakılırsa animasyon adından oluşturulur</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="animation-description-input">Açıklama:</label>
+                        <input type="text" id="animation-description-input" class="form-control" placeholder="Animasyonun açıklaması">
+                    </div>
+                    <div class="form-group">
+                        <label for="animation-duration-input">Süre (saniye):</label>
+                        <input type="number" id="animation-duration-input" class="form-control" min="0.1" step="0.1" value="3.0">
+                    </div>
+                </div>
+                
+                <div class="steps-section">
+                    <h5>Animasyon Adımları</h5>
+                    <div class="step-controls">
+                        <button id="add-step" class="btn btn-sm btn-success">Adım Ekle</button>
+                        <button id="duplicate-step" class="btn btn-sm btn-primary">Kopyala</button>
+                        <button id="delete-step" class="btn btn-sm btn-danger">Sil</button>
+                    </div>
+                    <div class="step-list-container">
+                        <select id="step-select" size="5">
+                            <option value="">Henüz adım yok</option>
+                        </select>
+                    </div>
+                    <div class="step-editor">
+                        <div class="form-group">
+                            <label for="step-time">Zaman (saniye):</label>
+                            <input type="number" id="step-time" class="form-control" min="0" step="0.1" value="0">
+                        </div>
+
+                        <div class="tabs">
+                            <button class="tab-button active" data-tab="eyes">Gözler</button>
+                            <button class="tab-button" data-tab="mouth">Ağız</button>
+                            <button class="tab-button" data-tab="leds">LED'ler</button>
+                            <button class="tab-button" data-tab="emotion">Duygu</button>
+                        </div>
+                        
+                        <div id="tab-eyes" class="tab-pane active">
+                            <div class="form-group">
+                                <label for="eyes-action">Eylem:</label>
+                                <select id="eyes-action" class="form-control">
+                                    <option value="none">Eylem Yok</option>
+                                    <option value="clear">Temizle</option>
+                                    <option value="blink">Göz Kırp</option>
+                                    <option value="look_around">Etrafı İzle</option>
+                                    <option value="growing_circle">Büyüyen Çember</option>
+                                </select>
+                            </div>
+                            <div id="eyes-params" class="action-params">
+                                <!-- Parametreler dinamik olarak yüklenecek -->
+                            </div>
+                        </div>
+                        
+                        <div id="tab-mouth" class="tab-pane">
+                            <div class="form-group">
+                                <label for="mouth-action">Eylem:</label>
+                                <select id="mouth-action" class="form-control">
+                                    <option value="none">Eylem Yok</option>
+                                    <option value="clear">Temizle</option>
+                                    <option value="smile">Gülümse</option>
+                                    <option value="speak">Konuş</option>
+                                </select>
+                            </div>
+                            <div id="mouth-params" class="action-params">
+                                <!-- Parametreler dinamik olarak yüklenecek -->
+                            </div>
+                        </div>
+                        
+                        <div id="tab-leds" class="tab-pane">
+                            <div class="form-group">
+                                <label for="leds-action">Eylem:</label>
+                                <select id="leds-action" class="form-control">
+                                    <option value="none">Eylem Yok</option>
+                                    <option value="off">Kapat</option>
+                                    <option value="pulse">Nabız</option>
+                                    <option value="rainbow">Gökkuşağı</option>
+                                </select>
+                            </div>
+                            <div id="leds-params" class="action-params">
+                                <!-- Parametreler dinamik olarak yüklenecek -->
+                            </div>
+                        </div>
+                        
+                        <div id="tab-emotion" class="tab-pane">
+                            <div class="form-group">
+                                <label for="emotion-action">Eylem:</label>
+                                <select id="emotion-action" class="form-control">
+                                    <option value="none">Eylem Yok</option>
+                                    <option value="set_emotion">Duygu Ayarla</option>
+                                </select>
+                            </div>
+                            <div id="emotion-params" class="action-params">
+                                <!-- Parametreler dinamik olarak yüklenecek -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="save-section mt-3">
+                    <button id="update-step" class="btn btn-primary">Adımı Güncelle</button>
+                    <button id="save-animation" class="btn btn-success">Kaydet</button>
+                    <div class="mt-2">
+                        <button id="export-animation" class="btn btn-sm btn-secondary">JSON Dışa Aktar</button>
+                        <button id="import-animation" class="btn btn-sm btn-secondary">JSON İçe Aktar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bildirim Alanı -->
+    <div id="notification" class="notification"></div>
+    
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="modal-title">Modal Başlık</h3>
+            <div id="modal-body">
+                Modal İçerik
+            </div>
+            <div class="modal-footer">
+                <button id="modal-cancel" class="btn btn-secondary">İptal</button>
+                <button id="modal-confirm" class="btn btn-primary">Tamam</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/animation_editor.js"></script>
+</body>
+</html>
