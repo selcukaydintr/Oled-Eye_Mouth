@@ -1,0 +1,2392 @@
+#!/usr/bin/env python3
+"""
+===========================================================
+# Proje: FACE1 - Raspberry Pi 5 Robot AI için Yüz Eklentisi
+# Dosya: oled_controller.py
+# Açıklama: OLED ekranları kontrol eden modül. Sol göz, sağ göz ve ağız ekranlarını yönetir.
+# Bağımlılıklar: PIL, adafruit_ssd1306, threading, logging, time
+# Bağlı Dosyalar: hardware_defines.py, theme_manager.py
+
+# Versiyon: 0.3.0
+# Değişiklikler:
+# - [0.1.0] Temel OLED kontrolcü sınıfı oluşturuldu
+# - [0.1.1] Simülasyon modu eklendi ve geliştirildi
+# - [0.2.0] Göz takibi özelliği ve mikro ifadeler eklendi, enerji tasarrufu modu geliştirildi
+# - [0.3.0] Duygu alt tiplerinin görsel ifadeleri geliştirildi, duygu geçişleri daha akıcı hale getirildi
+#
+# Yazar: GitHub Copilot
+# Tarih: 2025-04-30
+===========================================================
+"""
+
+import os
+import sys
+import time
+import random
+import logging
+import threading
+from typing import Dict, List, Tuple, Optional, Union
+from pathlib import Path
+from PIL import Image, ImageDraw, ImageFont
+
+# Proje dizinini ve include dizinini Python yoluna ekle
+PROJECT_DIR = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.append(str(PROJECT_DIR))
+
+from include import hardware_defines
+
+# Logger yapılandırması
+logger = logging.getLogger("OLEDController")
+
+# Gerekli modülleri koşullu olarak içe aktarma
+try:
+    import board
+    import busio
+    import adafruit_tca9548a
+    import adafruit_ssd1306
+    HARDWARE_AVAILABLE = True
+except ImportError:
+    logger.warning("Adafruit SSD1306 kütüphaneleri bulunamadı, simülasyon modu zorunlu")
+    HARDWARE_AVAILABLE = False
+
+class SimulatedDisplay:
+    """
+    SSD1306 ekranı simüle eden sınıf
+    """
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.buffer = Image.new("1", (width, height))
+        self.draw = ImageDraw.Draw(self.buffer)
+        self.contrast_value = 255
+        self.powered_on = True
+        
+        # Simülasyon için ekran kaydını izleme amaçlı kayıt dosyası yolu
+        self.frame_counter = 0
+        simulation_dir = os.path.join(PROJECT_DIR, "simulation")
+        os.makedirs(simulation_dir, exist_ok=True)
+        self.sim_dir = simulation_dir
+    
+    def image(self, img):
+        """Görüntüyü tampona yükler"""
+        self.buffer = img.copy()
+        self.draw = ImageDraw.Draw(self.buffer)
+    
+    def fill(self, color):
+        """Ekranı belirtilen renkle doldurur"""
+        self.draw.rectangle((0, 0, self.width, self.height), fill=color)
+    
+    def show(self):
+        """Tamponu ekrana çizer (simüle edilen)"""
+        # Burada gerçek ekrana yazma işlemi yapılacaktı, ancak simüle edildiği için sadece log çıktısı alıyoruz
+        # İsteğe bağlı olarak son tamponu bir dosyaya kaydediyoruz
+        self.save_frame()
+        logger.debug("Simüle edilen ekran güncellendi")
+    
+    def contrast(self, value):
+        """Kontrast ayarı (0-255)"""
+        self.contrast_value = value
+        logger.debug(f"Simüle edilen ekran kontrastı ayarlandı: {value}")
+    
+    def poweroff(self):
+        """Ekranı kapatır"""
+        self.powered_on = False
+        logger.debug("Simüle edilen ekran kapatıldı")
+    
+    def poweron(self):
+        """Ekranı açar"""
+        self.powered_on = True
+        logger.debug("Simüle edilen ekran açıldı")
+    
+    def save_frame(self, display_name="unknown"):
+        """Güncel ekran görüntüsünü kaydeder"""
+        # Her 10 karede bir görüntüyü dosyaya kaydet (performans için)
+        if self.frame_counter % 10 != 0:
+            self.frame_counter += 1
+            return
+            
+        try:
+            filename = os.path.join(
+                self.sim_dir, 
+                f"display_{display_name}_{int(time.time())}_{self.frame_counter:04d}.png"
+            )
+            # PNG olarak kaydet, siyah-beyaz renkleri RGB'ye dönüştür
+            rgb_img = self.buffer.convert("RGB")
+            rgb_img.save(filename)
+            self.frame_counter += 1
+        except Exception as e:
+            logger.debug(f"Simüle edilen ekran kaydedilemedi: {e}")
+
+
+class OLEDController:
+    """
+    OLED ekranları kontrol eden sınıf
+    
+    Bu sınıf, SSD1306 OLED ekranları üzerinde göz ve ağız animasyonları oluşturur.
+    Hem doğrudan I2C hem de TCA9548A I2C çoğaltıcı üzerinden çoklu ekran desteği sağlar.
+    """
+    
+    # Mikro ifade süre ayarları
+    MIN_MICRO_EXPRESSION_DURATION = 0.1  # saniye
+    MAX_MICRO_EXPRESSION_DURATION = 1.0  # saniye
+    
+    # Enerji tasarrufu modu ayarları
+    POWER_SAVE_DIM_DELAY = 120  # saniye
+    POWER_SAVE_OFF_DELAY = 300  # saniye
+    
+    def __init__(self, config):
+        """
+        OLED kontrolcü sınıfını başlatır
+        
+        Args:
+            config (dict): Yapılandırma ayarları
+        """
+        logger.info("OLED Kontrolcü başlatılıyor...")
+        self.config = config
+        
+        # Ekran nesneleri
+        self.displays = {
+            "left_eye": None,
+            "right_eye": None,
+            "mouth": None
+        }
+        
+        # Tampon görüntüleri (memory buffers)
+        self.buffers = {
+            "left_eye": None,
+            "right_eye": None,
+            "mouth": None
+        }
+        
+        # Çizim nesneleri
+        self.draw_objects = {
+            "left_eye": None,
+            "right_eye": None,
+            "mouth": None
+        }
+        
+        # Font yükleme
+        self.font_path = str(PROJECT_DIR / "themes" / "fonts")
+        self.fonts = {}
+        self._load_fonts()
+        
+        # Göz kırpma değişkenleri
+        self.blink_state = False
+        self.next_blink_time = time.time() + self._get_random_blink_interval()
+        
+        # Göz takip değişkenleri (göz bebeklerinin nereye baktığı)
+        self.eye_position = (0, 0)  # x, y (-1.0 - 1.0 arası)
+        self.target_eye_position = (0, 0)
+        self.eye_move_speed = 0.1
+        self.random_eye_move = True  # Otomatik göz hareketi
+        self.next_eye_move_time = time.time() + random.uniform(1.0, 3.0)
+        
+        # Mikro ifade değişkenleri
+        self.micro_expression = None
+        self.micro_expression_end_time = 0
+        self.micro_expression_intensity = 0.0
+        
+        # Güç tasarrufu modu
+        self.power_mode = "on"  # "on", "dim", "off"
+        self.last_activity_time = time.time()
+        
+        # Animasyon döngüsü kontrol değişkenleri
+        self.is_running = False
+        self.animation_thread = None
+        self.fps = config.get("animation", {}).get("fps", 30)
+        self.frame_delay = 1.0 / self.fps
+        
+        # I2C ve ekran başlatma
+        self.i2c = None
+        self.multiplexer = None
+        
+        # Platform tespiti
+        self.platform_type = hardware_defines.detect_platform()
+        logger.info(f"Platform türü tespit edildi: {self.platform_type}")
+        
+        # Simülasyon modu kontrolü
+        self.simulation_mode = (
+            config.get("hardware", {}).get("simulation_mode", False) or 
+            self.platform_type != "raspberry_pi" or 
+            not HARDWARE_AVAILABLE or
+            "Raspberry Pi 5" in hardware_defines.get_platform_info()
+        )
+        
+        if self.simulation_mode:
+            if self.platform_type == "raspberry_pi":
+                logger.info("Simülasyon modu etkin (Raspberry Pi 5 henüz tam olarak desteklenmiyor veya yapılandırmada seçildi)")
+            else:
+                logger.info("Simülasyon modu etkin (Raspberry Pi platformu değil)")
+            
+            # Simülasyon dizinini oluştur
+            self.sim_dir = os.path.join(PROJECT_DIR, "simulation")
+            os.makedirs(self.sim_dir, exist_ok=True)
+            logger.info(f"Simülasyon görüntüleri şurada saklanacak: {self.sim_dir}")
+    
+    def _get_random_blink_interval(self) -> float:
+        """
+        Rastgele göz kırpma aralığı oluşturur
+        
+        Returns:
+            float: Göz kırpma aralığı (saniye)
+        """
+        min_interval = self.config.get("animation", {}).get("blink_interval_min", 2.0)
+        max_interval = self.config.get("animation", {}).get("blink_interval_max", 10.0)
+        return random.uniform(min_interval, max_interval)
+    
+    def _load_fonts(self):
+        """
+        Kullanılacak fontları yükler
+        """
+        try:
+            # Font boyutlarını belirle
+            font_sizes = [8, 10, 12, 14, 16, 20, 24, 32]
+            
+            # PIL ile birlikte gelen fontları kullan
+            for size in font_sizes:
+                try:
+                    # TrueType font kullanımı (eğer dosya mevcutsa)
+                    # Önce projedeki font dosyalarını kontrol et
+                    font_files = [
+                        str(Path(self.font_path) / "roboto.ttf"),
+                        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",  # Linux
+                        "/System/Library/Fonts/Helvetica.ttc",  # macOS
+                        "C:\\Windows\\Fonts\\arial.ttf"  # Windows
+                    ]
+                    
+                    font = None
+                    for font_file in font_files:
+                        try:
+                            if os.path.exists(font_file):
+                                font = ImageFont.truetype(font_file, size)
+                                logger.debug(f"Font yüklendi: {font_file}, boyut: {size}")
+                                break
+                        except Exception:
+                            continue
+                    
+                    # TrueType font yoksa, PIL varsayılan fontunu kullan
+                    if font is None:
+                        font = ImageFont.load_default()
+                        logger.debug(f"Varsayılan font kullanılıyor, boyut: {size}")
+                    
+                    self.fonts[size] = font
+                    
+                except Exception as e:
+                    logger.error(f"Font yüklenirken hata oluştu, boyut {size}: {e}")
+                    # Varsayılan font
+                    self.fonts[size] = ImageFont.load_default()
+            
+        except Exception as e:
+            logger.error(f"Fontlar yüklenirken hata: {e}")
+            # En azından varsayılan fontu yükle
+            self.fonts[8] = ImageFont.load_default()
+    
+    def start(self) -> bool:
+        """
+        OLED ekranları başlatır ve animasyon döngüsünü çalıştırır
+        
+        Returns:
+            bool: Başarılı ise True, değilse False
+        """
+        try:
+            # I2C başlat
+            if not self._init_displays():
+                return False
+            
+            # Animasyon döngüsünü başlat
+            self.is_running = True
+            self.animation_thread = threading.Thread(target=self._animation_loop)
+            self.animation_thread.daemon = True
+            self.animation_thread.start()
+            
+            logger.info("OLED Kontrolcü başlatıldı")
+            return True
+            
+        except Exception as e:
+            logger.error(f"OLED Kontrolcü başlatılırken hata: {e}")
+            return False
+    
+    def stop(self) -> None:
+        """
+        Animasyon döngüsünü durdurur ve ekranları temizler
+        """
+        self.is_running = False
+        
+        if self.animation_thread:
+            try:
+                self.animation_thread.join(timeout=1.0)
+            except Exception:
+                pass
+        
+        # Ekranları temizle
+        self.clear_displays()
+        
+        logger.info("OLED Kontrolcü durduruldu")
+    
+    def _init_displays(self) -> bool:
+        """
+        OLED ekranları başlatır
+        
+        Returns:
+            bool: Başarılı ise True, değilse False
+        """
+        try:
+            # Yapılandırmadan ekran ayarlarını al
+            displays_config = self.config.get("hardware", {}).get("oled_displays", {})
+            
+            # Simülasyon modu kontrolü
+            if self.simulation_mode:
+                # Simülasyon modu - fiziksel donanım kullanmadan ekranları simüle et
+                logger.info("Simülasyon modunda ekranlar başlatılıyor...")
+                
+                for display_name in self.displays.keys():
+                    display_config = displays_config.get(display_name, {})
+                    
+                    # Simüle edilen ekranı oluştur
+                    width = display_config.get("width", hardware_defines.DISPLAY_WIDTH)
+                    height = display_config.get("height", hardware_defines.DISPLAY_HEIGHT)
+                    
+                    # Simüle edilmiş ekran nesnesi oluştur
+                    display = SimulatedDisplay(width, height)
+                    display.sim_dir = self.sim_dir  # Simülasyon dizinini ayarla
+                    
+                    # Ekranı temizle ve başlat
+                    display.fill(0)
+                    display.show()
+                    
+                    self.displays[display_name] = display
+                    
+                    # Tampon görüntü oluştur
+                    buffer_image = Image.new("1", (width, height))
+                    self.buffers[display_name] = buffer_image
+                    self.draw_objects[display_name] = ImageDraw.Draw(buffer_image)
+                    
+                    logger.info(f"Simüle edilen OLED ekran başlatıldı: {display_name}")
+                
+                return True
+            else:
+                # Gerçek donanım modu
+                # I2C başlat
+                self.i2c = hardware_defines.get_platform_i2c()
+                if self.i2c is None:
+                    logger.error("I2C başlatılamadı")
+                    return False
+                
+                # TCA9548A multiplexer kullanımı kontrolü
+                use_multiplexer = self.config.get("hardware", {}).get("use_multiplexer", False)
+                
+                if use_multiplexer:
+                    # TCA9548A I2C multiplexer başlat
+                    self.multiplexer = hardware_defines.init_i2c_multiplexer(self.i2c)
+                    if self.multiplexer is None:
+                        logger.error("TCA9548A multiplexer başlatılamadı")
+                        return False
+                    
+                    # Multiplexer üzerindeki ekranları başlat
+                    for display_name in self.displays.keys():
+                        display_config = displays_config.get(display_name, {})
+                        channel = display_config.get("channel", 0)
+                        
+                        try:
+                            # Kanal seç
+                            channel_i2c = self.multiplexer[channel]
+                            
+                            # SSD1306 ekranı başlat
+                            width = display_config.get("width", hardware_defines.DISPLAY_WIDTH)
+                            height = display_config.get("height", hardware_defines.DISPLAY_HEIGHT)
+                            
+                            display = adafruit_ssd1306.SSD1306_I2C(
+                                width, height, channel_i2c,
+                                addr=int(display_config.get("i2c_address", hardware_defines.DEFAULT_LEFT_EYE_ADDR), 16)
+                            )
+                            
+                            # Ekranı temizle ve başlat
+                            display.fill(0)
+                            display.show()
+                            
+                            self.displays[display_name] = display
+                            
+                            # Tampon görüntü oluştur
+                            buffer_image = Image.new("1", (width, height))
+                            self.buffers[display_name] = buffer_image
+                            self.draw_objects[display_name] = ImageDraw.Draw(buffer_image)
+                            
+                            logger.info(f"OLED ekran başlatıldı: {display_name}, kanal: {channel}")
+                        
+                        except Exception as e:
+                            logger.error(f"OLED ekran başlatılırken hata: {display_name}, hata: {e}")
+                else:
+                    # Doğrudan I2C bağlantısı ile ekranları başlat
+                    default_addresses = {
+                        "left_eye": hardware_defines.DEFAULT_LEFT_EYE_ADDR,
+                        "right_eye": hardware_defines.DEFAULT_RIGHT_EYE_ADDR,
+                        "mouth": hardware_defines.DEFAULT_MOUTH_ADDR
+                    }
+                    
+                    for display_name, default_addr in default_addresses.items():
+                        display_config = displays_config.get(display_name, {})
+                        
+                        try:
+                            # SSD1306 ekranı başlat
+                            width = display_config.get("width", hardware_defines.DISPLAY_WIDTH)
+                            height = display_config.get("height", hardware_defines.DISPLAY_HEIGHT)
+                            
+                            # I2C adresi yapılandırmadan alınır, yoksa varsayılan kullanılır
+                            i2c_addr = int(display_config.get("i2c_address", f"0x{default_addr:02X}"), 16)
+                            
+                            display = adafruit_ssd1306.SSD1306_I2C(
+                                width, height, self.i2c,
+                                addr=i2c_addr
+                            )
+                            
+                            # Ekranı temizle ve başlat
+                            display.fill(0)
+                            display.show()
+                            
+                            self.displays[display_name] = display
+                            
+                            # Tampon görüntü oluştur
+                            buffer_image = Image.new("1", (width, height))
+                            self.buffers[display_name] = buffer_image
+                            self.draw_objects[display_name] = ImageDraw.Draw(buffer_image)
+                            
+                            logger.info(f"OLED ekran başlatıldı: {display_name}, adres: 0x{i2c_addr:02X}")
+                        
+                        except Exception as e:
+                            logger.error(f"OLED ekran başlatılırken hata: {display_name}, hata: {e}")
+                
+                # Ekranların başarılı bir şekilde başlatılıp başlatılmadığını kontrol et
+                if not any(self.displays.values()):
+                    logger.error("Hiçbir OLED ekran başlatılamadı")
+                    return False
+                
+                return True
+            
+        except Exception as e:
+            logger.error(f"Ekranlar başlatılırken beklenmeyen hata: {e}")
+            return False
+    
+    def update_display(self) -> None:
+        """
+        Tüm ekranları günceller (tamponları ekranlara gönderir)
+        """
+        for display_name, display in self.displays.items():
+            if display is not None and self.buffers[display_name] is not None:
+                try:
+                    # PIL görüntüsünü ekran tamponuna dönüştür
+                    display.image(self.buffers[display_name])
+                    display.show()
+                    
+                    # Simülasyon modunda, ekranların son durumunu bir dosyaya kaydediyoruz
+                    if self.simulation_mode and hasattr(display, 'save_frame'):
+                        display.save_frame(display_name)
+                        
+                except Exception as e:
+                    logger.error(f"Ekran güncellenirken hata: {display_name}, hata: {e}")
+    
+    def clear_displays(self) -> None:
+        """
+        Tüm ekranları temizler
+        """
+        for display_name, display in self.displays.items():
+            if display is not None:
+                try:
+                    display.fill(0)
+                    display.show()
+                    
+                    # Tampon görüntüleri de temizle
+                    if self.buffers[display_name] is not None:
+                        self.draw_objects[display_name].rectangle(
+                            (0, 0, self.buffers[display_name].width, self.buffers[display_name].height),
+                            fill=0
+                        )
+                except Exception as e:
+                    logger.error(f"Ekran temizlenirken hata: {display_name}, hata: {e}")
+    
+    def _animation_loop(self) -> None:
+        """
+        Ana animasyon döngüsü
+        """
+        logger.info("Animasyon döngüsü başlatıldı")
+        
+        while self.is_running:
+            loop_start = time.time()
+            
+            try:
+                # Güç tasarrufu kontrolü
+                self._check_power_saving_mode()
+                
+                # Göz pozisyonu güncelleme
+                self._update_eye_position()
+                
+                # Göz kırpma kontrolü
+                self._update_blink_state()
+                
+                # Mikro ifade kontrolü
+                self._update_micro_expression()
+                
+                # Ekranlara çizim yap
+                self._draw_all_displays()
+                
+                # Ekranları güncelle
+                if self.power_mode != "off":
+                    self.update_display()
+                
+            except Exception as e:
+                logger.error(f"Animasyon döngüsünde hata: {e}")
+            
+            # FPS kontrolü
+            elapsed = time.time() - loop_start
+            sleep_time = max(0, self.frame_delay - elapsed)
+            
+            if sleep_time > 0:
+                time.sleep(sleep_time)
+            elif elapsed > 1.5 * self.frame_delay:
+                logger.warning(f"Animasyon döngüsü yavaş çalışıyor: {elapsed:.4f} saniye (hedef: {self.frame_delay:.4f})")
+    
+    def _update_eye_position(self) -> None:
+        """
+        Göz pozisyonunu günceller (göz bebeklerinin hareketi için)
+        """
+        # Rastgele göz hareketi kontrolü
+        if self.random_eye_move:
+            current_time = time.time()
+            if current_time >= self.next_eye_move_time:
+                # Yeni hedef pozisyon belirle (-0.7 ve 0.7 arasında)
+                self.target_eye_position = (
+                    random.uniform(-0.7, 0.7),
+                    random.uniform(-0.7, 0.7)
+                )
+                # Sonraki hareket zamanını belirle
+                self.next_eye_move_time = current_time + random.uniform(1.0, 3.0)
+        
+        # Mevcut pozisyondan hedef pozisyona doğru yumuşak geçiş
+        self.eye_position = (
+            self.eye_position[0] + (self.target_eye_position[0] - self.eye_position[0]) * self.eye_move_speed,
+            self.eye_position[1] + (self.target_eye_position[1] - self.eye_position[1]) * self.eye_move_speed
+        )
+    
+    def _update_blink_state(self) -> None:
+        """
+        Göz kırpma durumunu günceller
+        """
+        current_time = time.time()
+        if current_time >= self.next_blink_time:
+            self.blink_state = not self.blink_state
+            
+            if self.blink_state:
+                # Göz açık
+                self.next_blink_time = current_time + self._get_random_blink_interval()
+            else:
+                # Göz kapalı
+                self.next_blink_time = current_time + 0.15  # Göz kapalı kalma süresi
+    
+    def _update_micro_expression(self) -> None:
+        """
+        Mikro ifadeyi günceller
+        """
+        if self.micro_expression and time.time() > self.micro_expression_end_time:
+            logger.debug(f"Mikro ifade sona erdi: {self.micro_expression}")
+            self.micro_expression = None
+    
+    def _check_power_saving_mode(self) -> None:
+        """
+        Güç tasarrufu modunu kontrol eder ve günceller
+        """
+        if not self.config.get("system", {}).get("power_save_enabled", True):
+            return
+            
+        idle_time = time.time() - self.last_activity_time
+        
+        # Güç tasarrufu modunu güncelle
+        if self.power_mode == "on" and idle_time > self.POWER_SAVE_DIM_DELAY:
+            logger.info(f"Güç tasarrufu: Dim modu aktif ({self.POWER_SAVE_DIM_DELAY}s)")
+            self.set_power_mode("dim")
+        elif self.power_mode == "dim" and idle_time > self.POWER_SAVE_OFF_DELAY:
+            logger.info(f"Güç tasarrufu: Kapalı modu aktif ({self.POWER_SAVE_OFF_DELAY}s)")
+            self.set_power_mode("off")
+    
+    def _draw_all_displays(self) -> None:
+        """
+        Tüm ekranlara mevcut duygu durumuna göre çizim yapar
+        """
+        # Kullanılacak duygu belirleme (mikro ifade varsa onu kullan)
+        current_emotion = self.config.get("emotions", {}).get("default_emotion", "calm")
+        
+        # Eğer bir mikro ifade varsa, onu kullan
+        if self.micro_expression:
+            current_emotion = self.micro_expression
+        # Eğer geçiş yapılıyorsa ve EmotionEngine'den bir geçiş hedefi alınmışsa
+        elif "target" in self.config.get("emotions", {}) and self.config["emotions"].get("target") is not None:
+            target = self.config["emotions"]["target"]
+            source = self.config["emotions"].get("source", current_emotion)
+            progress = target.get("progress", 0.0)
+            
+            # İki duygu arasında geçiş yaparken blend_emotions fonksiyonunu kullan
+            if progress > 0.0 and progress < 1.0:
+                # Duygu geçişini daha doğal bir eğri ile yumuşat (kübik easing fonksiyonu)
+                # Bu fonksiyon başta yavaş, ortada hızlı, sonda tekrar yavaşlayan bir geçiş sağlar
+                eased_progress = progress
+                
+                # Kübik easing fonksiyonu (daha doğal geçiş için)
+                if progress < 0.5:
+                    # İlk yarı: t^3 * 4 
+                    eased_progress = 4 * (progress ** 3)
+                else:
+                    # İkinci yarı: 1 - (1-t)^3 * 4
+                    eased_progress = 1 - (4 * ((1 - progress) ** 3))
+                
+                # Duygular arasında yumuşak geçiş için blend_emotions kullan
+                current_emotion = self.blend_emotions(source, target["state"], eased_progress)
+                
+                # Göz pozisyonu ve kırpma durumunu duygu geçişine göre ayarla
+                if 0.45 < progress < 0.55:
+                    # Geçiş ortasında göz kırpmayı tetikle (daha doğal geçiş için)
+                    self.blink_state = False
+                    self.next_blink_time = time.time() + 0.2
+                
+                # "Concerned" ve "excited" gibi duygular için göz hareketi hızını ayarla
+                if target["state"] in ["concerned", "nervous", "excited", "anxious"]:
+                    self.eye_move_speed = 0.2
+                elif target["state"] in ["calm", "peaceful", "sleepy"]:
+                    self.eye_move_speed = 0.05
+                
+                # Eğer geçiş tamamlanmışsa, hedef duygusunu ayarla
+                if progress >= 1.0:
+                    current_emotion = target["state"]
+        
+        # Sol ve sağ gözleri çiz
+        self.draw_eyes(current_emotion, self.blink_state)
+        
+        # Ağzı çiz
+        self.draw_mouth(current_emotion)
+    
+    def draw_eyes(self, emotion: str, blink_state: bool) -> None:
+        """
+        Göz ekranlarına çizim yapar
+        
+        Args:
+            emotion (str): Duygu durumu
+            blink_state (bool): Göz kırpma durumu (True: açık, False: kapalı)
+        """
+        # Duygu alt tiplerini kontrol et ve ana duyguya eşle
+        base_emotion = emotion
+        
+        # Alt duygu tiplerini ana duygulara eşle
+        emotion_subtypes_map = {
+            # Happy alt tipleri
+            "joy": "happy", "content": "happy", "excited": "excited",
+            "amused": "happy", "proud": "happy",
+            
+            # Sad alt tipleri
+            "disappointed": "sad", "lonely": "sad", "depressed": "sad",
+            "miserable": "sad", "guilty": "sad",
+            
+            # Angry alt tipleri
+            "frustrated": "angry", "irritated": "angry", "enraged": "angry",
+            "annoyed": "angry", "bitter": "angry",
+            
+            # Surprised alt tipleri
+            "amazed": "surprised", "astonished": "surprised", "shocked": "surprised",
+            "startled": "surprised", "confused": "confused",
+            
+            # Fearful alt tipleri
+            "anxious": "fearful", "terrified": "fearful", "nervous": "fearful", 
+            "worried": "fearful", "scared": "fearful",
+            
+            # Disgusted alt tipleri
+            "disapproval": "disgusted", "revolted": "disgusted", "judgmental": "disgusted",
+            "avoidant": "disgusted", "loathing": "disgusted",
+            
+            # Calm alt tipleri
+            "relaxed": "calm", "peaceful": "calm", "serene": "calm",
+            "tranquil": "calm", "composed": "calm",
+            
+            # Neutral alt tipleri
+            "indifferent": "neutral", "objective": "neutral", "detached": "neutral", 
+            "unconcerned": "neutral", "balanced": "neutral",
+            
+            # Özel duygu ifadeleri
+            "sleepy": "sleepy", "bored": "bored", "love": "love"
+        }
+        
+        # Alt duygu tipini ana duyguya eşle
+        if emotion in emotion_subtypes_map:
+            base_emotion = emotion_subtypes_map[emotion]
+        
+        # Sol göz ve sağ göz ekranlarını kontrol et
+        for eye_name in ["left_eye", "right_eye"]:
+            if self.displays[eye_name] is None or self.draw_objects[eye_name] is None:
+                continue
+            
+            try:
+                # Tampon görüntüyü temizle
+                buffer = self.buffers[eye_name]
+                draw = self.draw_objects[eye_name]
+                draw.rectangle((0, 0, buffer.width, buffer.height), fill=0)
+                
+                # Ekran boyutlarını al
+                width, height = buffer.width, buffer.height
+                center_x, center_y = width // 2, height // 2
+                
+                if blink_state:
+                    # Göz açık
+                    if base_emotion == "happy":
+                        # Alt tipler için özel ayarlamalar
+                        pupil_offset_y_adjust = 0
+                        eye_size = min(width, height) // 2
+                        
+                        if emotion == "joy":
+                            # Daha yüksek mutluluk - daha yukarı bakan
+                            pupil_offset_y_adjust = -8
+                        elif emotion == "content":
+                            # Tatmin olmuş - nötr bakış
+                            pupil_offset_y_adjust = -2
+                        elif emotion == "amused":
+                            # Eğlenen - hafif göz kısma
+                            eye_size = min(width, height) // 2 - 3
+                        elif emotion == "proud":
+                            # Gururlu - sert bakış
+                            pupil_offset_y_adjust = -3
+                        
+                        # Göz çemberi
+                        draw.ellipse(
+                            (center_x - eye_size, center_y - eye_size, center_x + eye_size, center_y + eye_size),
+                            outline=1
+                        )
+                        
+                        # Göz bebeği
+                        pupil_size = eye_size // 2
+                        pupil_offset_x = int(self.eye_position[0] * 10)
+                        pupil_offset_y = int(self.eye_position[1] * 10 - 5 + pupil_offset_y_adjust)
+                        
+                        draw.ellipse(
+                            (center_x - pupil_size + pupil_offset_x, center_y - pupil_size + pupil_offset_y, 
+                             center_x + pupil_size + pupil_offset_x, center_y + pupil_offset_y),
+                            fill=1
+                        )
+                        
+                    elif base_emotion == "sad":
+                        # Alt tipler için özel ayarlamalar
+                        pupil_offset_y_adjust = 0
+                        tear_drop = False
+                        eye_size = min(width, height) // 2
+                        
+                        if emotion == "depressed":
+                            # Depresif - daha aşağı bakan ve küçük göz
+                            pupil_offset_y_adjust = 8
+                            eye_size = min(width, height) // 2 - 3
+                        elif emotion == "miserable":
+                            # Sefil - gözyaşı damlası ekle
+                            tear_drop = True
+                            pupil_offset_y_adjust = 7
+                        elif emotion == "lonely":
+                            # Yalnız - hafif aşağı bakan
+                            pupil_offset_y_adjust = 3
+                        elif emotion == "guilty":
+                            # Suçlu - gözler aşağıda
+                            pupil_offset_y_adjust = 5
+                            
+                        # Göz çemberi
+                        draw.ellipse(
+                            (center_x - eye_size, center_y - eye_size, center_x + eye_size, center_y + eye_size),
+                            outline=1
+                        )
+                        
+                        # Göz bebeği (biraz aşağıya bak, göz takibi ile)
+                        pupil_size = eye_size // 2
+                        pupil_offset_x = int(self.eye_position[0] * 10)
+                        pupil_offset_y = int(self.eye_position[1] * 10 + 5 + pupil_offset_y_adjust)
+                        
+                        draw.ellipse(
+                            (center_x - pupil_size + pupil_offset_x, center_y - pupil_size + pupil_offset_y, 
+                             center_x + pupil_size + pupil_offset_x, center_y + pupil_offset_y),
+                            fill=1
+                        )
+                        
+                        # Gözyaşı damlası (miserable için)
+                        if tear_drop:
+                            if eye_name == "left_eye":  # Sadece sol göze gözyaşı ekle
+                                tear_x = center_x - eye_size // 2
+                                tear_y = center_y + eye_size + 5
+                                tear_size = eye_size // 4
+                                
+                                # Gözyaşı damlası çiz
+                                draw.ellipse(
+                                    (tear_x - tear_size, tear_y - tear_size, 
+                                    tear_x + tear_size, tear_y + tear_size),
+                                    fill=1
+                                )
+                        
+                    elif base_emotion == "angry":
+                        # Alt tipler için özel ayarlamalar
+                        eye_width = min(width, height) // 2
+                        eye_height = eye_width // 2
+                        eyebrow_angle = 0  # Kaş açısı
+                        
+                        if emotion == "enraged":
+                            # Çok kızgın - daha dar gözler, daha eğimli kaşlar
+                            eye_height = eye_width // 3
+                            eyebrow_angle = 5
+                        elif emotion == "frustrated":
+                            # Sinirlenmiş - hafif kızgın
+                            eyebrow_angle = -3
+                        elif emotion == "irritated":
+                            # Rahatsız - hafif kısık gözler
+                            eye_height = eye_width // 2 - 2
+                        elif emotion == "bitter":
+                            # Acı - kısık gözler ve daha hafif kaşlar
+                            eye_height = eye_width // 3 + 2
+                            eyebrow_angle = -2
+                            
+                        # Göz çemberi (daha dar)
+                        draw.ellipse(
+                            (center_x - eye_width, center_y - eye_height, 
+                             center_x + eye_width, center_y + eye_height),
+                            outline=1
+                        )
+                        
+                        # Göz bebeği (ortada)
+                        pupil_size = eye_height // 2
+                        pupil_offset_x = int(self.eye_position[0] * 5)  # Göz takibi daha az etkili
+                        
+                        draw.ellipse(
+                            (center_x - pupil_size + pupil_offset_x, center_y - pupil_size, 
+                             center_x + pupil_size + pupil_offset_x, center_y + pupil_size),
+                            fill=1
+                        )
+                        
+                        # Kaş çiz
+                        if eye_name == "left_eye":
+                            # Sol kaş - sağa eğimli
+                            draw.line(
+                                (center_x - eye_width - 5, center_y - eye_height - 5 + eyebrow_angle, 
+                                 center_x + eye_width - 10, center_y - eye_height - 15 - eyebrow_angle),
+                                fill=1, width=2
+                            )
+                        else:
+                            # Sağ kaş - sola eğimli
+                            draw.line(
+                                (center_x - eye_width + 10, center_y - eye_height - 15 - eyebrow_angle, 
+                                 center_x + eye_width + 5, center_y - eye_height - 5 + eyebrow_angle),
+                                fill=1, width=2
+                            )
+                        
+                    elif base_emotion == "surprised":
+                        # Alt tipler için özel ayarlamalar
+                        eye_size = min(width, height) * 3 // 5
+                        pupil_size = eye_size // 3
+                        
+                        if emotion == "shocked":
+                            # Şok olmuş - daha büyük gözler, daha küçük göz bebekleri
+                            eye_size = min(width, height) * 3 // 5 + 2
+                            pupil_size = eye_size // 4
+                        elif emotion == "amazed":
+                            # Hayret - büyük gözler ve büyük göz bebekleri
+                            eye_size = min(width, height) * 3 // 5
+                            pupil_size = eye_size // 2
+                        elif emotion == "startled":
+                            # Ürkmüş - büyük gözler ama daha az açık
+                            eye_size = min(width, height) * 3 // 5 - 3
+                        
+                        # Göz çemberi (daha büyük)
+                        draw.ellipse(
+                            (center_x - eye_size, center_y - eye_size, center_x + eye_size, center_y + eye_size),
+                            outline=1
+                        )
+                        
+                        # Göz bebeği (merkeze yakın)
+                        pupil_offset_x = int(self.eye_position[0] * 5)
+                        pupil_offset_y = int(self.eye_position[1] * 5)
+                        
+                        draw.ellipse(
+                            (center_x - pupil_size + pupil_offset_x, center_y - pupil_size + pupil_offset_y, 
+                             center_x + pupil_size + pupil_offset_x, center_y + pupil_offset_y),
+                            fill=1
+                        )
+                    
+                    elif base_emotion == "fearful":
+                        # Alt tipler için özel ayarlamalar
+                        eye_size = min(width, height) // 2
+                        pupil_size = eye_size // 2
+                        pupil_offset_y_adjust = 0
+                        
+                        if emotion == "terrified":
+                            # Dehşete düşmüş - büyük gözler, göz bebeği üstte
+                            eye_size = min(width, height) * 3 // 5 - 2
+                            pupil_offset_y_adjust = -8
+                        elif emotion == "anxious":
+                            # Kaygılı - hafif dar gözler, hareketli göz bebekleri
+                            eye_size = min(width, height) // 2 - 2
+                        elif emotion == "nervous":
+                            # Sinirli - göz bebekleri daha hızlı hareket eder
+                            self.eye_move_speed = 0.2  # Geçici olarak göz hareket hızını artır
+                        elif emotion == "scared":
+                            # Korkmuş - göz bebekleri yukarı bakar
+                            pupil_offset_y_adjust = -5
+                            
+                        # Göz çemberi
+                        draw.ellipse(
+                            (center_x - eye_size, center_y - eye_size, center_x + eye_size, center_y + eye_size),
+                            outline=1
+                        )
+                        
+                        # Göz bebeği 
+                        pupil_offset_x = int(self.eye_position[0] * 12)  # Göz takibi daha etkin
+                        pupil_offset_y = int(self.eye_position[1] * 12 + pupil_offset_y_adjust)
+                        
+                        draw.ellipse(
+                            (center_x - pupil_size + pupil_offset_x, center_y - pupil_size + pupil_offset_y, 
+                             center_x + pupil_size + pupil_offset_x, center_y + pupil_offset_y),
+                            fill=1
+                        )
+                    
+                    elif base_emotion == "disgusted":
+                        # Alt tipler için özel ayarlamalar
+                        eye_width = min(width, height) // 2
+                        eye_height = eye_width // 2
+                        
+                        if emotion == "revolted":
+                            # Tiksinmiş - bir göz daha kısık
+                            if eye_name == "left_eye":
+                                eye_height = eye_width // 3
+                        elif emotion == "disapproval":
+                            # Onaylamayan - kaş çatmış
+                            pass
+                        elif emotion == "judgmental":
+                            # Yargılayıcı - bir kaş kalkmış
+                            pass
+                        elif emotion == "loathing":
+                            # Nefret - gözler kısılmış
+                            eye_height = eye_width // 3 + 1
+                            
+                        # Göz çemberi (daha dar)
+                        draw.ellipse(
+                            (center_x - eye_width, center_y - eye_height, 
+                             center_x + eye_width, center_y + eye_height),
+                            outline=1
+                        )
+                        
+                        # Göz bebeği
+                        pupil_size = eye_height // 2
+                        pupil_offset_x = int(self.eye_position[0] * 8)
+                        pupil_offset_y = int(self.eye_position[1] * 8)
+                        
+                        draw.ellipse(
+                            (center_x - pupil_size + pupil_offset_x, center_y - pupil_size + pupil_offset_y, 
+                             center_x + pupil_size + pupil_offset_x, center_y + pupil_offset_y),
+                            fill=1
+                        )
+                        
+                        # Kaş - sadece belirli duygular için
+                        if emotion in ["disapproval", "judgmental"]:
+                            if eye_name == "left_eye":
+                                # Sol kaş düz
+                                draw.line(
+                                    (center_x - eye_width - 2, center_y - eye_height - 10, 
+                                    center_x + eye_width + 2, center_y - eye_height - 10),
+                                    fill=1, width=2
+                                )
+                            else:
+                                if emotion == "judgmental":
+                                    # Sağ kaş kalkmış
+                                    draw.line(
+                                        (center_x - eye_width, center_y - eye_height - 10, 
+                                        center_x + eye_width, center_y - eye_height - 18),
+                                        fill=1, width=2
+                                    )
+                                else:
+                                    # Sağ kaş düz
+                                    draw.line(
+                                        (center_x - eye_width - 2, center_y - eye_height - 10, 
+                                        center_x + eye_width + 2, center_y - eye_height - 10),
+                                        fill=1, width=2
+                                    )
+                    
+                    elif base_emotion == "calm":
+                        # Alt tipler için özel ayarlamalar
+                        eye_size = min(width, height) // 2
+                        pupil_size = eye_size // 3
+                        
+                        if emotion == "relaxed":
+                            # Rahatlamış - hafif kısık gözler
+                            eye_size = min(width, height) // 2 - 2
+                        elif emotion == "peaceful":
+                            # Huzurlu - normal gözler, sabit bakış
+                            self.eye_move_speed = 0.05  # Göz hareket hızını azalt
+                        elif emotion == "serene":
+                            # Durgun - hafif kapalı gözler
+                            eye_size = min(width, height) // 2 - 3
+                        elif emotion == "tranquil":
+                            # Sakin - neredeyse gözler kapalı
+                            eye_size = min(width, height) // 2 - 4
+                            
+                        # Göz çemberi
+                        draw.ellipse(
+                            (center_x - eye_size, center_y - eye_size, center_x + eye_size, center_y + eye_size),
+                            outline=1
+                        )
+                        
+                        # Göz bebeği (göz takibi ile)
+                        pupil_offset_x = int(self.eye_position[0] * 8)  # Daha az göz hareketi
+                        pupil_offset_y = int(self.eye_position[1] * 8)  # Daha az göz hareketi
+                        
+                        draw.ellipse(
+                            (center_x - pupil_size + pupil_offset_x, center_y - pupil_size + pupil_offset_y, 
+                             center_x + pupil_size + pupil_offset_x, center_y + pupil_offset_y),
+                            fill=1
+                        )
+                    
+                    elif base_emotion == "neutral":
+                        # Alt tipler için özel ayarlamalar
+                        eye_size = min(width, height) // 2
+                        pupil_size = eye_size // 3
+                        pupil_offset_x_base = 0
+                        
+                        if emotion == "detached":
+                            # İlgisiz - göz bebekleri kenarda
+                            pupil_offset_x_base = 8 if eye_name == "left_eye" else -8
+                        elif emotion == "indifferent":
+                            # Kayıtsız - hafif kısık gözler
+                            eye_size = min(width, height) // 2 - 2
+                        
+                        # Göz çemberi
+                        draw.ellipse(
+                            (center_x - eye_size, center_y - eye_size, center_x + eye_size, center_y + eye_size),
+                            outline=1
+                        )
+                        
+                        # Göz bebeği (göz takibi ile)
+                        pupil_offset_x = int(self.eye_position[0] * 10) + pupil_offset_x_base
+                        pupil_offset_y = int(self.eye_position[1] * 10)
+                        
+                        draw.ellipse(
+                            (center_x - pupil_size + pupil_offset_x, center_y - pupil_size + pupil_offset_y, 
+                             center_x + pupil_size + pupil_offset_x, center_y + pupil_offset_y),
+                            fill=1
+                        )
+                    
+                    elif emotion == "confused":
+                        # Kafası karışık göz - asimetrik
+                        eye_size = min(width, height) // 2
+                        pupil_size = eye_size // 3
+                        
+                        # Asimetrik göz çemberi (bir göz diğerinden farklı)
+                        if eye_name == "left_eye":
+                            # Sol göz normal
+                            draw.ellipse(
+                                (center_x - eye_size, center_y - eye_size, 
+                                 center_x + eye_size, center_y + eye_size),
+                                outline=1
+                            )
+                        else:
+                            # Sağ göz daha küçük ve hafif çekik
+                            draw.ellipse(
+                                (center_x - eye_size * 3 // 4, center_y - eye_size // 2, 
+                                 center_x + eye_size * 3 // 4, center_y + eye_size // 2),
+                                outline=1
+                            )
+                        
+                        # Göz bebeği (farklı konumlarda)
+                        if eye_name == "left_eye":
+                            draw.ellipse(
+                                (center_x - pupil_size + 5, center_y - pupil_size, 
+                                 center_x + pupil_size + 5, center_y + pupil_size),
+                                fill=1
+                            )
+                        else:
+                            draw.ellipse(
+                                (center_x - pupil_size - 5, center_y - pupil_size, 
+                                 center_x + pupil_size - 5, center_y + pupil_size),
+                                fill=1
+                            )
+                        
+                        # Tek kaş çiz (sağ göz üzerinde)
+                        if eye_name == "right_eye":
+                            draw.line(
+                                (center_x - eye_size, center_y - eye_size - 5, 
+                                 center_x + eye_size, center_y - eye_size - 10),
+                                fill=1, width=2
+                            )
+                    
+                    elif emotion == "excited":
+                        # Heyecanlı göz - büyük ve parlak
+                        eye_size = min(width, height) * 3 // 5
+                        pupil_size = eye_size // 4
+                        
+                        # Göz çemberi (büyük)
+                        draw.ellipse(
+                            (center_x - eye_size, center_y - eye_size, 
+                             center_x + eye_size, center_y + eye_size),
+                            outline=1
+                        )
+                        
+                        # Göz bebeği
+                        draw.ellipse(
+                            (center_x - pupil_size, center_y - pupil_size, 
+                             center_x + pupil_size, center_y + pupil_size),
+                            fill=1
+                        )
+                        
+                        # Parıltı efekti (köşede küçük beyaz yuvarlak)
+                        highlight_size = pupil_size // 2
+                        draw.ellipse(
+                            (center_x - pupil_size // 2, center_y - pupil_size // 2, 
+                             center_x - pupil_size // 2 + highlight_size, center_y - pupil_size // 2 + highlight_size),
+                            fill=0
+                        )
+                    
+                    elif emotion == "sleepy":
+                        # Uykulu göz - yarı açık
+                        eye_width = min(width, height) // 2
+                        eye_height = eye_width // 4
+                        
+                        # Göz çemberi (yatay elips, üst yarısı)
+                        draw.arc(
+                            (center_x - eye_width, center_y - eye_height, 
+                             center_x + eye_width, center_y + eye_height * 3),
+                            180, 0, fill=1, width=1
+                        )
+                        
+                        # Alt çizgi
+                        draw.line(
+                            (center_x - eye_width, center_y, center_x + eye_width, center_y),
+                            fill=1, width=1
+                        )
+                        
+                        # Göz bebeği (küçük)
+                        pupil_size = eye_height // 2
+                        draw.ellipse(
+                            (center_x - pupil_size, center_y - pupil_size, 
+                             center_x + pupil_size, center_y),
+                            fill=1
+                        )
+                    
+                    elif emotion == "bored":
+                        # Sıkılmış göz - yarı kapalı, ifadesiz
+                        eye_width = min(width, height) // 2
+                        eye_height = eye_width // 3
+                        
+                        # Göz çemberi (yatık elips)
+                        draw.ellipse(
+                            (center_x - eye_width, center_y - eye_height, 
+                             center_x + eye_width, center_y + eye_height),
+                            outline=1
+                        )
+                        
+                        # Göz bebeği (küçük ve hafif yukarıda)
+                        pupil_size = eye_height // 2
+                        if eye_name == "left_eye":
+                            pupil_offset_x = 5  # Sol göz sağa bakıyor
+                        else:
+                            pupil_offset_x = -5  # Sağ göz sola bakıyor
+                            
+                        draw.ellipse(
+                            (center_x - pupil_size + pupil_offset_x, center_y - pupil_size, 
+                             center_x + pupil_size + pupil_offset_x, center_y + pupil_size),
+                            fill=1
+                        )
+                        
+                    elif emotion == "love":
+                        # Aşık göz - kalp şeklinde göz bebeği
+                        eye_size = min(width, height) // 2
+                        heart_size = eye_size // 2
+                        
+                        # Göz çemberi
+                        draw.ellipse(
+                            (center_x - eye_size, center_y - eye_size, center_x + eye_size, center_y + eye_size),
+                            outline=1
+                        )
+                        
+                        # Kalp şeklinde göz bebeği (basitleştirilmiş)
+                        # İki daire üst üste ve bir üçgen altında
+                        draw.ellipse(
+                            (center_x - heart_size // 2, center_y - heart_size // 2, 
+                             center_x, center_y),
+                            fill=1
+                        )
+                        draw.ellipse(
+                            (center_x, center_y - heart_size // 2, 
+                             center_x + heart_size // 2, center_y),
+                            fill=1
+                        )
+                        draw.polygon(
+                            [(center_x - heart_size // 2, center_y - heart_size // 4),
+                             (center_x + heart_size // 2, center_y - heart_size // 4),
+                             (center_x, center_y + heart_size // 2)],
+                            fill=1
+                        )
+                    
+                    else:  # "calm", "neutral" ve tanımlanmamış duygular için
+                        # Nötr göz
+                        eye_size = min(width, height) // 2
+                        pupil_size = eye_size // 3
+                        
+                        # Göz çemberi
+                        draw.ellipse(
+                            (center_x - eye_size, center_y - eye_size, center_x + eye_size, center_y + eye_size),
+                            outline=1
+                        )
+                        
+                        # Göz bebeği (göz takibi ile)
+                        pupil_offset_x = int(self.eye_position[0] * 10)
+                        pupil_offset_y = int(self.eye_position[1] * 10)
+                        
+                        draw.ellipse(
+                            (center_x - pupil_size + pupil_offset_x, center_y - pupil_size + pupil_offset_y, 
+                             center_x + pupil_size + pupil_offset_x, center_y + pupil_offset_y),
+                            fill=1
+                        )
+                
+                else:
+                    # Göz kapalı - sadece çizgi
+                    draw.line(
+                        (center_x - min(width, height) // 2, center_y, 
+                         center_x + min(width, height) // 2, center_y),
+                        fill=1, width=3
+                    )
+                    
+                    # Özel göz kapatma durumları
+                    if emotion == "peaceful" or emotion == "tranquil":
+                        # Huzurlu kapalı göz - hafif yukarı eğik
+                        draw.line(
+                            (center_x - min(width, height) // 2, center_y, 
+                             center_x, center_y - 2),
+                            fill=1, width=3
+                        )
+                        draw.line(
+                            (center_x, center_y - 2, 
+                             center_x + min(width, height) // 2, center_y),
+                            fill=1, width=3
+                        )
+                
+            except Exception as e:
+                logger.error(f"Göz çizilirken hata: {eye_name}, duygu: {emotion}, hata: {e}")
+    
+    def draw_mouth(self, emotion: str) -> None:
+        """
+        Ağız ekranına çizim yapar
+        
+        Args:
+            emotion (str): Duygu durumu
+        """
+        if self.displays["mouth"] is None or self.draw_objects["mouth"] is None:
+            return
+        
+        try:
+            # Tampon görüntüyü temizle
+            buffer = self.buffers["mouth"]
+            draw = self.draw_objects["mouth"]
+            draw.rectangle((0, 0, buffer.width, buffer.height), fill=0)
+            
+            # Ekran boyutlarını al
+            width, height = buffer.width, buffer.height
+            center_x, center_y = width // 2, height // 2
+            
+            # Alt duygu tiplerini ana duygulara eşle
+            emotion_subtypes_map = {
+                # Happy alt tipleri
+                "joy": "happy", "content": "happy", "excited": "excited",
+                "amused": "happy", "proud": "happy",
+                
+                # Sad alt tipleri
+                "disappointed": "sad", "lonely": "sad", "depressed": "sad",
+                "miserable": "sad", "guilty": "sad",
+                
+                # Angry alt tipleri
+                "frustrated": "angry", "irritated": "angry", "enraged": "angry",
+                "annoyed": "angry", "bitter": "angry",
+                
+                # Surprised alt tipleri
+                "amazed": "surprised", "astonished": "surprised", "shocked": "surprised",
+                "startled": "surprised", "confused": "confused",
+                
+                # Fearful alt tipleri
+                "anxious": "fearful", "terrified": "fearful", "nervous": "fearful", 
+                "worried": "fearful", "scared": "fearful",
+                
+                # Disgusted alt tipleri
+                "disapproval": "disgusted", "revolted": "disgusted", "judgmental": "disgusted",
+                "avoidant": "disgusted", "loathing": "disgusted",
+                
+                # Calm alt tipleri
+                "relaxed": "calm", "peaceful": "calm", "serene": "calm",
+                "tranquil": "calm", "composed": "calm",
+                
+                # Neutral alt tipleri
+                "indifferent": "neutral", "objective": "neutral", "detached": "neutral", 
+                "unconcerned": "neutral", "balanced": "neutral",
+                
+                # Özel duygu ifadeleri
+                "sleepy": "sleepy", "bored": "bored", "love": "love"
+            }
+            
+            # Alt duygu tipi analizi ve görsel ifade seçimi
+            base_emotion = emotion
+            if emotion in emotion_subtypes_map:
+                base_emotion = emotion_subtypes_map[emotion]
+            
+            # Happy duygu tipi ve alt tipleri
+            if base_emotion == "happy":
+                mouth_width = width * 2 // 3
+                mouth_height = height // 3
+                
+                # Alt tiplere göre ağız ifadesi ayarlaması
+                if emotion == "joy":
+                    # Büyük gülümseme
+                    draw.arc(
+                        (center_x - mouth_width // 2, center_y - mouth_height // 2, 
+                         center_x + mouth_width // 2, center_y + mouth_height * 4 // 3),
+                        0, 180, fill=1, width=2
+                    )
+                    
+                    # Dişleri göster
+                    teeth_count = 6
+                    teeth_width = (mouth_width // 2) // teeth_count
+                    for i in range(teeth_count):
+                        x1 = center_x - mouth_width // 4 + i * teeth_width
+                        y1 = center_y
+                        x2 = x1 + teeth_width - 1
+                        y2 = center_y + teeth_width * 2
+                        draw.line((x1, y1, x1, y2), fill=1, width=1)
+                        
+                elif emotion == "content":
+                    # Hafif gülümseme
+                    draw.arc(
+                        (center_x - mouth_width // 2, center_y - mouth_height // 3, 
+                         center_x + mouth_width // 2, center_y + mouth_height * 2 // 3),
+                        0, 180, fill=1, width=2
+                    )
+                    
+                elif emotion == "amused":
+                    # Geniş gülümseme, bir tarafı hafif yukarıda
+                    draw.arc(
+                        (center_x - mouth_width // 2, center_y - mouth_height // 2, 
+                         center_x + mouth_width // 2, center_y + mouth_height),
+                        0, 180, fill=1, width=2
+                    )
+                    # Küçük çizgi ekle (göz kırpma efekti için)
+                    draw.line(
+                        (center_x + mouth_width // 4, center_y - mouth_height // 4,
+                         center_x + mouth_width // 3, center_y - mouth_height // 8),
+                        fill=1, width=1
+                    )
+                    
+                elif emotion == "proud":
+                    # Gurur dolu gülümseme, ağız hafif kapalı
+                    draw.arc(
+                        (center_x - mouth_width // 2, center_y - mouth_height // 4, 
+                         center_x + mouth_width // 2, center_y + mouth_height // 2),
+                        0, 180, fill=1, width=2
+                    )
+                    
+                else:  # Varsayılan mutlu ağız
+                    # Standart gülümseme
+                    draw.arc(
+                        (center_x - mouth_width // 2, center_y - mouth_height // 2, 
+                         center_x + mouth_width // 2, center_y + mouth_height),
+                        0, 180, fill=1, width=2
+                    )
+            
+            # Sad duygu tipi ve alt tipleri
+            elif base_emotion == "sad":
+                mouth_width = width * 2 // 3
+                mouth_height = height // 3
+                
+                # Alt tiplere göre ağız ifadesi ayarlaması
+                if emotion == "depressed":
+                    # Daha büyük ve aşağı çekik dudaklar
+                    draw.arc(
+                        (center_x - mouth_width // 2, center_y + mouth_height // 2, 
+                         center_x + mouth_width // 2, center_y + mouth_height * 2),
+                        180, 360, fill=1, width=3
+                    )
+                    
+                elif emotion == "miserable":
+                    # Titreyen dudak efekti
+                    points = []
+                    segments = 8
+                    for i in range(segments + 1):
+                        x = center_x - mouth_width // 2 + (mouth_width * i // segments)
+                        # Küçük titreme efekti
+                        offset = -1 if i % 2 == 0 else 1
+                        y = center_y + mouth_height // 2 + offset
+                        points.append((x, y))
+                    
+                    # Önce alt çizgi (ana eğri)
+                    draw.arc(
+                        (center_x - mouth_width // 2, center_y, 
+                         center_x + mouth_width // 2, center_y + mouth_height * 2),
+                        180, 360, fill=1, width=2
+                    )
+                    
+                    # Sonra titreme çizgileri
+                    for i in range(len(points) - 1):
+                        draw.line((points[i], points[i+1]), fill=1, width=1)
+                    
+                elif emotion == "guilty" or emotion == "lonely":
+                    # Hafif aşağıya bakan dudaklar
+                    draw.arc(
+                        (center_x - mouth_width // 2, center_y, 
+                         center_x + mouth_width // 2, center_y + mouth_height),
+                        180, 360, fill=1, width=2
+                    )
+                    
+                elif emotion == "disappointed":
+                    # Düz hat ve köşeleri hafif aşağı
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y + 2, 
+                         center_x + mouth_width // 2, center_y + 2),
+                        fill=1, width=2
+                    )
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y + 2, 
+                         center_x - mouth_width // 3, center_y + mouth_height // 3),
+                        fill=1, width=2
+                    )
+                    draw.line(
+                        (center_x + mouth_width // 2, center_y + 2, 
+                         center_x + mouth_width // 3, center_y + mouth_height // 3),
+                        fill=1, width=2
+                    )
+                    
+                else:  # Varsayılan üzgün ağız
+                    # Standart üzgün ağız
+                    draw.arc(
+                        (center_x - mouth_width // 2, center_y, 
+                         center_x + mouth_width // 2, center_y + mouth_height * 2),
+                        180, 360, fill=1, width=2
+                    )
+            
+            # Angry duygu tipi ve alt tipleri
+            elif base_emotion == "angry":
+                mouth_width = width * 2 // 3
+                
+                # Alt tiplere göre ağız ifadesi ayarlaması
+                if emotion == "enraged":
+                    # Öfkeli ağız - düz çizgi, sert köşeler ve daha kalın çizgi
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y, center_x + mouth_width // 2, center_y),
+                        fill=1, width=4
+                    )
+                    
+                    # Köşeleri sert indir
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y, center_x - mouth_width // 3, center_y + 8),
+                        fill=1, width=3
+                    )
+                    draw.line(
+                        (center_x + mouth_width // 2, center_y, center_x + mouth_width // 3, center_y + 8),
+                        fill=1, width=3
+                    )
+                    
+                elif emotion == "frustrated" or emotion == "irritated":
+                    # Hafif gergin ağız - düz çizgi, hafif köşeler
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y, center_x + mouth_width // 2, center_y),
+                        fill=1, width=2
+                    )
+                    
+                    # Köşeler
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y, center_x - mouth_width // 3, center_y + 4),
+                        fill=1, width=2
+                    )
+                    draw.line(
+                        (center_x + mouth_width // 2, center_y, center_x + mouth_width // 3, center_y + 4),
+                        fill=1, width=2
+                    )
+                
+                elif emotion == "bitter":
+                    # Acı ifade - biraz çarpık ağız
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y + 2, center_x, center_y - 2),
+                        fill=1, width=2
+                    )
+                    draw.line(
+                        (center_x, center_y - 2, center_x + mouth_width // 2, center_y),
+                        fill=1, width=2
+                    )
+                    
+                else:  # Varsayılan kızgın ağız
+                    # Standart kızgın ağız - düz çizgi, hafif aşağı yönlü köşeler
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y, center_x + mouth_width // 2, center_y),
+                        fill=1, width=3
+                    )
+                    
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y, center_x - mouth_width // 3, center_y + 5),
+                        fill=1, width=3
+                    )
+                    draw.line(
+                        (center_x + mouth_width // 2, center_y, center_x + mouth_width // 3, center_y + 5),
+                        fill=1, width=3
+                    )
+            
+            # Surprised duygu tipi ve alt tipleri
+            elif base_emotion == "surprised":
+                # Alt tiplere göre ağız ifadesi ayarlaması
+                if emotion == "shocked":
+                    # Çok şaşırmış - büyük oval ağız
+                    mouth_width = width // 2
+                    mouth_height = height // 2
+                    
+                    draw.ellipse(
+                        (center_x - mouth_width // 2, center_y - mouth_height // 2, 
+                         center_x + mouth_width // 2, center_y + mouth_height // 2),
+                        outline=1, width=2
+                    )
+                    
+                elif emotion == "amazed":
+                    # Hayrete düşmüş - geniş oval ağız
+                    mouth_width = width // 2 + 5
+                    mouth_height = height // 3 + 5
+                    
+                    draw.ellipse(
+                        (center_x - mouth_width // 2, center_y - mouth_height // 2, 
+                         center_x + mouth_width // 2, center_y + mouth_height // 2),
+                        outline=1, width=2
+                    )
+                    
+                    # İçeride küçük çizgi (ağız boşluğu efekti)
+                    inner_width = mouth_width // 3
+                    inner_height = mouth_height // 3
+                    draw.ellipse(
+                        (center_x - inner_width // 2, center_y - inner_height // 2 + 3, 
+                         center_x + inner_width // 2, center_y + inner_height // 2 + 3),
+                        fill=1
+                    )
+                    
+                elif emotion == "startled":
+                    # Ürkmüş - küçük oval ağız
+                    mouth_width = width // 4
+                    mouth_height = height // 4
+                    
+                    draw.ellipse(
+                        (center_x - mouth_width // 2, center_y - mouth_height // 2, 
+                         center_x + mouth_width // 2, center_y + mouth_height // 2),
+                        outline=1, width=2
+                    )
+                    
+                elif emotion == "astonished":
+                    # Çok şaşırmış - büyük yuvarlak ağız ve içeride küçük bir dil
+                    mouth_width = width // 3
+                    mouth_height = height // 3
+                    
+                    draw.ellipse(
+                        (center_x - mouth_width // 2, center_y - mouth_height // 2, 
+                         center_x + mouth_width // 2, center_y + mouth_height // 2),
+                        outline=1, width=2
+                    )
+                    
+                    # Küçük dil
+                    tongue_width = mouth_width // 3
+                    tongue_height = mouth_height // 3
+                    draw.ellipse(
+                        (center_x - tongue_width // 2, center_y, 
+                         center_x + tongue_width // 2, center_y + tongue_height),
+                        fill=1
+                    )
+                    
+                else:  # Varsayılan şaşkın ağız
+                    # Standart şaşkın ağız - orta boy yuvarlak
+                    mouth_width = width // 3
+                    mouth_height = height // 3
+                    
+                    draw.ellipse(
+                        (center_x - mouth_width // 2, center_y - mouth_height // 2, 
+                         center_x + mouth_width // 2, center_y + mouth_height // 2),
+                        outline=1, width=2
+                    )
+            
+            # Fearful duygu tipi ve alt tipleri
+            elif base_emotion == "fearful":
+                mouth_width = width // 2
+                mouth_height = height // 4
+                
+                # Alt tiplere göre ağız ifadesi ayarlaması
+                if emotion == "terrified":
+                    # Dehşete düşmüş - büyük açık ağız, titreme
+                    draw.ellipse(
+                        (center_x - mouth_width // 2, center_y - mouth_height // 2, 
+                         center_x + mouth_width // 2, center_y + mouth_height),
+                        outline=1, width=2
+                    )
+                    
+                    # Titreme çizgileri
+                    points = []
+                    segments = 6
+                    for i in range(segments + 1):
+                        x = center_x - mouth_width // 3 + (mouth_width * 2 // 3 * i // segments)
+                        offset = 2 if i % 2 == 0 else 0
+                        y = center_y + mouth_height // 2 + offset
+                        points.append((x, y))
+                    
+                    for i in range(len(points) - 1):
+                        draw.line((points[i], points[i+1]), fill=1, width=1)
+                    
+                elif emotion == "anxious" or emotion == "nervous":
+                    # Kaygılı/Sinirli - çarpık dudak
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y, 
+                         center_x, center_y + 4),
+                        fill=1, width=2
+                    )
+                    draw.line(
+                        (center_x, center_y + 4,
+                         center_x + mouth_width // 2, center_y - 2),
+                        fill=1, width=2
+                    )
+                    
+                elif emotion == "worried" or emotion == "scared":
+                    # Endişeli/Korkmuş - hafif açık ağız
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y, 
+                         center_x + mouth_width // 2, center_y),
+                        fill=1, width=2
+                    )
+                    
+                    draw.arc(
+                        (center_x - mouth_width // 3, center_y, 
+                         center_x + mouth_width // 3, center_y + mouth_height),
+                        180, 360, fill=1, width=1
+                    )
+                    
+                else:  # Varsayılan korkmuş ağız
+                    draw.arc(
+                        (center_x - mouth_width // 2, center_y,
+                         center_x + mouth_width // 2, center_y + mouth_height),
+                        180, 360, fill=1, width=2
+                    )
+                    
+                    # Ağız hafif titriyor
+                    draw.line(
+                        (center_x - mouth_width // 4, center_y + mouth_height // 2,
+                         center_x + mouth_width // 4, center_y + mouth_height // 2 - 2),
+                        fill=1, width=1
+                    )
+            
+            # Disgusted duygu tipi ve alt tipleri
+            elif base_emotion == "disgusted":
+                mouth_width = width * 2 // 3
+                
+                # Alt tiplere göre ağız ifadesi ayarlaması
+                if emotion == "revolted":
+                    # Tiksinmiş - çarpık burun ağız ifadesi
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y - 3,
+                         center_x - mouth_width // 4, center_y),
+                        fill=1, width=2
+                    )
+                    draw.line(
+                        (center_x - mouth_width // 4, center_y,
+                         center_x + mouth_width // 4, center_y),
+                        fill=1, width=2
+                    )
+                    draw.line(
+                        (center_x + mouth_width // 4, center_y,
+                         center_x + mouth_width // 2, center_y + 5),
+                        fill=1, width=2
+                    )
+                    
+                elif emotion == "disapproval" or emotion == "judgmental":
+                    # Onaylamayan/Yargılayıcı - düz çizgi ve ters çevrilmiş köşeler
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y + 2, 
+                         center_x + mouth_width // 2, center_y + 2),
+                        fill=1, width=2
+                    )
+                    
+                    # Ters çevrilmiş köşeler
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y + 2,
+                         center_x - mouth_width // 3, center_y - 3),
+                        fill=1, width=2
+                    )
+                    draw.line(
+                        (center_x + mouth_width // 2, center_y + 2,
+                         center_x + mouth_width // 3, center_y - 3),
+                        fill=1, width=2
+                    )
+                
+                elif emotion == "loathing":
+                    # Nefret - aşırı çarpık burun ağız ifadesi
+                    draw.arc(
+                        (center_x - mouth_width // 2, center_y - 5,
+                         center_x - mouth_width // 4, center_y + 5),
+                        270, 90, fill=1, width=2
+                    )
+                    draw.arc(
+                        (center_x + mouth_width // 4, center_y - 5,
+                         center_x + mouth_width // 2, center_y + 5),
+                        90, 270, fill=1, width=2
+                    )
+                    draw.line(
+                        (center_x - mouth_width // 4, center_y,
+                         center_x + mouth_width // 4, center_y),
+                        fill=1, width=2
+                    )
+                
+                else:  # Varsayılan iğrenmiş ağız
+                    # İğrenmiş ağız - hafif yukarı kıvrılmış bir köşe
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y, 
+                         center_x + mouth_width // 3, center_y),
+                        fill=1, width=2
+                    )
+                    draw.line(
+                        (center_x + mouth_width // 3, center_y,
+                         center_x + mouth_width // 2, center_y - 5),
+                        fill=1, width=2
+                    )
+            
+            # Confused duygu tipi
+            elif emotion == "confused":
+                # Kafası karışık ağız - zikzak veya dalgalı
+                mouth_width = width * 2 // 3
+                mouth_height = height // 6
+                
+                # Dalgalı çizgi
+                points = []
+                segments = 8
+                for i in range(segments + 1):
+                    x = center_x - mouth_width // 2 + (mouth_width * i // segments)
+                    # Sinüs dalgası gibi yukarı aşağı
+                    y = center_y + int(mouth_height * (-1 if i % 2 == 0 else 1))
+                    points.append((x, y))
+                
+                # Noktaları birleştir
+                for i in range(len(points) - 1):
+                    draw.line((points[i], points[i+1]), fill=1, width=2)
+            
+            # Excited duygu tipi
+            elif emotion == "excited":
+                # Heyecanlı ağız - büyük açık gülümseme
+                mouth_width = width * 3 // 4
+                mouth_height = height // 2
+                
+                # Eliptik gülümseme
+                draw.arc(
+                    (center_x - mouth_width // 2, center_y - mouth_height // 3, 
+                     center_x + mouth_width // 2, center_y + mouth_height),
+                    0, 180, fill=1, width=2
+                )
+                
+                # İç çizgi (diş veya dil)
+                draw.arc(
+                    (center_x - mouth_width // 3, center_y, 
+                     center_x + mouth_width // 3, center_y + mouth_height // 2),
+                    0, 180, fill=1, width=1
+                )
+            
+            # Bored duygu tipi
+            elif emotion == "bored":
+                # Sıkılmış ağız - çok az eğri, neredeyse düz
+                mouth_width = width // 2
+                
+                # Hafif aşağı eğri
+                draw.arc(
+                    (center_x - mouth_width // 2, center_y - 5, 
+                     center_x + mouth_width // 2, center_y + 15),
+                    190, 350, fill=1, width=2
+                )
+            
+            # Sleepy duygu tipi
+            elif emotion == "sleepy":
+                # Uykulu ağız - esniyor gibi
+                mouth_width = width // 3
+                mouth_height = height // 3
+                
+                # Oval ağız
+                draw.ellipse(
+                    (center_x - mouth_width // 2, center_y - mouth_height // 2, 
+                     center_x + mouth_width // 2, center_y + mouth_height // 2),
+                    outline=1, width=2
+                )
+                
+                # İçine "Z" harfi çiz (uyku sembolü)
+                z_width = mouth_width // 3
+                z_height = mouth_height // 3
+                z_x = center_x + z_width // 2
+                z_y = center_y - z_height // 2
+                
+                draw.line((z_x - z_width, z_y - z_height, z_x + z_width, z_y - z_height), fill=1)
+                draw.line((z_x + z_width, z_y - z_height, z_x - z_width, z_y + z_height), fill=1)
+                draw.line((z_x - z_width, z_y + z_height, z_x + z_width, z_y + z_height), fill=1)
+            
+            # Love duygu tipi
+            elif emotion == "love":
+                # Aşık ağız - büyük gülümseme, belki bir kalp şekli
+                mouth_width = width * 2 // 3
+                mouth_height = height // 3
+                
+                # Geniş gülümseme
+                draw.arc(
+                    (center_x - mouth_width // 2, center_y - mouth_height, 
+                     center_x + mouth_width // 2, center_y + mouth_height),
+                    0, 180, fill=1, width=2
+                )
+                
+                # Küçük kalp (ağzın üzerinde)
+                heart_size = mouth_height // 2
+                heart_y = center_y - mouth_height - heart_size
+                
+                # İki daire yan yana ve bir üçgen altında
+                draw.ellipse(
+                    (center_x - heart_size, heart_y, 
+                     center_x, heart_y + heart_size),
+                    fill=1
+                )
+                draw.ellipse(
+                    (center_x, heart_y, 
+                     center_x + heart_size, heart_y + heart_size),
+                    fill=1
+                )
+                draw.polygon(
+                    [(center_x - heart_size, heart_y + heart_size // 2),
+                     (center_x + heart_size, heart_y + heart_size // 2),
+                     (center_x, heart_y + heart_size * 2)],
+                    fill=1
+                )
+                
+            # Calm duygu tipi ve alt tipleri
+            elif base_emotion == "calm":
+                # Alt tiplere göre ağız ifadesi ayarlaması
+                mouth_width = width * 2 // 3
+                
+                if emotion == "relaxed" or emotion == "peaceful":
+                    # Hafif gülümseme
+                    draw.arc(
+                        (center_x - mouth_width // 2, center_y - 5, 
+                         center_x + mouth_width // 2, center_y + 10),
+                        0, 180, fill=1, width=1
+                    )
+                    
+                elif emotion == "serene" or emotion == "tranquil":
+                    # Huzurlu düz çizgi
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y, center_x + mouth_width // 2, center_y),
+                        fill=1, width=1
+                    )
+                    
+                    # Hafif yükselen köşeler
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y, center_x - mouth_width // 3, center_y - 2),
+                        fill=1, width=1
+                    )
+                    draw.line(
+                        (center_x + mouth_width // 2, center_y, center_x + mouth_width // 3, center_y - 2),
+                        fill=1, width=1
+                    )
+                    
+                else:  # Varsayılan sakin ağız
+                    # Nötr ağız - hafif gülümseme
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y, center_x + mouth_width // 2, center_y),
+                        fill=1, width=2
+                    )
+                    
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y, center_x - mouth_width // 3, center_y - 1),
+                        fill=1, width=1
+                    )
+                    draw.line(
+                        (center_x + mouth_width // 2, center_y, center_x + mouth_width // 3, center_y - 1),
+                        fill=1, width=1
+                    )
+            
+            # Neutral duygu tipi ve alt tipleri
+            elif base_emotion == "neutral":
+                mouth_width = width * 2 // 3
+                
+                # Alt tiplere göre ağız ifadesi ayarlaması
+                if emotion == "detached" or emotion == "objective":
+                    # Tam düz çizgi
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y, center_x + mouth_width // 2, center_y),
+                        fill=1, width=2
+                    )
+                    
+                elif emotion == "indifferent" or emotion == "unconcerned":
+                    # Hafif aşağı çekik
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y, center_x + mouth_width // 2, center_y),
+                        fill=1, width=2
+                    )
+                    
+                    # Köşeler hafif aşağı
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y, center_x - mouth_width // 3, center_y + 1),
+                        fill=1, width=1
+                    )
+                    draw.line(
+                        (center_x + mouth_width // 2, center_y, center_x + mouth_width // 3, center_y + 1),
+                        fill=1, width=1
+                    )
+                    
+                else:  # Varsayılan nötr ağız
+                    # Düz çizgi ağız
+                    draw.line(
+                        (center_x - mouth_width // 2, center_y, center_x + mouth_width // 2, center_y),
+                        fill=1, width=2
+                    )
+            
+            # Diğer durumlar için varsayılan hafif gülümseme
+            else:
+                # Nötr ağız - hafif gülümseme
+                mouth_width = width * 2 // 3
+                
+                draw.line(
+                    (center_x - mouth_width // 2, center_y, center_x + mouth_width // 2, center_y),
+                    fill=1, width=2
+                )
+                
+                # Hafif gülümseme - uçları hafifçe yukarı çek
+                draw.line(
+                    (center_x - mouth_width // 2, center_y, center_x - mouth_width // 3, center_y - 3),
+                    fill=1, width=2
+                )
+                draw.line(
+                    (center_x + mouth_width // 2, center_y, center_x + mouth_width // 3, center_y - 3),
+                    fill=1, width=2
+                )
+            
+        except Exception as e:
+            logger.error(f"Ağız çizilirken hata: {e}")
+    
+    def set_brightness(self, brightness: float) -> None:
+        """
+        OLED ekranların parlaklığını ayarlar
+        
+        Args:
+            brightness (float): Parlaklık seviyesi (0.0 - 1.0)
+        """
+        # SSD1306 doğrudan parlaklık kontrolü sağlamıyor
+        # Ancak contrast ayarı benzer etki yapabilir
+        brightness = max(0.0, min(1.0, brightness))  # 0.0-1.0 aralığına sınırla
+        
+        for display_name, display in self.displays.items():
+            if display is not None:
+                try:
+                    # Contrast değerini 0-255 aralığına dönüştür
+                    contrast = int(brightness * 255)
+                    display.contrast(contrast)
+                    logger.debug(f"Ekran parlaklığı ayarlandı: {display_name}, değer: {brightness}")
+                except Exception as e:
+                    logger.error(f"Parlaklık ayarlanırken hata: {display_name}, hata: {e}")
+    
+    def set_power_mode(self, mode: str) -> None:
+        """
+        OLED ekranların güç modunu ayarlar
+        
+        Args:
+            mode (str): Güç modu ('on', 'off', 'dim')
+        """
+        for display_name, display in self.displays.items():
+            if display is not None:
+                try:
+                    if mode.lower() == "off":
+                        display.poweroff()
+                        logger.debug(f"Ekran kapatıldı: {display_name}")
+                    
+                    elif mode.lower() == "on":
+                        display.poweron()
+                        logger.debug(f"Ekran açıldı: {display_name}")
+                    
+                    elif mode.lower() == "dim":
+                        # Parlaklığı azalt
+                        display.contrast(64)  # 0-255 aralığında
+                        logger.debug(f"Ekran dim moduna alındı: {display_name}")
+                    
+                    else:
+                        logger.warning(f"Geçersiz güç modu: {mode}")
+                
+                except Exception as e:
+                    logger.error(f"Güç modu ayarlanırken hata: {display_name}, hata: {e}")
+    
+    def set_emotion(self, emotion: str, intensity: float = 1.0) -> None:
+        """
+        Ekranları belirtilen duygu durumuna göre günceller
+        
+        Args:
+            emotion (str): Duygu durumu (örn. "happy", "sad", "angry" vb.)
+            intensity (float, optional): Duygu yoğunluğu (0.0-1.0 arası). Varsayılan: 1.0
+        """
+        # Duygu durumunu yapılandırmaya kaydet
+        if "emotions" not in self.config:
+            self.config["emotions"] = {}
+        self.config["emotions"]["default_emotion"] = emotion
+        
+        # Aktivite zamanını güncelle (güç tasarrufu kontrolü için)
+        self.last_activity_time = time.time()
+        
+        # Güç modu kapalıysa açık moda geç
+        if self.power_mode == "off" or self.power_mode == "dim":
+            self.set_power_mode("on")
+        
+        # Doğrudan çizim yapmak yerine bir sonraki animasyon çerçevesinde güncellenecektir
+        logger.info(f"Duygu durumu ayarlandı: {emotion}, yoğunluk: {intensity:.2f}")
+    
+    def show_micro_expression(self, emotion: str, duration: float = 0.5, intensity: float = 1.0) -> None:
+        """
+        Kısa süreli mikro ifade gösterir
+        
+        Args:
+            emotion (str): Duygu durumu (örn. "happy", "sad", "angry" vb.)
+            duration (float, optional): İfade süresi (saniye). Varsayılan: 0.5
+            intensity (float, optional): Duygu yoğunluğu (0.0-1.0 arası). Varsayılan: 1.0
+        """
+        # Süreyi sınırla
+        duration = max(self.MIN_MICRO_EXPRESSION_DURATION, 
+                      min(self.MAX_MICRO_EXPRESSION_DURATION, duration))
+        
+        # Yoğunluğu sınırla
+        intensity = max(0.0, min(1.0, intensity))
+        
+        # Mikro ifadeyi ayarla
+        self.micro_expression = emotion
+        self.micro_expression_end_time = time.time() + duration
+        self.micro_expression_intensity = intensity
+        
+        # Aktivite zamanını güncelle (güç tasarrufu kontrolü için)
+        self.last_activity_time = time.time()
+        
+        # Güç modu kapalıysa açık moda geç
+        if self.power_mode == "off" or self.power_mode == "dim":
+            self.set_power_mode("on")
+        
+        logger.info(f"Mikro ifade gösteriliyor: {emotion}, süre: {duration:.2f}s, yoğunluk: {intensity:.2f}")
+    
+    def look_at(self, x: float, y: float, speed: float = 0.2) -> None:
+        """
+        Göz bebeklerinin belirli bir noktaya bakmasını sağlar
+        
+        Args:
+            x (float): X koordinatı (-1.0 - 1.0 arası, -1.0: sol, 1.0: sağ)
+            y (float): Y koordinatı (-1.0 - 1.0 arası, -1.0: yukarı, 1.0: aşağı)
+            speed (float, optional): Göz hareket hızı (0.0-1.0 arası). Varsayılan: 0.2
+        """
+        # Koordinatları sınırla
+        x = max(-1.0, min(1.0, x))
+        y = max(-1.0, min(1.0, y))
+        
+        # Hızı sınırla
+        speed = max(0.01, min(1.0, speed))
+        
+        # Göz hedef pozisyonunu ayarla
+        self.target_eye_position = (x, y)
+        self.eye_move_speed = speed
+        
+        # Otomatik göz hareketini devre dışı bırak
+        self.random_eye_move = False
+        
+        # Aktivite zamanını güncelle (güç tasarrufu kontrolü için)
+        self.last_activity_time = time.time()
+        
+        # Güç modu kapalıysa açık moda geç
+        if self.power_mode == "off" or self.power_mode == "dim":
+            self.set_power_mode("on")
+        
+        logger.debug(f"Göz bakışı ayarlandı: x={x:.2f}, y={y:.2f}, hız={speed:.2f}")
+    
+    def enable_random_eye_movement(self, enabled: bool = True) -> None:
+        """
+        Rastgele göz hareketlerini etkinleştirir veya devre dışı bırakır
+        
+        Args:
+            enabled (bool, optional): Etkinleştirme durumu. Varsayılan: True
+        """
+        self.random_eye_move = enabled
+        
+        if enabled:
+            # Sonraki göz hareket zamanını ayarla
+            self.next_eye_move_time = time.time() + random.uniform(0.5, 1.5)
+            logger.debug("Rastgele göz hareketleri etkinleştirildi")
+        else:
+            logger.debug("Rastgele göz hareketleri devre dışı bırakıldı")
+    
+    def reset_activity_timer(self) -> None:
+        """
+        Aktivite zamanlayıcısını sıfırlar (güç tasarrufu modu için)
+        """
+        self.last_activity_time = time.time()
+        
+        # Eğer ekranlar kapalı veya dim modundaysa, açık moda geç
+        if self.power_mode != "on":
+            self.set_power_mode("on")
+            logger.debug("Aktivite algılandı, ekranlar açıldı")
+            
+    def show_startup_animation(self) -> None:
+        """
+        Başlangıç animasyonunu gösterir
+        """
+        try:
+            logger.info("Başlangıç animasyonu gösteriliyor...")
+            
+            # Aktivite zamanlayıcısını sıfırla
+            self.reset_activity_timer()
+            
+            # Güç modu kapalıysa açık moda geç
+            if self.power_mode != "on":
+                self.set_power_mode("on")
+            
+            # Sol göz animasyonu
+            if self.displays["left_eye"] is not None and self.draw_objects["left_eye"] is not None:
+                self._draw_startup_eye_animation("left_eye")
+            
+            # Sağ göz animasyonu
+            if self.displays["right_eye"] is not None and self.draw_objects["right_eye"] is not None:
+                self._draw_startup_eye_animation("right_eye")
+            
+            # Ağız animasyonu
+            if self.displays["mouth"] is not None and self.draw_objects["mouth"] is not None:
+                self._draw_startup_mouth_animation()
+                
+            # Ekranları güncelle
+            self.update_display()
+            
+            logger.info("Başlangıç animasyonu tamamlandı")
+            
+        except Exception as e:
+            logger.error(f"Başlangıç animasyonu gösterilirken hata: {e}")
+    
+    def _draw_startup_eye_animation(self, eye_name: str) -> None:
+        """
+        Göz için başlangıç animasyonu çizer
+        
+        Args:
+            eye_name (str): Göz adı ("left_eye" veya "right_eye")
+        """
+        buffer = self.buffers[eye_name]
+        draw = self.draw_objects[eye_name]
+        
+        # Ekran boyutlarını al
+        width, height = buffer.width, buffer.height
+        center_x, center_y = width // 2, height // 2
+        
+        # İlk aşama: Ekranı temizle
+        draw.rectangle((0, 0, width, height), fill=0)
+        self.update_display()
+        time.sleep(0.3)
+        
+        # İkinci aşama: Dışarıdan içeriye doğru büyüyen daireler
+        max_radius = min(width, height) // 2
+        for radius in range(2, max_radius, 2):
+            draw.rectangle((0, 0, width, height), fill=0)  # Temizle
+            draw.ellipse(
+                (center_x - radius, center_y - radius, center_x + radius, center_y + radius),
+                outline=1
+            )
+            self.update_display()
+            time.sleep(0.05)
+        
+        # Üçüncü aşama: Göz bebeği oluştur
+        pupil_size = max_radius // 3
+        draw.ellipse(
+            (center_x - pupil_size, center_y - pupil_size, 
+            center_x + pupil_size, center_y + pupil_size),
+            fill=1
+        )
+        self.update_display()
+        time.sleep(0.2)
+        
+        # Dördüncü aşama: Göz kırpma
+        draw.rectangle((0, 0, width, height), fill=0)  # Temizle
+        draw.line(
+            (center_x - max_radius, center_y, center_x + max_radius, center_y),
+            fill=1, width=3
+        )
+        self.update_display()
+        time.sleep(0.2)
+        
+        # Son aşama: Standart göze geri dön
+        draw.rectangle((0, 0, width, height), fill=0)  # Temizle
+        draw.ellipse(
+            (center_x - max_radius, center_y - max_radius, 
+            center_x + max_radius, center_y + max_radius),
+            outline=1
+        )
+        draw.ellipse(
+            (center_x - pupil_size, center_y - pupil_size, 
+            center_x + pupil_size, center_y + pupil_size),
+            fill=1
+        )
+        self.update_display()
+    
+    def _draw_startup_mouth_animation(self) -> None:
+        """
+        Ağız için başlangıç animasyonu çizer
+        """
+        buffer = self.buffers["mouth"]
+        draw = self.draw_objects["mouth"]
+        
+        # Ekran boyutlarını al
+        width, height = buffer.width, buffer.height
+        center_x, center_y = width // 2, height // 2
+        
+        # İlk aşama: Ekranı temizle
+        draw.rectangle((0, 0, width, height), fill=0)
+        self.update_display()
+        time.sleep(0.3)
+        
+        # İkinci aşama: Düz bir çizgi çiz
+        mouth_width = width * 2 // 3
+        draw.line(
+            (center_x - mouth_width // 2, center_y, center_x + mouth_width // 2, center_y),
+            fill=1, width=2
+        )
+        self.update_display()
+        time.sleep(0.5)
+        
+        # Üçüncü aşama: Yavaşça gülümsemeye dönüştür
+        mouth_height = height // 3
+        steps = 10
+        for i in range(steps):
+            # Değişim oranı (0-1)
+            ratio = i / (steps - 1)
+            
+            # Temizle
+            draw.rectangle((0, 0, width, height), fill=0)
+            
+            # Arc parametreleri - düz çizgiden eğriye
+            arc_height = int(mouth_height * ratio)
+            
+            # Gülümseme yay çiz
+            draw.arc(
+                (center_x - mouth_width // 2, center_y - arc_height // 2, 
+                center_x + mouth_width // 2, center_y + arc_height),
+                0, 180, fill=1, width=2
+            )
+            
+            self.update_display()
+            time.sleep(0.05)
+        
+        # Son aşama: Biraz bekle
+        time.sleep(0.3)
+    
+    def blend_emotions(self, emotion1: str, emotion2: str, ratio: float) -> str:
+        """
+        İki duygu arasında yumuşak geçiş sağlar. 
+        Verilen orana göre iki duygudaki göz ve ağız pozisyonlarını karıştırır.
+        
+        Args:
+            emotion1 (str): Başlangıç duygu durumu
+            emotion2 (str): Hedef duygu durumu
+            ratio (float): Karıştırma oranı (0.0: tamamen emotion1, 1.0: tamamen emotion2)
+            
+        Returns:
+            str: Görsel temsil için kullanılacak etkili duygu
+        """
+        # Geçiş oranını sınırla (0.0-1.0 arası)
+        ratio = max(0.0, min(1.0, ratio))
+        
+        # Eğer geçiş henüz başlamamışsa veya tamamlanmışsa, doğrudan duygulardan birini döndür
+        if ratio <= 0.01:
+            return emotion1
+        elif ratio >= 0.99:
+            return emotion2
+            
+        # Geçiş oranına göre bazı mikro ifadeler için özel durumlar
+        
+        # Mutluluk -> Üzüntü geçişi
+        if (emotion1 == "happy" and emotion2 == "sad") or (emotion1 == "sad" and emotion2 == "happy"):
+            middle_point = 0.5
+            # Geçişin ortasında nötr ifade kullan
+            if abs(ratio - middle_point) < 0.2:
+                return "neutral"
+            elif ratio < middle_point:
+                return emotion1  # İlk yarıda başlangıç duygu
+            else:
+                return emotion2  # İkinci yarıda hedef duygu
+                
+        # Kızgın -> Mutlu geçişi
+        if (emotion1 == "angry" and emotion2 == "happy") or (emotion1 == "happy" and emotion2 == "angry"):
+            # Kızgın -> Şaşkın -> Mutlu şeklinde kademeli geçiş
+            if ratio < 0.33:
+                return emotion1
+            elif ratio < 0.66:
+                return "surprised"
+            else:
+                return emotion2
+                
+        # Korku -> Kızgınlık geçişi
+        if (emotion1 == "fearful" and emotion2 == "angry") or (emotion1 == "angry" and emotion2 == "fearful"):
+            # Korku -> Şaşkın -> Kızgınlık şeklinde kademeli geçiş
+            if ratio < 0.33:
+                return emotion1
+            elif ratio < 0.66:
+                return "surprised"
+            else:
+                return emotion2
+                
+        # Üzgün -> Sakin geçişi
+        if (emotion1 == "sad" and emotion2 == "calm") or (emotion1 == "calm" and emotion2 == "sad"):
+            if ratio < 0.5:
+                return emotion1
+            else:
+                return emotion2
+        
+        # Diğer durumlarda göz takibi ve göz bebeği büyüklüğünü hafifçe değiştir, ancak ana duyguyu kullan
+        return emotion2 if ratio > 0.5 else emotion1
+
+# Test kodu
+if __name__ == "__main__":
+    # Logging yapılandırması
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
+    
+    # Varsayılan yapılandırma
+    test_config = {
+        "hardware": {
+            "platform": "desktop",  # "raspberry_pi" veya "desktop"
+            "simulation_mode": True,  # Simülasyon modunu zorla
+            "oled_displays": {
+                "left_eye": {"i2c_address": "0x3C", "width": 128, "height": 64},
+                "right_eye": {"i2c_address": "0x3D", "width": 128, "height": 64},
+                "mouth": {"i2c_address": "0x3E", "width": 128, "height": 64}
+            },
+            "use_multiplexer": False
+        },
+        "animation": {
+            "fps": 30,
+            "blink_interval_min": 2.0,
+            "blink_interval_max": 10.0
+        },
+        "emotions": {
+            "default_emotion": "calm"
+        }
+    }
+    
+    print("OLED Kontrolcü Test")
+    print("-------------------")
+    
+    platform_type = hardware_defines.detect_platform()
+    print(f"Platform: {platform_type}")
+    
+    # OLED kontrolcü örneği oluştur
+    controller = OLEDController(test_config)
+    
+    # Kontrolcüyü başlat
+    if (controller.start()):
+        print("OLED kontrolcü başarıyla başlatıldı")
+        
+        # Farklı duygu durumlarını test et
+        emotions = ["happy", "sad", "angry", "surprised", "confused", "sleepy", "excited", "bored", "love", "calm"]
+        
+        for emotion in emotions:
+            print(f"Duygu test ediliyor: {emotion}")
+            controller.set_emotion(emotion)
+            time.sleep(3)  # Her duygu durumunu 3 saniye göster
+        
+        # Temizle ve kapat
+        controller.stop()
+        print("OLED kontrolcü durduruldu")
+        
+        print("Simülasyon dosyalarını kontrol edin: " + os.path.join(PROJECT_DIR, "simulation"))
+    else:
+        print("OLED kontrolcü başlatılamadı!")
+    
+    print("Test tamamlandı")

@@ -1,0 +1,1128 @@
+2025-05-05 21:56:00,853 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-05 21:56:00,950 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-05 21:56:00,950 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-05 21:56:00,951 - FacePluginEnvironment - INFO - GPIO kaynakları temizlendi
+2025-05-05 21:56:00,951 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 21:56:02,951 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-05 21:56:02,951 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-05 21:56:02,952 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-05 21:56:02,952 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-05 21:56:03,044 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-05 21:56:03,044 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-05 21:56:03,045 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-05 21:56:03,045 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-05 21:56:03,045 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-05 21:56:03,045 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-05 21:56:03,045 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-05 21:56:03,045 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-05 21:56:03,045 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-05 21:56:03,046 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-05 21:56:03,046 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 21:56:03,046 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 21:56:03,046 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-05 21:56:03,046 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-05 21:56:03,046 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-05 21:56:03,046 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-05 21:56:03,047 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-05 21:56:04,901 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-05 21:56:04,952 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-05 21:56:04,952 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-05 21:56:04,952 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-05 21:56:06,954 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-05 21:56:06,954 - FacePluginLifecycle - WARNING - Geçersiz durum geçişi: stopped -> initialized
+2025-05-05 21:56:06,954 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 21:56:06,955 - FacePluginEnvironment - INFO - GPIO kaynakları temizlendi
+2025-05-05 21:56:06,958 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 21:56:06,959 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-05 21:56:06,962 - FacePluginLifecycle - WARNING - Geçersiz durum geçişi: stopped -> initialized
+2025-05-05 21:56:06,965 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 21:56:54,155 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-05 21:56:54,208 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-05 21:56:54,208 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-05 21:56:54,209 - FacePluginEnvironment - INFO - GPIO kaynakları temizlendi
+2025-05-05 21:56:54,209 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 21:56:55,813 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-05 21:56:55,814 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-05 21:56:55,814 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-05 21:56:55,814 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-05 21:56:55,814 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-05 21:56:55,814 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-05 21:56:55,814 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-05 21:56:55,814 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-05 21:56:55,815 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-05 21:56:55,815 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-05 21:56:55,815 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 21:56:55,815 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 21:56:55,815 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-05 21:56:55,816 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-05 21:56:55,816 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-05 21:56:55,816 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-05 21:56:55,816 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-05 21:56:56,210 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-05 21:56:56,210 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-05 21:56:56,210 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-05 21:56:56,211 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-05 21:56:58,212 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-05 21:56:58,212 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-05 21:56:58,212 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-05 21:56:59,153 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-05 21:57:00,212 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-05 21:57:00,213 - FacePluginLifecycle - WARNING - Geçersiz durum geçişi: stopped -> initialized
+2025-05-05 21:57:00,213 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 21:57:00,214 - FacePluginEnvironment - INFO - GPIO kaynakları temizlendi
+2025-05-05 21:57:00,214 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 21:57:00,214 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-05 21:57:00,215 - FacePluginLifecycle - WARNING - Geçersiz durum geçişi: stopped -> initialized
+2025-05-05 21:57:00,215 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 21:57:19,138 - FacePluginEnvironment - INFO - Çevresel değişiklik: touch=detected (değer: 1)
+2025-05-05 21:59:03,493 - FacePluginEnvironment - INFO - Çevresel değişiklik: motion=detected (değer: 1)
+2025-05-05 22:05:27,785 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-05 22:05:27,868 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-05 22:05:27,868 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-05 22:05:27,869 - FacePluginEnvironment - INFO - GPIO kaynakları temizlendi
+2025-05-05 22:05:27,869 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 22:05:29,480 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-05 22:05:29,480 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-05 22:05:29,480 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-05 22:05:29,480 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-05 22:05:29,481 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-05 22:05:29,481 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-05 22:05:29,481 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-05 22:05:29,481 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-05 22:05:29,481 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-05 22:05:29,482 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-05 22:05:29,482 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 22:05:29,482 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 22:05:29,483 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-05 22:05:29,483 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-05 22:05:29,483 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-05 22:05:29,483 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-05 22:05:29,484 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-05 22:05:29,870 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-05 22:05:29,870 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-05 22:05:29,871 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-05 22:05:29,871 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-05 22:05:31,009 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-05 22:05:31,871 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-05 22:05:31,871 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-05 22:05:31,872 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-05 22:05:33,872 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-05 22:05:33,873 - FacePluginLifecycle - WARNING - Geçersiz durum geçişi: stopped -> initialized
+2025-05-05 22:05:33,873 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 22:05:33,873 - FacePluginEnvironment - INFO - GPIO kaynakları temizlendi
+2025-05-05 22:05:33,874 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 22:05:33,874 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-05 22:05:33,874 - FacePluginLifecycle - WARNING - Geçersiz durum geçişi: stopped -> initialized
+2025-05-05 22:05:33,875 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 22:06:04,132 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-05 22:06:04,219 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-05 22:06:04,219 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-05 22:06:04,219 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 22:06:05,187 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-05 22:06:05,188 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-05 22:06:05,188 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-05 22:06:05,188 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-05 22:06:05,188 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-05 22:06:05,793 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-05 22:06:05,794 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-05 22:06:05,794 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-05 22:06:05,794 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-05 22:06:05,794 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-05 22:06:05,794 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-05 22:06:05,794 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-05 22:06:05,794 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-05 22:06:05,795 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-05 22:06:05,795 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-05 22:06:05,795 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 22:06:05,796 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 22:06:05,796 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-05 22:06:05,797 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-05 22:06:05,797 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-05 22:06:05,797 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-05 22:06:05,798 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-05 22:06:07,188 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-05 22:06:07,189 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-05 22:06:07,189 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-05 22:06:09,189 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-05 22:06:09,189 - FacePluginBase - INFO - Plugin durumu değişti: stopped -> initializing
+2025-05-05 22:06:09,190 - FacePluginLifecycle - INFO - Durum değişti: stopped -> initializing
+2025-05-05 22:06:09,190 - FacePluginBase - INFO - Plugin durumu değişti: initializing -> initialized
+2025-05-05 22:06:09,190 - FacePluginLifecycle - INFO - Durum değişti: initializing -> initialized
+2025-05-05 22:06:09,190 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 22:06:09,190 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 22:06:09,190 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-05 22:06:09,197 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 22:06:10,802 - FacePluginEnvironment - INFO - Çevresel değişiklik: motion=detected (değer: 1)
+2025-05-05 22:06:57,454 - FacePluginEnvironment - INFO - Çevresel değişiklik: touch=detected (değer: 1)
+2025-05-05 22:13:10,231 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-05 22:13:10,289 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-05 22:13:10,290 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-05 22:13:10,290 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 22:13:11,904 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-05 22:13:11,904 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-05 22:13:11,904 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-05 22:13:11,905 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-05 22:13:11,905 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-05 22:13:11,905 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-05 22:13:11,905 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-05 22:13:11,905 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-05 22:13:11,906 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-05 22:13:11,906 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-05 22:13:11,906 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 22:13:11,906 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 22:13:11,907 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-05 22:13:11,907 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-05 22:13:11,907 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-05 22:13:11,907 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-05 22:13:11,908 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-05 22:13:12,292 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-05 22:13:12,292 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-05 22:13:12,293 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-05 22:13:12,293 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-05 22:13:14,285 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-05 22:13:14,293 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-05 22:13:14,293 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-05 22:13:14,293 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-05 22:13:15,833 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-05 22:13:15,834 - FacePluginBase - INFO - Plugin durumu değişti: stopped -> initializing
+2025-05-05 22:13:15,834 - FacePluginLifecycle - INFO - Durum değişti: stopped -> initializing
+2025-05-05 22:13:15,835 - FacePluginBase - INFO - Plugin durumu değişti: initializing -> initialized
+2025-05-05 22:13:15,835 - FacePluginLifecycle - INFO - Durum değişti: initializing -> initialized
+2025-05-05 22:13:15,835 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 22:13:15,835 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 22:13:15,836 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-05 22:13:15,836 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 22:14:05,467 - FacePluginEnvironment - INFO - Çevresel değişiklik: motion=detected (değer: 1)
+2025-05-05 22:18:19,440 - FacePluginEnvironment - INFO - Çevresel değişiklik: touch=detected (değer: 1)
+2025-05-05 22:23:18,310 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-05 22:23:18,427 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-05 22:23:18,429 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-05 22:23:18,430 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 22:23:18,927 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-05 22:23:18,928 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-05 22:23:18,930 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-05 22:23:18,939 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-05 22:23:18,943 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-05 22:23:20,944 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-05 22:23:20,945 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-05 22:23:20,945 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-05 22:23:21,955 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-05 22:23:21,963 - FacePluginBase - INFO - Plugin durumu değişti: stopped -> initializing
+2025-05-05 22:23:21,963 - FacePluginLifecycle - INFO - Durum değişti: stopped -> initializing
+2025-05-05 22:23:21,963 - FacePluginBase - INFO - Plugin durumu değişti: initializing -> initialized
+2025-05-05 22:23:21,964 - FacePluginLifecycle - INFO - Durum değişti: initializing -> initialized
+2025-05-05 22:23:21,964 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 22:23:21,964 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 22:23:21,964 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-05 22:23:21,967 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 22:27:23,435 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-05 22:27:23,436 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-05 22:27:23,436 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-05 22:27:23,437 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-05 22:27:23,437 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-05 22:27:23,438 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-05 22:27:23,438 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-05 22:27:23,439 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-05 22:27:23,439 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-05 22:27:23,440 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-05 22:27:23,441 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 22:27:23,441 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 22:27:23,442 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-05 22:27:23,442 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-05 22:27:23,443 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-05 22:27:23,443 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-05 22:27:23,443 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-05 22:27:44,976 - FacePluginEnvironment - INFO - Çevresel değişiklik: motion=detected (değer: 1)
+2025-05-05 22:27:51,889 - FacePluginEnvironment - INFO - Çevresel değişiklik: touch=detected (değer: 1)
+2025-05-05 22:40:53,086 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-05 22:40:53,088 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-05 22:40:53,091 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-05 22:40:53,092 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-05 22:40:53,092 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-05 22:40:53,092 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-05 22:40:53,093 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-05 22:40:53,096 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-05 22:40:53,097 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-05 22:40:53,099 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-05 22:40:53,099 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 22:40:53,100 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 22:40:53,100 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-05 22:40:53,102 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-05 22:40:53,102 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-05 22:40:53,102 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-05 22:40:53,102 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-05 22:41:04,841 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-05 22:41:04,915 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-05 22:41:04,916 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-05 22:41:04,916 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 22:41:06,917 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-05 22:41:06,917 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-05 22:41:06,918 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-05 22:41:06,918 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-05 22:41:08,402 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-05 22:41:08,918 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-05 22:41:08,919 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-05 22:41:08,919 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-05 22:41:10,920 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-05 22:41:10,921 - FacePluginBase - INFO - Plugin durumu değişti: stopped -> initializing
+2025-05-05 22:41:10,921 - FacePluginLifecycle - INFO - Durum değişti: stopped -> initializing
+2025-05-05 22:41:10,922 - FacePluginBase - INFO - Plugin durumu değişti: initializing -> initialized
+2025-05-05 22:41:10,922 - FacePluginLifecycle - INFO - Durum değişti: initializing -> initialized
+2025-05-05 22:41:10,922 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 22:41:10,922 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 22:41:10,922 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-05 22:41:10,923 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 22:47:44,667 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-05 22:47:44,695 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-05 22:47:44,696 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-05 22:47:44,696 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 22:47:46,696 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-05 22:47:46,697 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-05 22:47:46,697 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-05 22:47:46,697 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-05 22:47:47,670 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-05 22:47:48,697 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-05 22:47:48,697 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-05 22:47:48,697 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-05 22:47:50,698 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-05 22:47:50,698 - FacePluginBase - INFO - Plugin durumu değişti: stopped -> initializing
+2025-05-05 22:47:50,698 - FacePluginLifecycle - INFO - Durum değişti: stopped -> initializing
+2025-05-05 22:47:50,698 - FacePluginBase - INFO - Plugin durumu değişti: initializing -> initialized
+2025-05-05 22:47:50,698 - FacePluginLifecycle - INFO - Durum değişti: initializing -> initialized
+2025-05-05 22:47:50,698 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 22:47:50,699 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 22:47:50,699 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-05 22:47:50,699 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 22:48:07,082 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-05 22:48:07,082 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-05 22:48:07,082 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-05 22:48:07,082 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-05 22:48:07,082 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-05 22:48:07,082 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-05 22:48:07,082 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-05 22:48:07,082 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-05 22:48:07,083 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-05 22:48:07,083 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-05 22:48:07,083 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 22:48:07,083 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 22:48:07,083 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-05 22:48:07,084 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-05 22:48:07,084 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-05 22:48:07,084 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-05 22:48:07,084 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-05 22:49:25,354 - FacePluginEnvironment - INFO - Çevresel değişiklik: touch=detected (değer: 1)
+2025-05-05 22:50:25,858 - FacePluginEnvironment - INFO - Çevresel değişiklik: motion=detected (değer: 1)
+2025-05-05 23:02:24,362 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-05 23:02:24,397 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-05 23:02:24,398 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-05 23:02:24,398 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 23:02:26,398 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-05 23:02:26,398 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-05 23:02:26,398 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-05 23:02:26,398 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-05 23:02:26,749 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-05 23:02:26,750 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-05 23:02:26,750 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-05 23:02:26,750 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-05 23:02:26,750 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-05 23:02:26,750 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-05 23:02:26,750 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-05 23:02:26,750 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-05 23:02:26,751 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-05 23:02:26,751 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-05 23:02:26,751 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 23:02:26,751 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 23:02:26,752 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-05 23:02:26,752 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-05 23:02:26,752 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-05 23:02:26,752 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-05 23:02:26,752 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-05 23:02:28,399 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-05 23:02:28,399 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-05 23:02:28,399 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-05 23:02:29,198 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-05 23:02:30,399 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-05 23:02:30,400 - FacePluginBase - INFO - Plugin durumu değişti: stopped -> initializing
+2025-05-05 23:02:30,400 - FacePluginLifecycle - INFO - Durum değişti: stopped -> initializing
+2025-05-05 23:02:30,400 - FacePluginBase - INFO - Plugin durumu değişti: initializing -> initialized
+2025-05-05 23:02:30,400 - FacePluginLifecycle - INFO - Durum değişti: initializing -> initialized
+2025-05-05 23:02:30,400 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 23:02:30,401 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 23:02:30,401 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-05 23:02:30,403 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 23:03:22,936 - FacePluginEnvironment - INFO - Çevresel değişiklik: motion=detected (değer: 1)
+2025-05-05 23:08:47,448 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-05 23:08:47,496 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-05 23:08:47,496 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-05 23:08:47,497 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 23:08:49,497 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-05 23:08:49,497 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-05 23:08:49,497 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-05 23:08:49,497 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-05 23:08:49,683 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-05 23:08:49,904 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-05 23:08:49,904 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-05 23:08:49,904 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-05 23:08:49,904 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-05 23:08:49,904 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-05 23:08:49,904 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-05 23:08:49,904 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-05 23:08:49,904 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-05 23:08:49,905 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-05 23:08:49,905 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-05 23:08:49,905 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 23:08:49,905 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 23:08:49,906 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-05 23:08:49,906 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-05 23:08:49,906 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-05 23:08:49,906 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-05 23:08:49,906 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-05 23:08:51,497 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-05 23:08:51,498 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-05 23:08:51,498 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-05 23:08:51,784 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-05 23:08:51,785 - FacePluginBase - INFO - Plugin durumu değişti: stopped -> initializing
+2025-05-05 23:08:51,785 - FacePluginLifecycle - INFO - Durum değişti: stopped -> initializing
+2025-05-05 23:08:51,785 - FacePluginBase - INFO - Plugin durumu değişti: initializing -> initialized
+2025-05-05 23:08:51,785 - FacePluginLifecycle - INFO - Durum değişti: initializing -> initialized
+2025-05-05 23:08:51,785 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 23:08:51,785 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 23:08:51,785 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-05 23:08:51,786 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 23:09:11,323 - FacePluginEnvironment - INFO - Çevresel değişiklik: touch=detected (değer: 1)
+2025-05-05 23:09:25,934 - FacePluginEnvironment - INFO - Çevresel değişiklik: motion=detected (değer: 1)
+2025-05-05 23:23:20,575 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-05 23:23:20,615 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-05 23:23:20,615 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-05 23:23:20,616 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 23:23:20,889 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-05 23:23:20,890 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 23:23:22,159 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-05 23:23:22,159 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-05 23:23:22,160 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-05 23:23:22,160 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-05 23:23:22,161 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-05 23:23:24,166 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-05 23:23:24,166 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-05 23:23:24,166 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-05 23:23:24,980 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-05 23:23:24,980 - FacePluginBase - INFO - Plugin durumu değişti: stopped -> initializing
+2025-05-05 23:23:24,981 - FacePluginLifecycle - INFO - Durum değişti: stopped -> initializing
+2025-05-05 23:23:24,981 - FacePluginBase - INFO - Plugin durumu değişti: initializing -> initialized
+2025-05-05 23:23:24,982 - FacePluginLifecycle - INFO - Durum değişti: initializing -> initialized
+2025-05-05 23:23:24,982 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 23:23:24,982 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 23:23:24,982 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-05 23:23:24,983 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 23:23:25,755 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-05 23:23:25,755 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-05 23:23:25,755 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-05 23:23:25,756 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-05 23:23:25,756 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-05 23:23:25,756 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-05 23:23:25,756 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-05 23:23:25,756 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-05 23:23:25,757 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-05 23:23:25,757 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-05 23:23:25,757 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 23:23:25,758 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 23:23:25,758 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-05 23:23:25,758 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-05 23:23:25,758 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-05 23:23:25,758 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-05 23:23:25,761 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-05 23:23:29,731 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-05 23:23:29,731 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-05 23:23:29,732 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-05 23:23:29,732 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-05 23:23:29,732 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-05 23:23:29,732 - modules.dashboard_widgets.widget_manager - INFO - Widget'lar yükleniyor...
+2025-05-05 23:23:29,732 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: expression_widget
+2025-05-05 23:23:29,732 - modules.dashboard_widgets.expression_widget - INFO - Yüz İfadesi Kontrolü Widget'ı başlatıldı
+2025-05-05 23:23:29,732 - modules.dashboard_widgets.widget_manager - INFO - Widget ExpressionWidget başlatıldı (ID: expression)
+2025-05-05 23:23:29,732 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: state_history_widget
+2025-05-05 23:23:29,732 - modules.dashboard_widgets.widget_manager - ERROR - Widget modülü yüklenirken hata: state_history_widget, StateHistoryWidget.__init__() got an unexpected keyword argument 'emotion_engine'
+2025-05-05 23:23:29,732 - modules.dashboard_widgets.widget_manager - WARNING - Zorunlu widget yüklenemedi: state_history_widget. Varsayılan yüklenecek.
+2025-05-05 23:23:29,732 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: emotion_transitions_widget
+2025-05-05 23:23:29,733 - modules.dashboard_widgets.emotion_transitions_widget - INFO - Hızlı Duygu Geçişleri Widget'ı başlatıldı
+2025-05-05 23:23:29,733 - modules.dashboard_widgets.widget_manager - INFO - Widget EmotionTransitionsWidget başlatıldı (ID: emotion_transitions)
+2025-05-05 23:23:29,734 - modules.dashboard_widgets.widget_manager - INFO - Toplam 2 widget yüklendi
+2025-05-05 23:23:29,734 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-05 23:23:29,734 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-05 23:23:29,734 - DashboardServer - INFO - Face plugin referansı hazırlandı ve widget'lar yüklendi
+2025-05-05 23:23:29,743 - DashboardServer - INFO - Dashboard sunucusu başlatıldı: http://localhost:8000
+2025-05-05 23:23:29,845 - include.hardware_defines - INFO - Raspberry Pi platformu tespit edildi: Raspberry Pi 5 Model B Rev 1.0
+2025-05-05 23:24:10,656 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-05 23:24:10,756 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-05 23:24:10,757 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-05 23:24:10,757 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 23:24:11,690 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-05 23:24:11,691 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-05 23:24:11,692 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-05 23:24:11,692 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-05 23:24:11,693 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-05 23:24:13,693 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-05 23:24:13,694 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-05 23:24:13,696 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-05 23:24:13,993 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-05 23:24:13,993 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-05 23:24:13,994 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-05 23:24:13,994 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-05 23:24:13,994 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-05 23:24:13,994 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-05 23:24:13,994 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-05 23:24:13,994 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-05 23:24:13,995 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-05 23:24:13,995 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-05 23:24:13,996 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 23:24:13,996 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 23:24:13,997 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-05 23:24:14,000 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-05 23:24:14,001 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-05 23:24:14,002 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-05 23:24:14,007 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-05 23:24:15,696 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-05 23:24:15,697 - FacePluginBase - INFO - Plugin durumu değişti: stopped -> initializing
+2025-05-05 23:24:15,698 - FacePluginLifecycle - INFO - Durum değişti: stopped -> initializing
+2025-05-05 23:24:15,698 - FacePluginBase - INFO - Plugin durumu değişti: initializing -> initialized
+2025-05-05 23:24:15,699 - FacePluginLifecycle - INFO - Durum değişti: initializing -> initialized
+2025-05-05 23:24:15,699 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 23:24:15,700 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 23:24:15,700 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-05 23:24:15,702 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 23:25:19,496 - FacePluginEnvironment - INFO - Çevresel değişiklik: touch=detected (değer: 1)
+2025-05-05 23:25:52,561 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-05 23:25:52,636 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-05 23:25:52,637 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-05 23:25:52,637 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 23:25:54,637 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-05 23:25:54,637 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-05 23:25:54,638 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-05 23:25:54,638 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-05 23:25:55,179 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-05 23:25:55,180 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-05 23:25:55,180 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-05 23:25:55,180 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-05 23:25:55,180 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-05 23:25:55,180 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-05 23:25:55,180 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-05 23:25:55,180 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-05 23:25:55,180 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-05 23:25:55,181 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-05 23:25:55,181 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 23:25:55,181 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-05 23:25:55,181 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-05 23:25:55,181 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-05 23:25:55,181 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-05 23:25:55,182 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-05 23:25:55,182 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-05 23:25:56,013 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-05 23:25:56,317 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-05 23:25:56,317 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-05 23:25:56,317 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-05 23:25:56,317 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-05 23:25:56,318 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-05 23:25:56,318 - modules.dashboard_widgets.widget_manager - INFO - Widget'lar yükleniyor...
+2025-05-05 23:25:56,318 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: expression_widget
+2025-05-05 23:25:56,318 - modules.dashboard_widgets.expression_widget - INFO - Yüz İfadesi Kontrolü Widget'ı başlatıldı
+2025-05-05 23:25:56,318 - modules.dashboard_widgets.widget_manager - INFO - Widget ExpressionWidget başlatıldı (ID: expression)
+2025-05-05 23:25:56,318 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: state_history_widget
+2025-05-05 23:25:56,318 - modules.dashboard_widgets.widget_manager - ERROR - Widget modülü yüklenirken hata: state_history_widget, StateHistoryWidget.__init__() got an unexpected keyword argument 'emotion_engine'
+2025-05-05 23:25:56,319 - modules.dashboard_widgets.widget_manager - WARNING - Zorunlu widget yüklenemedi: state_history_widget. Varsayılan yüklenecek.
+2025-05-05 23:25:56,319 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: emotion_transitions_widget
+2025-05-05 23:25:56,320 - modules.dashboard_widgets.emotion_transitions_widget - INFO - Hızlı Duygu Geçişleri Widget'ı başlatıldı
+2025-05-05 23:25:56,320 - modules.dashboard_widgets.widget_manager - INFO - Widget EmotionTransitionsWidget başlatıldı (ID: emotion_transitions)
+2025-05-05 23:25:56,320 - modules.dashboard_widgets.widget_manager - INFO - Toplam 2 widget yüklendi
+2025-05-05 23:25:56,321 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-05 23:25:56,321 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-05 23:25:56,321 - DashboardServer - INFO - Face plugin referansı hazırlandı ve widget'lar yüklendi
+2025-05-05 23:25:56,324 - DashboardServer - INFO - Dashboard sunucusu başlatıldı: http://localhost:8000
+2025-05-05 23:25:56,426 - include.hardware_defines - INFO - Raspberry Pi platformu tespit edildi: Raspberry Pi 5 Model B Rev 1.0
+2025-05-05 23:25:56,638 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-05 23:25:56,638 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-05 23:25:56,638 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-05 23:25:58,638 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-05 23:25:58,639 - FacePluginBase - INFO - Plugin durumu değişti: stopped -> initializing
+2025-05-05 23:25:58,639 - FacePluginLifecycle - INFO - Durum değişti: stopped -> initializing
+2025-05-05 23:25:58,639 - FacePluginBase - INFO - Plugin durumu değişti: initializing -> initialized
+2025-05-05 23:25:58,640 - FacePluginLifecycle - INFO - Durum değişti: initializing -> initialized
+2025-05-05 23:25:58,640 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 23:25:58,640 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-05 23:25:58,640 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-05 23:25:58,640 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-05 23:26:46,607 - DashboardRoutes - INFO - Face plugin durumu dosyadan okundu: çalışıyor
+2025-05-05 23:26:46,922 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression_control
+2025-05-05 23:26:46,926 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state_history
+2025-05-05 23:26:50,342 - DashboardWebSocket - INFO - Simülasyon WebSocket bağlantısı başlatıldı: sim_140732902186640
+2025-05-05 23:26:55,351 - DashboardWebSocket - ERROR - Simülasyon güncellemesi gönderilirken hata: 
+2025-05-05 23:26:56,353 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı, simülasyon döngüsü durduruluyor: sim_140732902186640
+2025-05-05 23:27:00,832 - FacePlugin - WARNING - Yüz eklentisi çalışmıyor (durum: PluginState.INITIALIZED), duygu ayarlanamıyor.
+2025-05-05 23:27:01,569 - FacePlugin - WARNING - Yüz eklentisi çalışmıyor (durum: PluginState.INITIALIZED), duygu ayarlanamıyor.
+2025-05-05 23:27:02,207 - FacePlugin - WARNING - Yüz eklentisi çalışmıyor (durum: PluginState.INITIALIZED), duygu ayarlanamıyor.
+2025-05-05 23:27:02,658 - FacePlugin - WARNING - Yüz eklentisi çalışmıyor (durum: PluginState.INITIALIZED), duygu ayarlanamıyor.
+2025-05-05 23:27:03,119 - FacePlugin - WARNING - Yüz eklentisi çalışmıyor (durum: PluginState.INITIALIZED), duygu ayarlanamıyor.
+2025-05-05 23:27:03,680 - FacePlugin - WARNING - Yüz eklentisi çalışmıyor (durum: PluginState.INITIALIZED), duygu ayarlanamıyor.
+2025-05-05 23:27:04,511 - FacePlugin - WARNING - Yüz eklentisi çalışmıyor (durum: PluginState.INITIALIZED), duygu ayarlanamıyor.
+2025-05-05 23:27:05,088 - FacePlugin - WARNING - Yüz eklentisi çalışmıyor (durum: PluginState.INITIALIZED), duygu ayarlanamıyor.
+2025-05-05 23:27:08,112 - FacePlugin - WARNING - Yüz eklentisi çalışmıyor (durum: PluginState.INITIALIZED), duygu ayarlanamıyor.
+2025-05-05 23:27:09,008 - FacePlugin - WARNING - Yüz eklentisi çalışmıyor (durum: PluginState.INITIALIZED), duygu ayarlanamıyor.
+2025-05-05 23:27:09,824 - FacePlugin - WARNING - Yüz eklentisi çalışmıyor (durum: PluginState.INITIALIZED), duygu ayarlanamıyor.
+2025-05-05 23:27:10,464 - FacePlugin - WARNING - Yüz eklentisi çalışmıyor (durum: PluginState.INITIALIZED), duygu ayarlanamıyor.
+2025-05-05 23:27:14,264 - FacePluginEnvironment - INFO - Çevresel değişiklik: motion=detected (değer: 1)
+2025-05-05 23:27:26,174 - FacePluginEnvironment - INFO - Çevresel değişiklik: touch=detected (değer: 1)
+2025-05-06 00:22:19,354 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı: 140732902117008
+2025-05-06 00:22:23,882 - DashboardWebSocket - INFO - Simülasyon WebSocket bağlantısı başlatıldı: sim_140732902129296
+2025-05-06 00:22:27,900 - DashboardWebSocket - ERROR - Simülasyon güncellemesi gönderilirken hata: 
+2025-05-06 00:22:28,902 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı, simülasyon döngüsü durduruluyor: sim_140732902129296
+2025-05-06 00:30:26,219 - DashboardRoutes - INFO - Face plugin durumu dosyadan okundu: çalışıyor
+2025-05-06 00:30:29,890 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression_control
+2025-05-06 00:30:29,929 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state_history
+2025-05-06 00:38:05,221 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-06 00:38:05,314 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-06 00:38:05,315 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-06 00:38:05,315 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-06 00:38:07,315 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-06 00:38:07,315 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-06 00:38:07,315 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-06 00:38:07,315 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-06 00:38:09,264 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-06 00:38:09,317 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-06 00:38:09,317 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-06 00:38:09,317 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-06 00:38:11,317 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-06 00:38:11,318 - FacePluginBase - INFO - Plugin durumu değişti: stopped -> initializing
+2025-05-06 00:38:11,318 - FacePluginLifecycle - INFO - Durum değişti: stopped -> initializing
+2025-05-06 00:38:11,318 - FacePluginBase - INFO - Plugin durumu değişti: initializing -> initialized
+2025-05-06 00:38:11,318 - FacePluginLifecycle - INFO - Durum değişti: initializing -> initialized
+2025-05-06 00:38:11,318 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-06 00:38:11,319 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-06 00:38:11,319 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-06 00:38:11,319 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-06 00:39:54,656 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-06 00:39:54,656 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-06 00:39:54,657 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-06 00:39:54,657 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-06 00:39:54,657 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-06 00:39:54,657 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-06 00:39:54,657 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-06 00:39:54,657 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-06 00:39:54,658 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-06 00:39:54,658 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-06 00:39:54,658 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-06 00:39:54,658 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-06 00:39:54,658 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-06 00:39:54,658 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-06 00:39:54,659 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-06 00:39:54,659 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-06 00:39:54,659 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-06 00:39:55,617 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-06 00:39:55,617 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-06 00:39:55,618 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-06 00:39:55,618 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-06 00:39:55,618 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-06 00:39:55,618 - modules.dashboard_widgets.widget_manager - INFO - Widget'lar yükleniyor...
+2025-05-06 00:39:55,618 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: expression_widget
+2025-05-06 00:39:55,618 - modules.dashboard_widgets.expression_widget - INFO - Yüz İfadesi Kontrolü Widget'ı başlatıldı
+2025-05-06 00:39:55,619 - modules.dashboard_widgets.widget_manager - INFO - Widget ExpressionWidget başlatıldı (ID: expression)
+2025-05-06 00:39:55,619 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: state_history_widget
+2025-05-06 00:39:55,619 - modules.dashboard_widgets.widget_manager - ERROR - Widget modülü yüklenirken hata: state_history_widget, StateHistoryWidget.__init__() got an unexpected keyword argument 'emotion_engine'
+2025-05-06 00:39:55,619 - modules.dashboard_widgets.widget_manager - WARNING - Zorunlu widget yüklenemedi: state_history_widget. Varsayılan yüklenecek.
+2025-05-06 00:39:55,619 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: emotion_transitions_widget
+2025-05-06 00:39:55,620 - modules.dashboard_widgets.emotion_transitions_widget - INFO - Hızlı Duygu Geçişleri Widget'ı başlatıldı
+2025-05-06 00:39:55,620 - modules.dashboard_widgets.widget_manager - INFO - Widget EmotionTransitionsWidget başlatıldı (ID: emotion_transitions)
+2025-05-06 00:39:55,620 - modules.dashboard_widgets.widget_manager - INFO - Toplam 2 widget yüklendi
+2025-05-06 00:39:55,620 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-06 00:39:55,620 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-06 00:39:55,621 - DashboardServer - INFO - Face plugin referansı hazırlandı ve widget'lar yüklendi
+2025-05-06 00:39:55,624 - DashboardServer - INFO - Dashboard sunucusu başlatıldı: http://localhost:8000
+2025-05-06 00:39:55,726 - include.hardware_defines - INFO - Raspberry Pi platformu tespit edildi: Raspberry Pi 5 Model B Rev 1.0
+2025-05-06 00:40:00,338 - DashboardRoutes - INFO - Face plugin durumu dosyadan okundu: çalışıyor
+2025-05-06 00:40:00,645 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression_control
+2025-05-06 00:40:00,652 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state_history
+2025-05-06 00:40:04,819 - DashboardWebSocket - INFO - Simülasyon WebSocket bağlantısı başlatıldı: sim_140734140856848
+2025-05-06 00:40:10,838 - DashboardWebSocket - ERROR - Simülasyon güncellemesi gönderilirken hata: 
+2025-05-06 00:40:11,840 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı, simülasyon döngüsü durduruluyor: sim_140734140856848
+2025-05-06 00:40:21,326 - FacePlugin - WARNING - Yüz eklentisi çalışmıyor (durum: PluginState.INITIALIZED), duygu ayarlanamıyor.
+2025-05-06 00:40:54,928 - FacePluginEnvironment - INFO - Çevresel değişiklik: touch=detected (değer: 1)
+2025-05-06 00:43:44,866 - FacePluginEnvironment - INFO - Çevresel değişiklik: motion=detected (değer: 1)
+2025-05-06 00:45:07,692 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı: 140734349900816
+2025-05-06 00:45:07,823 - DashboardRoutes - INFO - Face plugin durumu dosyadan okundu: çalışıyor
+2025-05-06 00:45:08,249 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression_control
+2025-05-06 00:45:08,251 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state_history
+2025-05-06 00:45:50,741 - DashboardWebSocket - INFO - Simülasyon WebSocket bağlantısı başlatıldı: sim_140734335798288
+2025-05-06 00:45:54,791 - DashboardWebSocket - ERROR - Simülasyon güncellemesi gönderilirken hata: 
+2025-05-06 00:45:55,793 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı, simülasyon döngüsü durduruluyor: sim_140734335798288
+2025-05-06 00:59:17,336 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-06 00:59:17,387 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-06 00:59:17,391 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-06 00:59:17,391 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-06 00:59:19,310 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-06 00:59:19,321 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-06 00:59:19,321 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-06 00:59:19,321 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-06 00:59:19,322 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-06 00:59:20,867 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-06 00:59:20,868 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-06 00:59:20,868 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-06 00:59:20,868 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-06 00:59:20,868 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-06 00:59:20,868 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-06 00:59:20,868 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-06 00:59:20,868 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-06 00:59:20,869 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-06 00:59:20,869 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-06 00:59:20,869 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-06 00:59:20,869 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-06 00:59:20,870 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-06 00:59:20,870 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-06 00:59:20,870 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-06 00:59:20,871 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-06 00:59:20,871 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-06 00:59:21,353 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-06 00:59:21,354 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-06 00:59:21,354 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-06 00:59:23,354 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-06 00:59:23,355 - FacePluginBase - INFO - Plugin durumu değişti: stopped -> initializing
+2025-05-06 00:59:23,355 - FacePluginLifecycle - INFO - Durum değişti: stopped -> initializing
+2025-05-06 00:59:23,355 - FacePluginBase - INFO - Plugin durumu değişti: initializing -> initialized
+2025-05-06 00:59:23,355 - FacePluginLifecycle - INFO - Durum değişti: initializing -> initialized
+2025-05-06 00:59:23,355 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-06 00:59:23,355 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-06 00:59:23,356 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-06 00:59:23,358 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-06 01:01:52,763 - FacePluginEnvironment - INFO - Çevresel değişiklik: motion=detected (değer: 1)
+2025-05-06 01:01:58,791 - FacePluginEnvironment - INFO - Çevresel değişiklik: touch=detected (değer: 1)
+2025-05-07 21:48:57,080 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-07 21:48:57,081 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-07 21:48:57,082 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-07 21:48:57,082 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-07 21:48:57,082 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-07 21:48:57,082 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-07 21:48:57,082 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-07 21:48:57,082 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-07 21:48:57,083 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-07 21:48:57,083 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-07 21:48:57,083 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-07 21:48:57,083 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-07 21:48:57,083 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-07 21:48:57,084 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-07 21:48:57,084 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-07 21:48:57,084 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-07 21:48:57,084 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-07 21:48:58,387 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-07 21:48:58,387 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-07 21:48:58,387 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-07 21:48:58,387 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-07 21:48:58,388 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-07 21:48:58,388 - DashboardWebSocket - INFO - Simülasyon dizini: /home/seljux/projects/face1/simulation
+2025-05-07 21:48:58,388 - modules.dashboard_widgets.widget_manager - INFO - Widget'lar yükleniyor...
+2025-05-07 21:48:58,388 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: expression_widget
+2025-05-07 21:48:58,388 - modules.dashboard_widgets.expression_widget - INFO - Yüz İfadesi Kontrolü Widget'ı başlatıldı
+2025-05-07 21:48:58,388 - modules.dashboard_widgets.widget_manager - INFO - Widget ExpressionWidget başlatıldı (ID: expression)
+2025-05-07 21:48:58,388 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: state_history_widget
+2025-05-07 21:48:58,388 - modules.dashboard_widgets.widget_manager - ERROR - Widget modülü yüklenirken hata: state_history_widget, StateHistoryWidget.__init__() got an unexpected keyword argument 'emotion_engine'
+2025-05-07 21:48:58,388 - modules.dashboard_widgets.widget_manager - WARNING - Zorunlu widget yüklenemedi: state_history_widget. Varsayılan yüklenecek.
+2025-05-07 21:48:58,388 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: emotion_transitions_widget
+2025-05-07 21:48:58,389 - modules.dashboard_widgets.emotion_transitions_widget - INFO - Hızlı Duygu Geçişleri Widget'ı başlatıldı
+2025-05-07 21:48:58,389 - modules.dashboard_widgets.widget_manager - INFO - Widget EmotionTransitionsWidget başlatıldı (ID: emotion_transitions)
+2025-05-07 21:48:58,389 - modules.dashboard_widgets.widget_manager - INFO - Toplam 2 widget yüklendi
+2025-05-07 21:48:58,389 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-07 21:48:58,389 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-07 21:48:58,389 - DashboardServer - INFO - Face plugin referansı hazırlandı ve widget'lar yüklendi
+2025-05-07 21:48:58,393 - DashboardServer - INFO - Dashboard sunucusu başlatıldı: http://localhost:8000
+2025-05-07 21:48:58,495 - include.hardware_defines - INFO - Raspberry Pi platformu tespit edildi: Raspberry Pi 5 Model B Rev 1.0
+2025-05-07 21:49:11,676 - DashboardRoutes - INFO - Face plugin durumu dosyadan okundu: çalışıyor
+2025-05-07 21:49:12,171 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression_control
+2025-05-07 21:49:12,172 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state_history
+2025-05-07 21:49:24,125 - FacePluginEnvironment - INFO - Çevresel değişiklik: touch=detected (değer: 1)
+2025-05-07 21:49:41,197 - DashboardWebSocket - INFO - Simülasyon WebSocket bağlantısı başlatıldı: sim_140732541191312
+2025-05-07 21:49:57,702 - FacePluginEnvironment - INFO - Çevresel değişiklik: motion=detected (değer: 1)
+2025-05-07 21:50:01,157 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı: 140732541153616
+2025-05-07 21:50:02,454 - DashboardRoutes - INFO - Face plugin durumu dosyadan okundu: çalışıyor
+2025-05-07 21:50:02,604 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression_control
+2025-05-07 21:50:02,609 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state_history
+2025-05-07 21:50:58,937 - DashboardWebSocket - INFO - Simülasyon WebSocket bağlantısı başlatıldı: sim_140732523319696
+2025-05-07 22:04:21,621 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı: 140732523322768
+2025-05-07 22:04:21,655 - DashboardRoutes - INFO - Face plugin durumu dosyadan okundu: çalışıyor
+2025-05-07 22:04:21,889 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression_control
+2025-05-07 22:04:21,893 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state_history
+2025-05-07 22:17:45,626 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı: 140732523338000
+2025-05-07 22:17:45,698 - DashboardRoutes - INFO - Face plugin durumu dosyadan okundu: çalışıyor
+2025-05-07 22:17:46,104 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression_control
+2025-05-07 22:17:46,107 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state_history
+2025-05-07 22:18:39,209 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-07 22:18:39,310 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-07 22:18:39,311 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-07 22:18:39,311 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-07 22:18:41,311 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-07 22:18:41,311 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-07 22:18:41,311 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-07 22:18:41,312 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-07 22:18:41,937 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-07 22:18:41,937 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-07 22:18:41,938 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-07 22:18:41,938 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-07 22:18:41,938 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-07 22:18:41,938 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-07 22:18:41,939 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-07 22:18:41,939 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-07 22:18:41,939 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-07 22:18:41,940 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-07 22:18:41,940 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-07 22:18:41,940 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-07 22:18:41,940 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-07 22:18:41,941 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-07 22:18:41,941 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-07 22:18:41,941 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-07 22:18:41,942 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-07 22:18:42,453 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-07 22:18:42,992 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-07 22:18:42,993 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-07 22:18:42,993 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-07 22:18:42,993 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-07 22:18:42,993 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-07 22:18:42,993 - DashboardWebSocket - INFO - Simülasyon dizini: /home/seljux/projects/face1/simulation
+2025-05-07 22:18:42,993 - modules.dashboard_widgets.widget_manager - INFO - Widget'lar yükleniyor...
+2025-05-07 22:18:42,993 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: expression_widget
+2025-05-07 22:18:42,993 - modules.dashboard_widgets.expression_widget - INFO - Yüz İfadesi Kontrolü Widget'ı başlatıldı
+2025-05-07 22:18:42,993 - modules.dashboard_widgets.widget_manager - INFO - Widget ExpressionWidget başlatıldı (ID: expression)
+2025-05-07 22:18:42,993 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: state_history_widget
+2025-05-07 22:18:42,993 - modules.dashboard_widgets.widget_manager - ERROR - Widget modülü yüklenirken hata: state_history_widget, StateHistoryWidget.__init__() got an unexpected keyword argument 'emotion_engine'
+2025-05-07 22:18:42,994 - modules.dashboard_widgets.widget_manager - WARNING - Zorunlu widget yüklenemedi: state_history_widget. Varsayılan yüklenecek.
+2025-05-07 22:18:42,994 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: emotion_transitions_widget
+2025-05-07 22:18:42,995 - modules.dashboard_widgets.emotion_transitions_widget - INFO - Hızlı Duygu Geçişleri Widget'ı başlatıldı
+2025-05-07 22:18:42,995 - modules.dashboard_widgets.widget_manager - INFO - Widget EmotionTransitionsWidget başlatıldı (ID: emotion_transitions)
+2025-05-07 22:18:42,995 - modules.dashboard_widgets.widget_manager - INFO - Toplam 2 widget yüklendi
+2025-05-07 22:18:42,995 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-07 22:18:42,995 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-07 22:18:42,995 - DashboardServer - INFO - Face plugin referansı hazırlandı ve widget'lar yüklendi
+2025-05-07 22:18:42,997 - DashboardServer - INFO - Dashboard sunucusu başlatıldı: http://localhost:8000
+2025-05-07 22:18:43,099 - include.hardware_defines - INFO - Raspberry Pi platformu tespit edildi: Raspberry Pi 5 Model B Rev 1.0
+2025-05-07 22:18:43,312 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-07 22:18:43,312 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-07 22:18:43,312 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-07 22:18:45,312 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-07 22:18:45,313 - FacePluginBase - INFO - Plugin durumu değişti: stopped -> initializing
+2025-05-07 22:18:45,313 - FacePluginLifecycle - INFO - Durum değişti: stopped -> initializing
+2025-05-07 22:18:45,313 - FacePluginBase - INFO - Plugin durumu değişti: initializing -> initialized
+2025-05-07 22:18:45,313 - FacePluginLifecycle - INFO - Durum değişti: initializing -> initialized
+2025-05-07 22:18:45,313 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-07 22:18:45,314 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-07 22:18:45,314 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-07 22:18:45,314 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-07 22:18:46,186 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı: 140732725435280
+2025-05-07 22:18:46,215 - DashboardRoutes - INFO - Face plugin durumu dosyadan okundu: çalışıyor
+2025-05-07 22:18:46,373 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression_control
+2025-05-07 22:18:46,380 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state_history
+2025-05-07 22:18:54,122 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı: 140732563932048
+2025-05-07 22:19:10,680 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression_control
+2025-05-07 22:19:10,681 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state_history
+2025-05-07 22:19:17,722 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı: 140732562547152
+2025-05-07 22:19:44,029 - FacePluginEnvironment - INFO - Çevresel değişiklik: motion=detected (değer: 1)
+2025-05-07 22:20:07,718 - DashboardRoutes - INFO - Face plugin durumu dosyadan okundu: çalışıyor
+2025-05-07 22:20:07,938 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression_control
+2025-05-07 22:20:07,944 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state_history
+2025-05-07 22:23:07,945 - FacePluginEnvironment - INFO - Çevresel değişiklik: touch=detected (değer: 1)
+2025-05-07 22:26:28,893 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı: 140732562554128
+2025-05-07 22:26:28,928 - DashboardRoutes - INFO - Face plugin durumu dosyadan okundu: çalışıyor
+2025-05-07 22:26:29,133 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression_control
+2025-05-07 22:26:29,137 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state_history
+2025-05-07 22:26:37,297 - DashboardWebSocket - INFO - Simülasyon WebSocket bağlantısı başlatıldı: sim_140732562545360
+2025-05-07 22:26:48,502 - FacePlugin - WARNING - Yüz eklentisi çalışmıyor (durum: PluginState.INITIALIZED), duygu ayarlanamıyor.
+2025-05-07 22:26:53,077 - FacePlugin - WARNING - Yüz eklentisi çalışmıyor (durum: PluginState.INITIALIZED), duygu ayarlanamıyor.
+2025-05-07 22:27:10,941 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı: 140732562579472
+2025-05-07 22:29:34,846 - FacePluginBase - INFO - Yapılandırma güncelleniyor...
+2025-05-07 22:29:34,851 - FacePluginBase - INFO - Yapılandırma dosyası güncellendi: /home/seljux/projects/face1/config/config.json
+2025-05-07 22:29:34,852 - FacePluginBase - INFO - Yapılandırma başarıyla güncellendi.
+2025-05-07 22:29:45,858 - DashboardRoutes - INFO - Face plugin durumu dosyadan okundu: çalışıyor
+2025-05-07 22:29:46,050 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression_control
+2025-05-07 22:29:46,053 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state_history
+2025-05-07 22:32:39,040 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı: 140732562673168
+2025-05-07 22:32:39,046 - DashboardRoutes - INFO - Face plugin durumu dosyadan okundu: çalışıyor
+2025-05-07 22:32:39,178 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression_control
+2025-05-07 22:32:39,191 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state_history
+2025-05-07 22:34:32,965 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-07 22:34:32,980 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-07 22:34:32,980 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-07 22:34:32,980 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-07 22:34:34,980 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-07 22:34:34,980 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-07 22:34:34,981 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-07 22:34:34,981 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-07 22:34:35,301 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-07 22:34:35,301 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-07 22:34:35,301 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-07 22:34:35,302 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-07 22:34:35,302 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-07 22:34:35,302 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-07 22:34:35,302 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-07 22:34:35,302 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-07 22:34:35,302 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-07 22:34:35,303 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-07 22:34:35,303 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-07 22:34:35,303 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-07 22:34:35,303 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-07 22:34:35,304 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-07 22:34:35,304 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-07 22:34:35,304 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-07 22:34:35,305 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-07 22:34:35,823 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-07 22:34:36,521 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-07 22:34:36,521 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-07 22:34:36,521 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-07 22:34:36,521 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-07 22:34:36,521 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-07 22:34:36,521 - DashboardWebSocket - INFO - Simülasyon dizini: /home/seljux/projects/face1/simulation
+2025-05-07 22:34:36,521 - modules.dashboard_widgets.widget_manager - INFO - Widget'lar yükleniyor...
+2025-05-07 22:34:36,521 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: expression_widget
+2025-05-07 22:34:36,521 - modules.dashboard_widgets.expression_widget - INFO - Yüz İfadesi Kontrolü Widget'ı başlatıldı
+2025-05-07 22:34:36,521 - modules.dashboard_widgets.widget_manager - INFO - Widget ExpressionWidget başlatıldı (ID: expression)
+2025-05-07 22:34:36,521 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: state_history_widget
+2025-05-07 22:34:36,521 - modules.dashboard_widgets.widget_manager - ERROR - Widget modülü yüklenirken hata: state_history_widget, StateHistoryWidget.__init__() got an unexpected keyword argument 'emotion_engine'
+2025-05-07 22:34:36,521 - modules.dashboard_widgets.widget_manager - ERROR - Hata detayları: 
+Traceback (most recent call last):
+  File "/home/seljux/projects/face1/src/modules/dashboard_widgets/widget_manager.py", line 108, in load_widgets
+    widget_instance = widget_class(
+                      ^^^^^^^^^^^^^
+TypeError: StateHistoryWidget.__init__() got an unexpected keyword argument 'emotion_engine'
+2025-05-07 22:34:36,522 - modules.dashboard_widgets.widget_manager - WARNING - Zorunlu widget yüklenemedi: state_history_widget. Varsayılan yüklenecek.
+2025-05-07 22:34:36,522 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: emotion_transitions_widget
+2025-05-07 22:34:36,525 - modules.dashboard_widgets.emotion_transitions_widget - INFO - Hızlı Duygu Geçişleri Widget'ı başlatıldı
+2025-05-07 22:34:36,525 - modules.dashboard_widgets.widget_manager - INFO - Widget EmotionTransitionsWidget başlatıldı (ID: emotion_transitions)
+2025-05-07 22:34:36,525 - modules.dashboard_widgets.widget_manager - INFO - Toplam 2 widget yüklendi
+2025-05-07 22:34:36,526 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-07 22:34:36,526 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-07 22:34:36,526 - DashboardServer - INFO - Face plugin referansı hazırlandı ve widget'lar yüklendi
+2025-05-07 22:34:36,529 - DashboardServer - INFO - Dashboard sunucusu başlatıldı: http://localhost:8000
+2025-05-07 22:34:36,628 - include.hardware_defines - INFO - Raspberry Pi platformu tespit edildi: Raspberry Pi 5 Model B Rev 1.0
+2025-05-07 22:34:36,981 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-07 22:34:36,981 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-07 22:34:36,981 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-07 22:34:37,019 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-07 22:34:37,020 - FacePluginBase - INFO - Plugin durumu değişti: stopped -> initializing
+2025-05-07 22:34:37,020 - FacePluginLifecycle - INFO - Durum değişti: stopped -> initializing
+2025-05-07 22:34:37,020 - FacePluginBase - INFO - Plugin durumu değişti: initializing -> initialized
+2025-05-07 22:34:37,020 - FacePluginLifecycle - INFO - Durum değişti: initializing -> initialized
+2025-05-07 22:34:37,020 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-07 22:34:37,020 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-07 22:34:37,020 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-07 22:34:37,021 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-07 22:34:38,834 - DashboardRoutes - INFO - Face plugin durumu dosyadan okundu: çalışıyor
+2025-05-07 22:34:38,966 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression-control
+2025-05-07 22:34:38,972 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state-history
+2025-05-07 22:34:38,975 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: emotion-transitions
+2025-05-07 22:34:43,496 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı: 140732594549904
+2025-05-07 22:35:46,393 - FacePluginEnvironment - INFO - Çevresel değişiklik: motion=detected (değer: 1)
+2025-05-07 22:38:03,393 - FacePluginEnvironment - INFO - Çevresel değişiklik: touch=detected (değer: 1)
+2025-05-07 22:52:06,832 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-07 22:52:06,872 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-07 22:52:06,872 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-07 22:52:06,872 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-07 22:52:08,480 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-07 22:52:08,481 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-07 22:52:08,481 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-07 22:52:08,481 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-07 22:52:08,481 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-07 22:52:08,481 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-07 22:52:08,482 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-07 22:52:08,482 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-07 22:52:08,482 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-07 22:52:08,483 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-07 22:52:08,483 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-07 22:52:08,483 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-07 22:52:08,483 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-07 22:52:08,484 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-07 22:52:08,484 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-07 22:52:08,484 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-07 22:52:08,485 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-07 22:52:08,873 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-07 22:52:08,873 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-07 22:52:08,874 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-07 22:52:08,874 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-07 22:52:09,648 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-07 22:52:09,649 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-07 22:52:09,649 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-07 22:52:09,649 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-07 22:52:09,649 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-07 22:52:09,649 - DashboardWebSocket - INFO - Simülasyon dizini: /home/seljux/projects/face1/simulation
+2025-05-07 22:52:09,650 - modules.dashboard_widgets.widget_manager - INFO - Widget'lar yükleniyor...
+2025-05-07 22:52:09,650 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: expression_widget
+2025-05-07 22:52:09,650 - modules.dashboard_widgets.expression_widget - INFO - Yüz İfadesi Kontrolü Widget'ı başlatıldı
+2025-05-07 22:52:09,650 - modules.dashboard_widgets.widget_manager - INFO - Widget ExpressionWidget başlatıldı (ID: expression)
+2025-05-07 22:52:09,650 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: state_history_widget
+2025-05-07 22:52:09,650 - modules.dashboard_widgets.state_history_widget - INFO - StateHistoryWidget başlatıldı: state_history
+2025-05-07 22:52:09,650 - modules.dashboard_widgets.widget_manager - INFO - Widget StateHistoryWidget başlatıldı (ID: state_history)
+2025-05-07 22:52:09,651 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: emotion_transitions_widget
+2025-05-07 22:52:09,651 - modules.dashboard_widgets.emotion_transitions_widget - INFO - Hızlı Duygu Geçişleri Widget'ı başlatıldı
+2025-05-07 22:52:09,651 - modules.dashboard_widgets.widget_manager - INFO - Widget EmotionTransitionsWidget başlatıldı (ID: emotion_transitions)
+2025-05-07 22:52:09,651 - modules.dashboard_widgets.widget_manager - INFO - Toplam 3 widget yüklendi
+2025-05-07 22:52:09,651 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-07 22:52:09,651 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-07 22:52:09,652 - DashboardServer - INFO - Face plugin referansı hazırlandı ve widget'lar yüklendi
+2025-05-07 22:52:09,653 - DashboardServer - INFO - Dashboard sunucusu başlatıldı: http://localhost:8000
+2025-05-07 22:52:09,755 - include.hardware_defines - INFO - Raspberry Pi platformu tespit edildi: Raspberry Pi 5 Model B Rev 1.0
+2025-05-07 22:52:10,874 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-07 22:52:10,875 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-07 22:52:10,875 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-07 22:52:11,225 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-07 22:52:12,875 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-07 22:52:12,876 - FacePluginBase - INFO - Plugin durumu değişti: stopped -> initializing
+2025-05-07 22:52:12,876 - FacePluginLifecycle - INFO - Durum değişti: stopped -> initializing
+2025-05-07 22:52:12,876 - FacePluginBase - INFO - Plugin durumu değişti: initializing -> initialized
+2025-05-07 22:52:12,877 - FacePluginLifecycle - INFO - Durum değişti: initializing -> initialized
+2025-05-07 22:52:12,877 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-07 22:52:12,877 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-07 22:52:12,878 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-07 22:52:12,878 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-07 22:52:19,497 - FacePluginEnvironment - INFO - Çevresel değişiklik: motion=detected (değer: 1)
+2025-05-07 22:53:33,168 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression-control
+2025-05-07 22:53:33,173 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state-history
+2025-05-07 22:53:33,176 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: emotion-transitions
+2025-05-07 22:53:47,449 - DashboardWebSocket - INFO - Simülasyon WebSocket bağlantısı başlatıldı: sim_140734266642704
+2025-05-07 22:54:06,340 - FacePluginEnvironment - INFO - Çevresel değişiklik: touch=detected (değer: 1)
+2025-05-07 23:06:41,020 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-07 23:06:41,053 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-07 23:06:41,054 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-07 23:06:41,054 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-07 23:06:43,054 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-07 23:06:43,054 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-07 23:06:43,054 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-07 23:06:43,054 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-07 23:06:45,055 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-07 23:06:45,055 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-07 23:06:45,055 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-07 23:06:45,820 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-07 23:06:47,055 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-07 23:06:47,056 - FacePluginBase - INFO - Plugin durumu değişti: stopped -> initializing
+2025-05-07 23:06:47,056 - FacePluginLifecycle - INFO - Durum değişti: stopped -> initializing
+2025-05-07 23:06:47,056 - FacePluginBase - INFO - Plugin durumu değişti: initializing -> initialized
+2025-05-07 23:06:47,056 - FacePluginLifecycle - INFO - Durum değişti: initializing -> initialized
+2025-05-07 23:06:47,056 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-07 23:06:47,056 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-07 23:06:47,056 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-07 23:06:47,058 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-07 23:07:30,635 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-07 23:07:30,635 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-07 23:07:30,635 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-07 23:07:30,635 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-07 23:07:30,635 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-07 23:07:30,635 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-07 23:07:30,636 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-07 23:07:30,636 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-07 23:07:30,636 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-07 23:07:30,636 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-07 23:07:30,637 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-07 23:07:30,637 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-07 23:07:30,637 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-07 23:07:30,637 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-07 23:07:30,638 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-07 23:07:30,638 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-07 23:07:30,638 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-07 23:07:31,585 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-07 23:07:31,586 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-07 23:07:31,586 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-07 23:07:31,586 - DashboardServer - WARNING - Face plugin'in animation_engine modülü başlatılmamış veya None
+2025-05-07 23:07:31,586 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-07 23:07:31,586 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-07 23:07:31,586 - DashboardWebSocket - INFO - Simülasyon dizini: /home/seljux/projects/face1/simulation
+2025-05-07 23:07:31,587 - modules.dashboard_widgets.widget_manager - INFO - Widget'lar yükleniyor...
+2025-05-07 23:07:31,587 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: expression_widget
+2025-05-07 23:07:31,587 - modules.dashboard_widgets.expression_widget - INFO - Yüz İfadesi Kontrolü Widget'ı başlatıldı
+2025-05-07 23:07:31,587 - modules.dashboard_widgets.widget_manager - INFO - Widget ExpressionWidget başlatıldı (ID: expression)
+2025-05-07 23:07:31,587 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: state_history_widget
+2025-05-07 23:07:31,587 - modules.dashboard_widgets.state_history_widget - INFO - StateHistoryWidget başlatıldı: state_history
+2025-05-07 23:07:31,587 - modules.dashboard_widgets.widget_manager - INFO - Widget StateHistoryWidget başlatıldı (ID: state_history)
+2025-05-07 23:07:31,588 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: emotion_transitions_widget
+2025-05-07 23:07:31,588 - modules.dashboard_widgets.emotion_transitions_widget - INFO - Hızlı Duygu Geçişleri Widget'ı başlatıldı
+2025-05-07 23:07:31,589 - modules.dashboard_widgets.widget_manager - INFO - Widget EmotionTransitionsWidget başlatıldı (ID: emotion_transitions)
+2025-05-07 23:07:31,589 - modules.dashboard_widgets.widget_manager - INFO - Toplam 3 widget yüklendi
+2025-05-07 23:07:31,589 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-07 23:07:31,589 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-07 23:07:31,589 - DashboardServer - INFO - Face plugin referansı hazırlandı ve widget'lar yüklendi
+2025-05-07 23:07:31,589 - DashboardServer - WARNING - Dashboard üzerindeki animasyon özellikleri çalışmayabilir, animation_engine mevcut değil
+2025-05-07 23:07:31,593 - DashboardServer - INFO - Dashboard sunucusu başlatıldı: http://localhost:8000
+2025-05-07 23:07:31,695 - include.hardware_defines - INFO - Raspberry Pi platformu tespit edildi: Raspberry Pi 5 Model B Rev 1.0
+2025-05-07 23:07:40,000 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression-control
+2025-05-07 23:07:40,003 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state-history
+2025-05-07 23:07:40,005 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: emotion-transitions
+2025-05-07 23:07:47,162 - FacePluginEnvironment - INFO - Çevresel değişiklik: motion=detected (değer: 1)
+2025-05-07 23:08:01,981 - FacePluginEnvironment - INFO - Çevresel değişiklik: touch=detected (değer: 1)
+2025-05-07 23:23:19,763 - FacePlugin - INFO - Sinyal alındı: kapanıyor...
+2025-05-07 23:23:19,849 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durdu
+2025-05-07 23:23:19,849 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü durduruldu
+2025-05-07 23:23:19,849 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-07 23:23:21,849 - FacePluginMetrics - INFO - Metrik toplama döngüsü durduruldu
+2025-05-07 23:23:21,850 - FacePluginSystem - INFO - Yüz eklentisi durduruluyor...
+2025-05-07 23:23:21,850 - FacePluginBase - INFO - Plugin durumu değişti: running -> stopping
+2025-05-07 23:23:21,850 - FacePluginLifecycle - INFO - Durum değişti: running -> stopping
+2025-05-07 23:23:22,175 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-07 23:23:22,175 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-07 23:23:22,175 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-07 23:23:22,176 - FacePluginBase - INFO - Plugin durumu değişti: initialized -> starting
+2025-05-07 23:23:22,176 - FacePluginLifecycle - INFO - Durum değişti: initialized -> starting
+2025-05-07 23:23:22,176 - PluginIsolation - INFO - Kaynak sınırları ayarlandı: Dosya tanımlayıcı sınırı = 1000
+2025-05-07 23:23:22,176 - PluginIsolation - INFO - Kaynak izleme başlatıldı
+2025-05-07 23:23:22,176 - PluginIsolation - INFO - Plugin izolasyon katmanı başlatıldı
+2025-05-07 23:23:22,176 - FacePluginSystem - INFO - Yüz eklentisi çalışıyor.
+2025-05-07 23:23:22,177 - FacePluginMetrics - INFO - Metrik toplama döngüsü başlatıldı
+2025-05-07 23:23:22,177 - FacePluginEnvironment - WARNING - Işık sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-07 23:23:22,177 - FacePluginEnvironment - WARNING - Sıcaklık ve nem sensörü kütüphanesi mevcut değil, simülasyon modu kullanılacak
+2025-05-07 23:23:22,177 - FacePluginEnvironment - ERROR - Dokunmatik veya hareket sensörleri yapılandırılamadı: Cannot determine SOC peripheral base address
+2025-05-07 23:23:22,178 - FacePluginEnvironment - INFO - Çevresel faktör izleme döngüsü başlatıldı
+2025-05-07 23:23:22,178 - FacePluginBase - INFO - Plugin durumu değişti: starting -> running
+2025-05-07 23:23:22,178 - FacePluginLifecycle - INFO - Durum değişti: starting -> running
+2025-05-07 23:23:22,178 - FacePlugin - INFO - Yüz eklentisi çalışıyor. Durdurmak için Ctrl+C'ye basın...
+2025-05-07 23:23:23,046 - FacePluginBase - INFO - Plugin durumu değişti: uninitialized -> initialized
+2025-05-07 23:23:23,046 - FacePluginLifecycle - INFO - Durum değişti: uninitialized -> initialized
+2025-05-07 23:23:23,046 - FacePlugin - INFO - FACE1 Yüz Eklentisi başlatıldı.
+2025-05-07 23:23:23,046 - DashboardServer - WARNING - Face plugin'in animation_engine modülü başlatılmamış veya None
+2025-05-07 23:23:23,046 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-07 23:23:23,046 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-07 23:23:23,046 - DashboardWebSocket - INFO - Simülasyon dizini: /home/seljux/projects/face1/simulation
+2025-05-07 23:23:23,046 - modules.dashboard_widgets.widget_manager - INFO - Widget'lar yükleniyor...
+2025-05-07 23:23:23,046 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: expression_widget
+2025-05-07 23:23:23,046 - modules.dashboard_widgets.expression_widget - INFO - Yüz İfadesi Kontrolü Widget'ı başlatıldı
+2025-05-07 23:23:23,046 - modules.dashboard_widgets.widget_manager - INFO - Widget ExpressionWidget başlatıldı (ID: expression)
+2025-05-07 23:23:23,046 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: state_history_widget
+2025-05-07 23:23:23,046 - modules.dashboard_widgets.state_history_widget - INFO - StateHistoryWidget başlatıldı: state_history
+2025-05-07 23:23:23,046 - modules.dashboard_widgets.widget_manager - INFO - Widget StateHistoryWidget başlatıldı (ID: state_history)
+2025-05-07 23:23:23,046 - modules.dashboard_widgets.widget_manager - INFO - Widget modülü yüklendi: emotion_transitions_widget
+2025-05-07 23:23:23,047 - modules.dashboard_widgets.emotion_transitions_widget - INFO - Hızlı Duygu Geçişleri Widget'ı başlatıldı
+2025-05-07 23:23:23,047 - modules.dashboard_widgets.widget_manager - INFO - Widget EmotionTransitionsWidget başlatıldı (ID: emotion_transitions)
+2025-05-07 23:23:23,048 - modules.dashboard_widgets.widget_manager - INFO - Toplam 3 widget yüklendi
+2025-05-07 23:23:23,048 - DashboardWebSocket - WARNING - Animasyon motoru callback kayıt fonksiyonu bulunamadı
+2025-05-07 23:23:23,048 - DashboardWebSocket - ERROR - Ses callback'leri kaydedilirken hata: 'NoneType' object has no attribute 'register_volume_callback'
+2025-05-07 23:23:23,048 - DashboardServer - INFO - Face plugin referansı hazırlandı ve widget'lar yüklendi
+2025-05-07 23:23:23,048 - DashboardServer - WARNING - Dashboard üzerindeki animasyon özellikleri çalışmayabilir, animation_engine mevcut değil
+2025-05-07 23:23:23,053 - DashboardServer - INFO - Dashboard sunucusu başlatıldı: http://localhost:8000
+2025-05-07 23:23:23,151 - include.hardware_defines - INFO - Raspberry Pi platformu tespit edildi: Raspberry Pi 5 Model B Rev 1.0
+2025-05-07 23:23:23,850 - FacePluginBase - INFO - Plugin durumu değişti: stopping -> stopped
+2025-05-07 23:23:23,850 - FacePluginLifecycle - INFO - Durum değişti: stopping -> stopped
+2025-05-07 23:23:23,850 - FacePluginSystem - INFO - Yüz eklentisi durduruldu.
+2025-05-07 23:23:24,481 - FacePluginMetrics - INFO - Metrik toplama döngüsü durdu
+2025-05-07 23:23:25,694 - PluginIsolation - INFO - Plugin izolasyon katmanı durduruldu
+2025-05-07 23:23:25,695 - FacePluginBase - INFO - Plugin durumu değişti: stopped -> initializing
+2025-05-07 23:23:25,695 - FacePluginLifecycle - INFO - Durum değişti: stopped -> initializing
+2025-05-07 23:23:25,696 - FacePluginBase - INFO - Plugin durumu değişti: initializing -> initialized
+2025-05-07 23:23:25,696 - FacePluginLifecycle - INFO - Durum değişti: initializing -> initialized
+2025-05-07 23:23:25,696 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-07 23:23:25,696 - FacePluginEnvironment - INFO - Çevresel faktör kaynakları temizlendi
+2025-05-07 23:23:25,696 - FacePluginSystem - WARNING - Yüz eklentisi zaten durdurulmuş.
+2025-05-07 23:23:25,699 - FacePlugin - INFO - Yüz eklentisi ve izolasyon katmanı durduruldu
+2025-05-07 23:24:03,491 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı: 140736241496144
+2025-05-07 23:24:03,988 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression-control
+2025-05-07 23:24:03,989 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state-history
+2025-05-07 23:24:04,053 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: emotion-transitions
+2025-05-07 23:24:22,943 - FacePluginEnvironment - INFO - Çevresel değişiklik: touch=detected (değer: 1)
+2025-05-07 23:25:08,099 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı: 140735917427024
+2025-05-07 23:25:25,233 - DashboardWebSocket - INFO - Simülasyon WebSocket bağlantısı başlatıldı: sim_140735917426512
+2025-05-07 23:26:36,907 - FacePluginEnvironment - INFO - Çevresel değişiklik: motion=detected (değer: 1)
+2025-05-07 23:31:26,473 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı: 140735917434768
+2025-05-07 23:31:26,955 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression-control
+2025-05-07 23:31:26,961 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state-history
+2025-05-07 23:31:26,962 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: emotion-transitions
+2025-05-07 23:31:27,870 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı: 140735917435152
+2025-05-07 23:31:28,085 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: expression-control
+2025-05-07 23:31:28,089 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: state-history
+2025-05-07 23:31:28,094 - modules.dashboard_widgets.widget_manager - ERROR - Widget bulunamadı: emotion-transitions
+2025-05-07 23:35:55,226 - DashboardWebSocket - INFO - WebSocket bağlantısı kapandı: 140735917466512
